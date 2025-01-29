@@ -1,17 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from './pages/Login';
+import DashboardCompetitorPage from './pages/DashboardCompetitor';
+import DashboardExpertPage from './pages/DashboardExpert';
+import DashboardAdminPage from './pages/DashboardAdmin';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="dashboard-competitor" element={<DashboardCompetitorPage />} />
+        <Route path="dashboard-expert" element={<DashboardExpertPage />} />
+        <Route path="dashboard-admin" element={<DashboardAdminPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
 reportWebVitals();

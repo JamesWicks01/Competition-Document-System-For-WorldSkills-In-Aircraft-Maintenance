@@ -1,7 +1,34 @@
+import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
+import { BASE_URL } from './config';
 
 function LoginPage() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+
+    const handleLogin = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/login`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username,password}),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('token', data.token);
+                window.location.href = 'dashboard-competitor';
+            } else {
+                alert(data.message);
+            }
+        } catch (err) {
+            alert('Failed to connect to the server');
+        }
+    };
+
     return (
         <div id="base" className="">
         {/* Username Group (Group) */}
@@ -22,7 +49,7 @@ function LoginPage() {
             data-label="Username_Input"
             >
             <div id="u1_div" className="" />
-            <input id="u1_input" type="text" defaultValue="" className="u1_input" />
+            <input id="u1_input" type="text" defaultValue="" className="u1_input" value={username} onChange={(e) => setUsername(e.target.value)}/>
             </div>
             {/* Username_Label (Rectangle) */}
             <div
@@ -76,6 +103,8 @@ function LoginPage() {
                 type="password"
                 defaultValue=""
                 className="u5_input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
             </div>
             {/* Password_Label (Rectangle) */}
@@ -107,11 +136,13 @@ function LoginPage() {
             </div>
             </div>
         </div>
+
         {/* Login_Button (Rectangle) */}
-        <div
+        <button
             id="u8"
             className="ax_default shape transition notrs"
             data-label="Login_Button"
+            onClick={handleLogin}
         >
             <div id="u8_div" className="" />
             <div id="u8_text" className="text ">
@@ -119,7 +150,7 @@ function LoginPage() {
                 <span>Login</span>
             </p>
             </div>
-        </div>
+        </button>
         {/* Unnamed (Rectangle) */}
         <div id="u9" className="ax_default heading_1 transition notrs">
             <div id="u9_div" className="" />

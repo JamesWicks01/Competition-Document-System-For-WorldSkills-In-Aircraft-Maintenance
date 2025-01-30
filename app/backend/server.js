@@ -32,7 +32,7 @@ app.post("/login", (req, res) => {
       const user = result[0];
 
       if (password === user.password) {
-        const token = jwt.sign({ id: user.id, username: user.username }, "secretKey", { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, username: user.username,  role: user.user_role}, "secretKey", { expiresIn: "1h" });
         res.json({ message: "Login successful", token });
       } else {
         res.status(401).json({ message: "Invalid credentials" });

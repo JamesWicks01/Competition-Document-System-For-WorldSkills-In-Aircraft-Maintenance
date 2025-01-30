@@ -2,6 +2,7 @@ import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
 import { BASE_URL } from './config';
+import { jwtDecode } from 'jwt-decode';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -13,14 +14,26 @@ function LoginPage() {
             const response = await fetch(`${BASE_URL}/login`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username,password}),
+                body: JSON.stringify({username, password}),
             });
 
             const data = await response.json();
 
             if (response.ok) {
                 localStorage.setItem('token', data.token);
-                window.location.href = 'dashboard-competitor';
+
+                // Decode the token to get the user's role (assuming the token is JWT)
+                const decodedToken = jwtDecode(data.token);
+                const userRole = decodedToken.role;
+
+                // Redirect based on the user's role
+                if (userRole === 'COMPETITOR') {
+                    window.location.href = 'dashboard-competitor';
+                } else if (userRole === 'EXPERT') {
+                    window.location.href = 'dashboard-expert';
+                } else if (userRole === 'ADMIN') {
+                    window.location.href = 'dashboard-admin';
+                }
             } else {
                 alert(data.message);
             }

@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "scripts": {
       "start": "concurrently \"npm run server\" \"npm run client\"",
-      "server": "cd app/backend && nodemon server.js",
+      "server": "cd app/backend && node server.js",
       "client": "cd app/frontend && npm start",
 
       "install-all": "concurrently \"npm run install-server\" \"npm run install-client\"",

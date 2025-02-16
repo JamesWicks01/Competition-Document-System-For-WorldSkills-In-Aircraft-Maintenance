@@ -16,10 +16,46 @@ function ToolCalibrationRecordPage() {
         document.getElementById("u92").style.visibility = "hidden";
     };
 
+    const NewRecord = () => {
+        const description = document.getElementById("u98_input");
+        const partNumber = document.getElementById("u102_input");
+        const serialNumber = document.getElementById("u106_input");
+        const calibrationDate = document.getElementById("u110_input");
+        const calibrationDueDate = document.getElementById("u114_input");
+    
+        if (!description.value || !partNumber.value || !serialNumber.value || !calibrationDate.value || !calibrationDueDate.value) {
+            alert("Please fill in all fields");
+            return null; // Stop execution if validation fails
+        }
+    
+        const Record = {
+            Description: description.value,
+            PartNumber: partNumber.value,
+            SerialNumber: serialNumber.value,
+            CalibrationDate: calibrationDate.value,
+            CalibrationDueDate: calibrationDueDate.value
+        };
+    
+        // Clear input fields
+        description.value = "";
+        partNumber.value = "";
+        serialNumber.value = "";
+        calibrationDate.value = "";
+        calibrationDueDate.value = "";
+    
+        return Record;
+    };
+    
     const Submit_Button = () => {
+        const record = NewRecord();
+        if (!record) return; // Stop execution if validation failed
+    
+        console.log(record);
         document.getElementById("u92").style.display = "none";
         document.getElementById("u92").style.visibility = "hidden";
     };
+    
+
 
     return(
         <div id="base" className="">

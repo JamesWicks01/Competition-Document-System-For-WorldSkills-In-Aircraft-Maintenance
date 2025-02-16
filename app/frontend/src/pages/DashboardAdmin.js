@@ -1,13 +1,27 @@
 import './css/DashboardAdmin.css';
 
 function DashboardAdminPage() {
+
+    const SignOut_Button = () => {
+        window.location.href = "/";
+    };
+
+    const PartsConsumableRequest_Button = () => {
+        window.location.href = "/parts-consumable-request";
+    };
+
+    const ToolCalibrationRecords_Button = () => {
+        window.location.href = "/tool-calibration-record";
+    };
+
     return (
         <div id="base" className="">
         {/* SignOut_Button (Rectangle) */}
-        <div
+        <button
             id="u23"
             className="ax_default shape transition notrs"
             data-label="SignOut_Button"
+            onClick={SignOut_Button}
         >
             <div id="u23_div" className="" />
             <div id="u23_text" className="text ">
@@ -15,7 +29,7 @@ function DashboardAdminPage() {
                 <span>Sign Out</span>
             </p>
             </div>
-        </div>
+        </button>
         {/* Unnamed (Rectangle) */}
         <div id="u24" className="ax_default box_3 transition notrs">
             <div id="u24_div" className="" />
@@ -32,6 +46,7 @@ function DashboardAdminPage() {
             id="u25"
             className="ax_default shape transition notrs"
             data-label="PartsConsumableRequest_Button"
+            onClick={PartsConsumableRequest_Button}
         >
             <div id="u25_div" className="" />
             <div id="u25_text" className="text ">
@@ -45,6 +60,7 @@ function DashboardAdminPage() {
             id="u26"
             className="ax_default shape transition notrs"
             data-label="ToolCalibrationRecords_Button"
+            onClick={ToolCalibrationRecords_Button}
         >
             <div id="u26_div" className="" />
             <div id="u26_text" className="text ">

@@ -1,13 +1,27 @@
 import './css/DashboardExpert.css';
 
 function DashboardExpertPage() {
+
+    const SignOut_Button = () => {
+        window.location.href = "/";
+    };
+
+    const PartsConsumableRequest_Button = () => {
+        window.location.href = "/parts-consumable-request";
+    };
+
+    const ToolCalibrationRecords_Button = () => { 
+        window.location.href = "/tool-calibration-record";
+    };
+    
     return (
         <div id="base" className="">
         {/* SignOut_Button (Rectangle) */}
-        <div
+        <button
             id="u11"
             className="ax_default shape transition notrs"
             data-label="SignOut_Button"
+            onclick={SignOut_Button}
         >
             <div id="u11_div" className="" />
             <div id="u11_text" className="text ">
@@ -15,7 +29,7 @@ function DashboardExpertPage() {
                 <span>Sign Out</span>
             </p>
             </div>
-        </div>
+        </button>
         {/* Unnamed (Rectangle) */}
         <div id="u12" className="ax_default box_3 transition notrs">
             <div id="u12_div" className="" />
@@ -32,6 +46,7 @@ function DashboardExpertPage() {
             id="u13"
             className="ax_default shape transition notrs"
             data-label="PartsConsumableRequest_Button"
+            onClick={PartsConsumableRequest_Button}
         >
             <div id="u13_div" className="" />
             <div id="u13_text" className="text ">
@@ -45,6 +60,7 @@ function DashboardExpertPage() {
             id="u14"
             className="ax_default shape transition notrs"
             data-label="ToolCalibrationRecords_Button"
+            onClick={ToolCalibrationRecords_Button}
         >
             <div id="u14_div" className="" />
             <div id="u14_text" className="text ">

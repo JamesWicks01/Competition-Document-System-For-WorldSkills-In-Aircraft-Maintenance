@@ -3,7 +3,8 @@ import { jwtDecode } from "jwt-decode";
 export function CheckLoggedIn() {
     const token = localStorage.getItem("token");
     if (!token) {
-        window.location.href = "/login";
+        alert("You need to be logged in to access this page");
+        window.location.href = "/";
     }
 }
 
@@ -18,21 +19,21 @@ export function GetRole() {
 
 export function Signout() {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    window.location.href = "/";
 }
 
-export function CheckAccess(role) {
-    const userRole = GetRole();
-    if (userRole !== role) {
-        alert("Access denied");
+export function CheckAccess() {
+    const token = localStorage.getItem("token");
+    const AllowedPages = {
+        ADMIN: ["/dashboard-admin", "/parts-consumable-request", "/tool-calibration-record", "/create-atl"],
+        EXPERT: ["/dashboard-expert", "/parts-consumable-request", "/tool-calibration-record", "/create-atl"],
+        COMPETITOR: ["/dashboard-competitor", "/parts-consumable-request", "/tool-calibration-record"],
+    };
+    const decodedToken = jwtDecode(token);
+    const role = decodedToken.role;
+    const currentPage = window.location.pathname;
+    if (!AllowedPages[role].includes(currentPage)) {
+        alert("You are not authorized to access this page");
         window.history.back();
     }
-}
-
-export function ServerRequest(url, method, body) {
-    return fetch(url, {
-        method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-    });
 }

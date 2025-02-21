@@ -1,10 +1,16 @@
-import * as React from 'react';
+import { useState , useEffect } from 'react';
 import './css/CreateATL.css';
 import logo from './images/WorldSkills-Logo.png';
+import * as authUtils from './authUtils';
 
 function CreateAircraftTechnicalLogPage() {
 
-    const [disabled] = React.useState(true);
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
+    const [disabled] = useState(true);
 
     return (
             <div id="base" className="">

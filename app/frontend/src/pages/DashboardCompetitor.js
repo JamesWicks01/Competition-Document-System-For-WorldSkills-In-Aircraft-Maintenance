@@ -1,9 +1,16 @@
 import './css/DashboardCompetitor.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils';
 
 function DashboardCompetitorPage() {
 
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
     const SignOut_Button = () => {
-        window.location.href = "/";
+        authUtils.Signout();
     };
 
     const PartsConsumableRequest_Button = () => {

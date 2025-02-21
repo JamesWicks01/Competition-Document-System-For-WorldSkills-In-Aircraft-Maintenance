@@ -1,9 +1,35 @@
 import './css/ToolCalibrationRecord.css';
 import { BASE_URL } from './config';
 import React, { useEffect, useState } from "react";
-import * as apiService from "./apiService";
+import * as apiService from './apiService';
+import * as authUtils from './authUtils';
 
 function ToolCalibrationRecordPage() {
+
+    useEffect(() => {
+
+        function InsertNewRecordAccess() {
+            const UserRole = authUtils.GetRole();
+            
+            if (UserRole !== "ADMIN" && UserRole !== "EXPERT") {
+                document.getElementById("u91").style.display = "none";
+                document.getElementById("u91").style.visibility = "hidden";
+            }
+        }
+        
+        async function fetchData() {
+            try {
+                const response = await apiService.apiRequest("load-tool-calibration-records");
+                setData(response);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+        fetchData();
+        InsertNewRecordAccess();
+    }, []);
 
     const [data, setData] = useState([]);
     const headers = ["Description", "Part Number", "Serial Number", "Calibration Date", "Calibration Due Date"];
@@ -21,13 +47,6 @@ function ToolCalibrationRecordPage() {
         document.getElementById("u92").style.display = "none";
         document.getElementById("u92").style.visibility = "hidden";
     };
-
-    useEffect(() => {
-        fetch(`${BASE_URL}/load-tool-calibration-records`)
-          .then((response) => response.json()) // Convert response to JSON
-          .then((data) => setData(data)) // Update state with fetched data
-          .catch((error) => console.error("Error fetching data:", error));
-      }, []);
 
     const NewRecord = async () => {
         const description = document.getElementById("u98_input");

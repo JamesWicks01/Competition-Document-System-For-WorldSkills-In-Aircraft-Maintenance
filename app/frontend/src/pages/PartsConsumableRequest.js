@@ -1,6 +1,13 @@
 import './css/PartsConsumableRequest.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils';
 
 function PartsConsumableRequestPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
 
     return (
         <div id="base" className="">

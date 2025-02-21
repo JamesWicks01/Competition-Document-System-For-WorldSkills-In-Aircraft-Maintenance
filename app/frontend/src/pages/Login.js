@@ -151,7 +151,7 @@ function LoginPage() {
         </div>
 
         {/* Login_Button (Rectangle) */}
-        <button
+        <div
             id="u8"
             className="ax_default shape transition notrs"
             data-label="Login_Button"
@@ -163,7 +163,7 @@ function LoginPage() {
                 <span>Login</span>
             </p>
             </div>
-        </button>
+        </div>
         {/* Unnamed (Rectangle) */}
         <div id="u9" className="ax_default heading_1 transition notrs">
             <div id="u9_div" className="" />

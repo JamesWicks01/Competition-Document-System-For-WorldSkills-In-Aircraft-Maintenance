@@ -43,6 +43,56 @@ app.post("/login", (req, res) => {
   });
 });
 
+// **New Tool Calibration Record**
+app.post("/new-record", (req, res) => {
+  const {Description, PartNumber, SerialNumber, CalibrationDate, CalibrationDueDate} = req.body;
+  const sql = "INSERT INTO tool_calibration_records (description, part_number, serial_number, calibration_date, calibration_due_date) VALUES (?,?,?,?,?)";
+  const values = [Description, PartNumber, SerialNumber, CalibrationDate, CalibrationDueDate];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+        console.error("Error inserting record:", err);
+        return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(201).json({ message: "Record added successfully", recordId: result.insertId });
+  });
+
+});
+// **Load Tool Calibration Records**
+app.get("/load-tool-calibration-records", (req, res) => {
+  const sql = `SELECT description, part_number, serial_number, 
+                  DATE_FORMAT(calibration_date, '%d/%m/%Y') AS calibration_date, 
+                  DATE_FORMAT(calibration_due_date, '%d/%m/%Y') AS calibration_due_date
+              FROM tool_calibration_records`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error loading records:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.json(result);
+  });
+});
+
+// **Search Tool Calibration Records**
+app.get("/search-tool-calibration-records", (req, res) => {
+  const { searchType, searchInput } = req.query;
+  // Query the database with a LIKE search for partial matches
+  const sql = `SELECT description, part_number, serial_number, 
+                  DATE_FORMAT(calibration_date, '%d/%m/%Y') AS calibration_date, 
+                  DATE_FORMAT(calibration_due_date, '%d/%m/%Y') AS calibration_due_date
+               FROM tool_calibration_records
+               WHERE ?? LIKE ?`;
+  const values = [searchType, `%${searchInput}%`];
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error("Error fetching records:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+});
+
 // **Start Server**
 app.listen(5000, () => {
   console.log("Server running on port 5000");

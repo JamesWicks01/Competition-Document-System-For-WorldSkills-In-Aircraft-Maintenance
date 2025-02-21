@@ -38,6 +38,7 @@ body {
     line-height:24px;
   }
   #u11 {
+    cursor: pointer;
     border-width:0px;
     position:absolute;
     left:1004px;
@@ -194,6 +195,7 @@ body {
     line-height:24px;
   }
   #u13 {
+    cursor: pointer;
     border-width:0px;
     position:absolute;
     left:710px;
@@ -313,6 +315,7 @@ body {
     line-height:24px;
   }
   #u14 {
+    cursor: pointer;
     border-width:0px;
     position:absolute;
     left:710px;
@@ -432,6 +435,7 @@ body {
     line-height:24px;
   }
   #u15 {
+    cursor: pointer;
     border-width:0px;
     position:absolute;
     left:265px;
@@ -551,6 +555,7 @@ body {
     line-height:24px;
   }
   #u16 {
+    cursor: pointer;
     border-width:0px;
     position:absolute;
     left:265px;

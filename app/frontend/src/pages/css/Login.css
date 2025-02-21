@@ -910,6 +910,7 @@ body {
   #u8 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:497px;
     top:585px;
     width:200px;

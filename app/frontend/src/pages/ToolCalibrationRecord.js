@@ -1,5 +1,4 @@
 import './css/ToolCalibrationRecord.css';
-import { BASE_URL } from './config';
 import React, { useEffect, useState } from "react";
 import * as apiService from './apiService';
 import * as authUtils from './authUtils';
@@ -76,19 +75,9 @@ function ToolCalibrationRecordPage() {
         };
     
         try {
-            const response = await fetch(`${BASE_URL}/new-record`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(Record),
-            });
-    
-            if (response.ok) {
+            const response = await apiService.apiRequest("new-record", "POST", Record); 
+            if(response) {
                 alert("Record added successfully");
-            } else {
-                alert("Failed to add record");
-                return null;
             }
         } catch (error) {
             console.error("Error:", error);

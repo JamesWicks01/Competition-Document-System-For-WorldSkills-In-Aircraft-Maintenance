@@ -1,8 +1,9 @@
 import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
-import { BASE_URL } from './config';
+import * as apiService from './apiService';
 import { jwtDecode } from 'jwt-decode';
+import bcrypt from "bcryptjs";
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -11,15 +12,11 @@ function LoginPage() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/login`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username, password}),
-            });
+            const salt = await bcrypt.genSalt(12);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const data = await apiService.apiRequest('login', "POST", {username: username, password: hashedPassword}, false);
 
-            const data = await response.json();
-
-            if (response.ok) {
+            if (data && data.token) {
                 localStorage.setItem('token', data.token);
 
                 // Decode the token to get the user's role (assuming the token is JWT)

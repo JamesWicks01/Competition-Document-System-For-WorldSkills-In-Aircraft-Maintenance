@@ -3,6 +3,7 @@ const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const app = express();
 app.use(cors());
@@ -31,14 +32,15 @@ app.post("/login", (req, res) => {
     if (result.length > 0) {
       const user = result[0];
 
-      if (password === user.password) {
+      const isMatch = bcrypt.compare(password, user.password);
+      if (isMatch) {
         const token = jwt.sign({ id: user.id, username: user.username,  role: user.user_role}, "secretKey", { expiresIn: "1h" });
         res.json({ message: "Login successful", token });
       } else {
-        res.status(401).json({ message: "Invalid credentials" });
+        res.json({ message: "Invalid credentials" });
       }
     } else {
-      res.status(401).json({ message: "User not found" });
+      res.json({ message: "User not found" });
     }
   });
 });

@@ -7,7 +7,6 @@ import DashboardExpertPage from './pages/DashboardExpert';
 import DashboardAdminPage from './pages/DashboardAdmin';
 import PartsConsumableRequestPage from './pages/PartsConsumableRequest';
 import ToolCalibrationRecordPage from './pages/ToolCalibrationRecord';
-import AircraftTechnicalLogPage from './pages/AircraftTechnicalLog';
 import reportWebVitals from './reportWebVitals';
 
 export default function App() {
@@ -20,7 +19,6 @@ export default function App() {
         <Route path="dashboard-admin" element={<DashboardAdminPage />} />
         <Route path="parts-consumable-request" element={<PartsConsumableRequestPage />} />
         <Route path="tool-calibration-record" element={<ToolCalibrationRecordPage />} />
-        <Route path="atl" element={<AircraftTechnicalLogPage/>} />
       </Routes>
     </BrowserRouter>
   )

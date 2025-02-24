@@ -1,4 +1,5 @@
 import './css/AircraftTechnicalLogCreate.css';
+import logo from './images/WorldSkills-Logo.png';
 
 function AircraftTechnicalLogCreatePage() {
     return(
@@ -448,7 +449,7 @@ function AircraftTechnicalLogCreatePage() {
             </div>
             {/* Unnamed (Image) */}
             <div id="u323" className="ax_default image transition notrs">
-            <img id="u323_img" className="img " src="images/login/u10.png" />
+            <img id="u323_img" className="img " src={logo} alt='' />
             <div
                 id="u323_text"
                 className="text "

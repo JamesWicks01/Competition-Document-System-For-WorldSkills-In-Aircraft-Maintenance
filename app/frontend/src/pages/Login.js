@@ -127,7 +127,7 @@ function LoginPage() {
         </div>
         {/* Unnamed (Image) */}
         <div id="u10" className="ax_default image transition notrs">
-            <img id="u10_img" className="img " src={logo} />
+            <img id="u10_img" className="img " src={logo} alt='' />
             <div
             id="u10_text"
             className="text "

@@ -1,410 +1,988 @@
 import './css/PartsConsumableRequest.css';
-import { useEffect } from 'react';
-import * as authUtils from './authUtils';
 
 function PartsConsumableRequestPage() {
-
-    useEffect(() => {
-        authUtils.CheckLoggedIn();
-        authUtils.CheckAccess();
-    }, []);
-
-    return (
+    return(
         <div id="base" className="">
-            {/* Unnamed (Rectangle) */}
-            <div id="u33" className="ax_default box_1 transition notrs">
-            <div id="u33_div" className="" />
-            <div id="u33_text" className="text ">
-                <p>
+        {/* Unnamed (Rectangle) */}
+        <div id="u105" className="ax_default box_1 transition notrs">
+            <div id="u105_div" className="" />
+            <div id="u105_text" className="text ">
+            <p>
                 <span>PARTS AND CONSUMABLE REQUISITION</span>
-                </p>
+            </p>
             </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u34" className="ax_default box_1 transition notrs">
-            <div id="u34_div" className="" />
-            <div id="u34_text" className="text ">
-                <p>
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u106" className="ax_default box_1 transition notrs">
+            <div id="u106_div" className="" />
+            <div id="u106_text" className="text ">
+            <p>
                 <span>Name</span>
-                </p>
+            </p>
             </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u35" className="ax_default box_1 transition notrs">
-            <div id="u35_div" className="" />
-            <div id="u35_text" className="text ">
-                <p>
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u107" className="ax_default box_1 transition notrs">
+            <div id="u107_div" className="" />
+            <div id="u107_text" className="text ">
+            <p>
                 <span>ACA#</span>
-                </p>
+            </p>
             </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u36" className="ax_default box_1 transition notrs">
-            <div id="u36_div" className="" />
-            <div
-                id="u36_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u37" className="ax_default box_1 transition notrs">
-            <div id="u37_div" className="" />
-            <div id="u37_text" className="text ">
-                <p>
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u108" className="ax_default box_1 transition notrs">
+            <div id="u108_div" className="" />
+            <div id="u108_text" className="text ">
+            <p>
                 <span>Work Order #</span>
-                </p>
+            </p>
             </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u38" className="ax_default box_1 transition notrs">
-            <div id="u38_div" className="" />
-            <div
-                id="u38_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u39" className="ax_default box_1 transition notrs">
-            <div id="u39_div" className="" />
-            <div
-                id="u39_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u40" className="ax_default box_1 transition notrs">
-            <div id="u40_div" className="" />
-            <div id="u40_text" className="text ">
-                <p>
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u109" className="ax_default box_1 transition notrs">
+            <div id="u109_div" className="" />
+            <div id="u109_text" className="text ">
+            <p>
                 <span>Task Card ID#</span>
-                </p>
+            </p>
             </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u41" className="ax_default box_1 transition notrs">
-            <div id="u41_div" className="" />
-            <div
-                id="u41_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u42" className="ax_default box_1 transition notrs">
-            <div id="u42_div" className="" />
-            <div id="u42_text" className="text ">
-                <p>
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u110" className="ax_default box_1 transition notrs">
+            <div id="u110_div" className="" />
+            <div id="u110_text" className="text ">
+            <p>
                 <span>PARTS REQUEST</span>
-                </p>
+            </p>
             </div>
+        </div>
+        {/* Add_Row_Parts_Request (Rectangle) */}
+        <div
+            id="u111"
+            className="ax_default shape transition notrs"
+            data-label="Add_Row_Parts_Request"
+        >
+            <div id="u111_div" className="" />
+            <div id="u111_text" className="text ">
+            <p>
+                <span>Add New Row Above</span>
+            </p>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u43" className="ax_default box_1 transition notrs">
-            <div id="u43_div" className="" />
-            <div id="u43_text" className="text ">
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u112" className="ax_default box_1 transition notrs">
+            <div id="u112_div" className="" />
+            <div id="u112_text" className="text ">
+            <p>
+                <span>CONSUMABLE REQUEST</span>
+            </p>
+            </div>
+        </div>
+        {/* Add_Row_Consumable_Request (Rectangle) */}
+        <div
+            id="u113"
+            className="ax_default shape transition notrs"
+            data-label="Add_Row_Consumable_Request"
+        >
+            <div id="u113_div" className="" />
+            <div id="u113_text" className="text ">
+            <p>
+                <span>Add New Row Above</span>
+            </p>
+            </div>
+        </div>
+        {/* Submit_Button (Rectangle) */}
+        <div
+            id="u114"
+            className="ax_default shape transition notrs"
+            data-label="Submit_Button"
+        >
+            <div id="u114_div" className="" />
+            <div id="u114_text" className="text ">
+            <p>
+                <span>Submit</span>
+            </p>
+            </div>
+        </div>
+        {/* Name (Text field) */}
+        <div
+            id="u115"
+            className="ax_default text_field transition notrs"
+            data-label="Name"
+        >
+            <div id="u115_div" className="" />
+            <input id="u115_input" type="text" defaultValue="" className="u115_input" />
+        </div>
+        {/* Work_Order_Number (Text field) */}
+        <div
+            id="u116"
+            className="ax_default text_field transition notrs"
+            data-label="Work_Order_Number"
+        >
+            <div id="u116_div" className="" />
+            <input id="u116_input" type="text" defaultValue="" className="u116_input" />
+        </div>
+        {/* ACA_Number (Text field) */}
+        <div
+            id="u117"
+            className="ax_default text_field transition notrs"
+            data-label="ACA_Number"
+        >
+            <div id="u117_div" className="" />
+            <input id="u117_input" type="text" defaultValue="" className="u117_input" />
+        </div>
+        {/* Task_Card_ID (Text field) */}
+        <div
+            id="u118"
+            className="ax_default text_field transition notrs"
+            data-label="Task_Card_ID"
+        >
+            <div id="u118_div" className="" />
+            <input id="u118_input" type="text" defaultValue="" className="u118_input" />
+        </div>
+        {/* Unnamed (Table) */}
+        <div id="u119" className="ax_default">
+            {/* Unnamed (Table cell) */}
+            <div id="u120" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u120.svg"
+                id="u120_img"
+                className="img generatedImage"
+                viewBox="0 0 114 30"
+            >
+                <path
+                d="M 1 1  L 114 1  L 114 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 114 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                className="stroke"
+                />
+            </svg>
+            <div id="u120_text" className="text ">
                 <p>
                 <span>Item</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u44" className="ax_default box_1 transition notrs">
-            <div id="u44_div" className="" />
-            <div id="u44_text" className="text ">
-                <p>
-                <span>Parts Number</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u45" className="ax_default box_1 transition notrs">
-            <div id="u45_div" className="" />
-            <div id="u45_text" className="text ">
-                <p>
-                <span>1</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u46" className="ax_default box_1 transition notrs">
-            <div id="u46_div" className="" />
-            <div
-                id="u46_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
+            {/* Unnamed (Table cell) */}
+            <div id="u121" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u121.svg"
+                id="u121_img"
+                className="img generatedImage"
+                viewBox="114 0 447 30"
             >
-                <p />
+                <path
+                d="M 1 1  L 447 1  L 447 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                transform="matrix(1 0 0 1 114 0 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 447 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 0 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u121_text" className="text ">
+                <p>
+                <span>Part Number</span>
+                </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u47" className="ax_default box_1 transition notrs">
-            <div id="u47_div" className="" />
-            <div id="u47_text" className="text ">
+            {/* Unnamed (Table cell) */}
+            <div id="u122" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u122.svg"
+                id="u122_img"
+                className="img generatedImage"
+                viewBox="561 0 425 30"
+            >
+                <path
+                d="M 1 1  L 425 1  L 425 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                transform="matrix(1 0 0 1 561 0 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 425 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 0 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u122_text" className="text ">
                 <p>
                 <span>Description</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u48" className="ax_default box_1 transition notrs">
-            <div id="u48_div" className="" />
-            <div id="u48_text" className="text ">
+            {/* Unnamed (Table cell) */}
+            <div id="u123" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u123.svg"
+                id="u123_img"
+                className="img generatedImage"
+                viewBox="986 0 135 30"
+            >
+                <path
+                d="M 1 1  L 134 1  L 134 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 135 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 134.5 1  L 134.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u123_text" className="text ">
                 <p>
                 <span>Quantity</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u49" className="ax_default box_1 transition notrs">
-            <div id="u49_div" className="" />
+            {/* Unnamed (Table cell) */}
+            <div id="u124" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u124.svg"
+                id="u124_img"
+                className="img generatedImage"
+                viewBox="0 30 114 39"
+            >
+                <path
+                d="M 1 1  L 114 1  L 114 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 114 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 114 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u124_text" className="text ">
+                <p>
+                <span>1</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Table cell) */}
+            <div id="u125" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u125.svg"
+                id="u125_img"
+                className="img generatedImage"
+                viewBox="114 30 447 39"
+            >
+                <path
+                d="M 1 1  L 447 1  L 447 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 447 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 447 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="stroke"
+                />
+            </svg>
             <div
-                id="u49_text"
+                id="u125_text"
                 className="text "
                 style={{ display: "none", visibility: "hidden" }}
             >
                 <p />
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u50" className="ax_default box_1 transition notrs">
-            <div id="u50_div" className="" />
+            {/* Unnamed (Table cell) */}
+            <div id="u126" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u126.svg"
+                id="u126_img"
+                className="img generatedImage"
+                viewBox="561 30 425 39"
+            >
+                <path
+                d="M 1 1  L 425 1  L 425 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 425 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 425 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="stroke"
+                />
+            </svg>
             <div
-                id="u50_text"
+                id="u126_text"
                 className="text "
                 style={{ display: "none", visibility: "hidden" }}
             >
                 <p />
             </div>
             </div>
-            {/* Add_Row_Parts_Request (Rectangle) */}
-            <div
-            id="u51"
-            className="ax_default shape transition notrs"
-            data-label="Add_Row_Parts_Request"
+            {/* Unnamed (Table cell) */}
+            <div id="u127" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u127.svg"
+                id="u127_img"
+                className="img generatedImage"
+                viewBox="986 30 135 39"
             >
-            <div id="u51_div" className="" />
-            <div id="u51_text" className="text ">
-                <p>
-                <span>Add New Row Above</span>
-                </p>
+                <path
+                d="M 1 1  L 134 1  L 134 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 135 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 134.5 1  L 134.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 135 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+            </svg>
+            <div
+                id="u127_text"
+                className="text "
+                style={{ display: "none", visibility: "hidden" }}
+            >
+                <p />
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u52" className="ax_default box_1 transition notrs">
-            <div id="u52_div" className="" />
-            <div id="u52_text" className="text ">
-                <p>
-                <span>CONSUMABLE REQUEST</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u53" className="ax_default box_1 transition notrs">
-            <div id="u53_div" className="" />
-            <div id="u53_text" className="text ">
+        </div>
+        {/* Part_Number (Text field) */}
+        <div
+            id="u128"
+            className="ax_default text_field transition notrs"
+            data-label="Part_Number"
+        >
+            <div id="u128_div" className="" />
+            <input id="u128_input" type="text" defaultValue="" className="u128_input" />
+        </div>
+        {/* Part_Description (Text field) */}
+        <div
+            id="u129"
+            className="ax_default text_field transition notrs"
+            data-label="Part_Description"
+        >
+            <div id="u129_div" className="" />
+            <input id="u129_input" type="text" defaultValue="" className="u129_input" />
+        </div>
+        {/* Part_Quantity (Text field) */}
+        <div
+            id="u130"
+            className="ax_default text_field transition notrs"
+            data-label="Part_Quantity"
+        >
+            <div id="u130_div" className="" />
+            <input
+            id="u130_input"
+            type="number"
+            defaultValue=""
+            className="u130_input"
+            />
+        </div>
+        {/* Unnamed (Table) */}
+        <div id="u131" className="ax_default">
+            {/* Unnamed (Table cell) */}
+            <div id="u132" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u120.svg"
+                id="u132_img"
+                className="img generatedImage"
+                viewBox="0 0 114 30"
+            >
+                <path
+                d="M 1 1  L 114 1  L 114 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 114 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                className="stroke"
+                />
+            </svg>
+            <div id="u132_text" className="text ">
                 <p>
                 <span>Item</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u54" className="ax_default box_1 transition notrs">
-            <div id="u54_div" className="" />
-            <div id="u54_text" className="text ">
+            {/* Unnamed (Table cell) */}
+            <div id="u133" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u121.svg"
+                id="u133_img"
+                className="img generatedImage"
+                viewBox="114 0 447 30"
+            >
+                <path
+                d="M 1 1  L 447 1  L 447 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                transform="matrix(1 0 0 1 114 0 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 447 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 0 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u133_text" className="text ">
                 <p>
                 <span>Identification #</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u55" className="ax_default box_1 transition notrs">
-            <div id="u55_div" className="" />
-            <div id="u55_text" className="text ">
-                <p>
-                <span>1</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u56" className="ax_default box_1 transition notrs">
-            <div id="u56_div" className="" />
-            <div
-                id="u56_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
+            {/* Unnamed (Table cell) */}
+            <div id="u134" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u122.svg"
+                id="u134_img"
+                className="img generatedImage"
+                viewBox="561 0 425 30"
             >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u57" className="ax_default box_1 transition notrs">
-            <div id="u57_div" className="" />
-            <div id="u57_text" className="text ">
+                <path
+                d="M 1 1  L 425 1  L 425 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                transform="matrix(1 0 0 1 561 0 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 425 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 0 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u134_text" className="text ">
                 <p>
                 <span>Description</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u58" className="ax_default box_1 transition notrs">
-            <div id="u58_div" className="" />
-            <div id="u58_text" className="text ">
+            {/* Unnamed (Table cell) */}
+            <div id="u135" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u123.svg"
+                id="u135_img"
+                className="img generatedImage"
+                viewBox="986 0 135 30"
+            >
+                <path
+                d="M 1 1  L 134 1  L 134 30  L 1 30  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(238, 236, 225, 0.9921568627450981)"
+                stroke="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 135 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="stroke"
+                />
+                <path
+                d="M 134.5 1  L 134.5 30  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 0 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u135_text" className="text ">
                 <p>
                 <span>Quantity</span>
                 </p>
             </div>
             </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u59" className="ax_default box_1 transition notrs">
-            <div id="u59_div" className="" />
-            <div
-                id="u59_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
+            {/* Unnamed (Table cell) */}
+            <div id="u136" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u124.svg"
+                id="u136_img"
+                className="img generatedImage"
+                viewBox="0 30 114 39"
             >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u60" className="ax_default box_1 transition notrs">
-            <div id="u60_div" className="" />
-            <div
-                id="u60_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Add_Row_Consumable_Request (Rectangle) */}
-            <div
-            id="u61"
-            className="ax_default shape transition notrs"
-            data-label="Add_Row_Consumable_Request"
-            >
-            <div id="u61_div" className="" />
-            <div id="u61_text" className="text ">
+                <path
+                d="M 1 1  L 114 1  L 114 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 114 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 114 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 0 30 )"
+                className="stroke"
+                />
+            </svg>
+            <div id="u136_text" className="text ">
                 <p>
-                <span>Add New Row Above</span>
+                <span>1</span>
                 </p>
             </div>
             </div>
-            {/* Name (Text field) */}
-            <div
-            id="u62"
-            className="ax_default text_field transition notrs"
-            data-label="Name"
+            {/* Unnamed (Table cell) */}
+            <div id="u137" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u125.svg"
+                id="u137_img"
+                className="img generatedImage"
+                viewBox="114 30 447 39"
             >
-            <div id="u62_div" className="" />
-            <input id="u62_input" type="text" defaultValue="" className="u62_input" />
-            </div>
-            {/* ACA_Number (Text field) */}
+                <path
+                d="M 1 1  L 447 1  L 447 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 447 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 447 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 114 30 )"
+                className="stroke"
+                />
+            </svg>
             <div
-            id="u63"
-            className="ax_default text_field transition notrs"
-            data-label="ACA_Number"
+                id="u137_text"
+                className="text "
+                style={{ display: "none", visibility: "hidden" }}
             >
-            <div id="u63_div" className="" />
-            <input id="u63_input" type="text" defaultValue="" className="u63_input" />
+                <p />
             </div>
-            {/* Task_Card_ID (Text field) */}
-            <div
-            id="u64"
-            className="ax_default text_field transition notrs"
-            data-label="Task_Card_ID"
+            </div>
+            {/* Unnamed (Table cell) */}
+            <div id="u138" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u126.svg"
+                id="u138_img"
+                className="img generatedImage"
+                viewBox="561 30 425 39"
             >
-            <div id="u64_div" className="" />
-            <input id="u64_input" type="text" defaultValue="" className="u64_input" />
-            </div>
-            {/* Work_Order_Number (Text field) */}
+                <path
+                d="M 1 1  L 425 1  L 425 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 425 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 425 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 561 30 )"
+                className="stroke"
+                />
+            </svg>
             <div
-            id="u65"
-            className="ax_default text_field transition notrs"
-            data-label="Work_Order_Number"
+                id="u138_text"
+                className="text "
+                style={{ display: "none", visibility: "hidden" }}
             >
-            <div id="u65_div" className="" />
-            <input id="u65_input" type="text" defaultValue="" className="u65_input" />
+                <p />
             </div>
-            {/* Parts_Number (Text field) */}
-            <div
-            id="u66"
-            className="ax_default text_field transition notrs"
-            data-label="Parts_Number"
+            </div>
+            {/* Unnamed (Table cell) */}
+            <div id="u139" className="ax_default transition notrs">
+            <svg
+                data="images/parts_and_consumable_request/u127.svg"
+                id="u139_img"
+                className="img generatedImage"
+                viewBox="986 30 135 39"
             >
-            <div id="u66_div" className="" />
-            <input id="u66_input" type="text" defaultValue="" className="u66_input" />
-            </div>
-            {/* Parts_Description (Text field) */}
+                <path
+                d="M 1 1  L 134 1  L 134 38  L 1 38  L 1 1  Z "
+                fillRule="nonzero"
+                fill="rgba(255, 255, 255, 1)"
+                stroke="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="fill"
+                />
+                <path
+                d="M 0.5 1  L 0.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 0.5  L 135 0.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 134.5 1  L 134.5 38  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+                <path
+                d="M 0 38.5  L 135 38.5  "
+                strokeWidth={1}
+                strokeDasharray={0}
+                stroke="rgba(0, 0, 0, 1)"
+                fill="none"
+                transform="matrix(1 0 0 1 986 30 )"
+                className="stroke"
+                />
+            </svg>
             <div
-            id="u67"
-            className="ax_default text_field transition notrs"
-            data-label="Parts_Description"
+                id="u139_text"
+                className="text "
+                style={{ display: "none", visibility: "hidden" }}
             >
-            <div id="u67_div" className="" />
-            <input id="u67_input" type="text" defaultValue="" className="u67_input" />
+                <p />
             </div>
-            {/* Parts_Quantity (Text field) */}
-            <div
-            id="u68"
-            className="ax_default text_field transition notrs"
-            data-label="Parts_Quantity"
-            >
-            <div id="u68_div" className="" />
-            <input id="u68_input" type="text" defaultValue="" className="u68_input" />
             </div>
-            {/* Identification_Number (Text field) */}
-            <div
-            id="u69"
+        </div>
+        {/* Identification_Number (Text field) */}
+        <div
+            id="u140"
             className="ax_default text_field transition notrs"
             data-label="Identification_Number"
-            >
-            <div id="u69_div" className="" />
-            <input id="u69_input" type="text" defaultValue="" className="u69_input" />
-            </div>
-            {/* Consumable_Description (Text field) */}
-            <div
-            id="u70"
+        >
+            <div id="u140_div" className="" />
+            <input id="u140_input" type="text" defaultValue="" className="u140_input" />
+        </div>
+        {/* Consumable_Description (Text field) */}
+        <div
+            id="u141"
             className="ax_default text_field transition notrs"
             data-label="Consumable_Description"
-            >
-            <div id="u70_div" className="" />
-            <input id="u70_input" type="text" defaultValue="" className="u70_input" />
-            </div>
-            {/* Consumable_Quantity (Text field) */}
-            <div
-            id="u71"
+        >
+            <div id="u141_div" className="" />
+            <input id="u141_input" type="text" defaultValue="" className="u141_input" />
+        </div>
+        {/* Consumable_Quantity (Text field) */}
+        <div
+            id="u142"
             className="ax_default text_field transition notrs"
             data-label="Consumable_Quantity"
-            >
-            <div id="u71_div" className="" />
-            <input id="u71_input" type="text" defaultValue="" className="u71_input" />
-            </div>
-            {/* Submit_Button (Rectangle) */}
-            <div
-            id="u72"
-            className="ax_default shape transition notrs"
-            data-label="Submit_Button"
-            >
-            <div id="u72_div" className="" />
-            <div id="u72_text" className="text ">
-                <p>
-                <span>Submit</span>
-                </p>
-            </div>
-            </div>
-         </div>
+        >
+            <div id="u142_div" className="" />
+            <input
+            id="u142_input"
+            type="number"
+            defaultValue=""
+            className="u142_input"
+            />
+        </div>
+        </div>       
     );
-}
+};
 
 export default PartsConsumableRequestPage;

@@ -16,7 +16,7 @@ body {
     position:absolute;
     z-index:0;
   }
-  #u17_div {
+  #u26_div {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -30,15 +30,14 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u17 {
-    cursor: pointer;
+  #u26 {
     border-width:0px;
     position:absolute;
     left:1004px;
@@ -52,14 +51,14 @@ body {
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u17 .text {
+  #u26 .text {
     position:absolute;
     align-self:center;
     padding:2px 2px 2px 2px;
     box-sizing:border-box;
     width:100%;
   }
-  #u17_div.mouseOver {
+  #u26_div.mouseOver {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -73,16 +72,16 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u17.mouseOver {
+  #u26.mouseOver {
   }
-  #u17_div.mouseDown {
+  #u26_div.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -96,16 +95,16 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u17.mouseDown {
+  #u26.mouseDown {
   }
-  #u17_div.mouseOver.mouseDown {
+  #u26_div.mouseOver.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -119,24 +118,24 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u17.mouseOver.mouseDown {
+  #u26.mouseOver.mouseDown {
   }
-  #u17_text {
+  #u26_text {
     border-width:0px;
     word-wrap:break-word;
     text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
     -webkit-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
-    -moz-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
+
     text-transform:none;
   }
-  #u18_div {
+  #u27_div {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -146,10 +145,10 @@ body {
     background:inherit;
     background-color:rgba(215, 215, 215, 1);
     border-radius:0px;
-    filter:drop-shadow(none);
+
     transition:none;
   }
-  #u18 {
+  #u27 {
     border-width:0px;
     position:absolute;
     left:696px;
@@ -160,20 +159,20 @@ body {
     transition:none;
     transform-origin:50% 50%;
   }
-  #u18 .text {
+  #u27 .text {
     position:absolute;
     align-self:center;
     padding:2px 2px 2px 2px;
     box-sizing:border-box;
     width:100%;
   }
-  #u18_text {
+  #u27_text {
     border-width:0px;
     word-wrap:break-word;
     text-transform:none;
     visibility:hidden;
   }
-  #u19_div {
+  #u28_div {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -187,15 +186,14 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u19 {
-    cursor: pointer;
+  #u28 {
     border-width:0px;
     position:absolute;
     left:710px;
@@ -209,14 +207,14 @@ body {
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u19 .text {
+  #u28 .text {
     position:absolute;
     align-self:center;
     padding:2px 2px 2px 2px;
     box-sizing:border-box;
     width:100%;
   }
-  #u19_div.mouseOver {
+  #u28_div.mouseOver {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -230,16 +228,16 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u19.mouseOver {
+  #u28.mouseOver {
   }
-  #u19_div.mouseDown {
+  #u28_div.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -253,16 +251,16 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u19.mouseDown {
+  #u28.mouseDown {
   }
-  #u19_div.mouseOver.mouseDown {
+  #u28_div.mouseOver.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -276,24 +274,24 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u19.mouseOver.mouseDown {
+  #u28.mouseOver.mouseDown {
   }
-  #u19_text {
+  #u28_text {
     border-width:0px;
     word-wrap:break-word;
     text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
     -webkit-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
-    -moz-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
+
     text-transform:none;
   }
-  #u20_div {
+  #u29_div {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -307,15 +305,14 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u20 {
-    cursor: pointer;
+  #u29 {
     border-width:0px;
     position:absolute;
     left:710px;
@@ -329,14 +326,14 @@ body {
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u20 .text {
+  #u29 .text {
     position:absolute;
     align-self:center;
     padding:2px 2px 2px 2px;
     box-sizing:border-box;
     width:100%;
   }
-  #u20_div.mouseOver {
+  #u29_div.mouseOver {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -350,16 +347,16 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u20.mouseOver {
+  #u29.mouseOver {
   }
-  #u20_div.mouseDown {
+  #u29_div.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -373,16 +370,16 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u20.mouseDown {
+  #u29.mouseDown {
   }
-  #u20_div.mouseOver.mouseDown {
+  #u29_div.mouseOver.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -396,24 +393,24 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u20.mouseOver.mouseDown {
+  #u29.mouseOver.mouseDown {
   }
-  #u20_text {
+  #u29_text {
     border-width:0px;
     word-wrap:break-word;
     text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
     -webkit-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
-    -moz-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
+
     text-transform:none;
   }
-  #u21_div {
+  #u30_div {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -427,15 +424,14 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u21 {
-    cursor: pointer;
+  #u30 {
     border-width:0px;
     position:absolute;
     left:265px;
@@ -449,14 +445,14 @@ body {
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u21 .text {
+  #u30 .text {
     position:absolute;
     align-self:center;
     padding:2px 2px 2px 2px;
     box-sizing:border-box;
     width:100%;
   }
-  #u21_div.mouseOver {
+  #u30_div.mouseOver {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -470,16 +466,16 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 1px 0px 0px rgba(255, 255, 255, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u21.mouseOver {
+  #u30.mouseOver {
   }
-  #u21_div.mouseDown {
+  #u30_div.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -493,16 +489,16 @@ body {
     border-style:solid;
     border-color:rgba(204, 204, 204, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u21.mouseDown {
+  #u30.mouseDown {
   }
-  #u21_div.mouseOver.mouseDown {
+  #u30_div.mouseOver.mouseDown {
     border-width:0px;
     position:absolute;
     left:0px;
@@ -516,58 +512,21 @@ body {
     border-style:solid;
     border-color:rgba(173, 173, 173, 1);
     border-radius:4px;
-    filter:drop-shadow(none);
+
     box-shadow:0px 3px 5px 0px rgba(0, 0, 0, 0.11764705882352941) inset;
     transition:none;
     font-size:20px;
     color:rgba(255, 255, 255, 0.996078431372549);
     line-height:24px;
   }
-  #u21.mouseOver.mouseDown {
+  #u30.mouseOver.mouseDown {
   }
-  #u21_text {
+  #u30_text {
     border-width:0px;
     word-wrap:break-word;
     text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
     -webkit-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
-    -moz-text-shadow:0px 1px 0px rgba(255, 255, 255, 1);
+
     text-transform:none;
-  }
-  #u22_div {
-    border-width:0px;
-    position:absolute;
-    left:0px;
-    top:0px;
-    width:1px;
-    height:15px;
-    background:inherit;
-    background-color:rgba(255, 255, 255, 0);
-    border-radius:0px;
-    filter:drop-shadow(none);
-    transition:none;
-  }
-  #u22 {
-    border-width:0px;
-    position:absolute;
-    left:1264px;
-    top:243px;
-    width:1px;
-    height:15px;
-    display:flex;
-    transition:none;
-    transform-origin:50% 50%;
-  }
-  #u22 .text {
-    position:absolute;
-    align-self:flex-start;
-    padding:0px 0px 0px 0px;
-    box-sizing:border-box;
-    width:100%;
-  }
-  #u22_text {
-    border-width:0px;
-    white-space:nowrap;
-    text-transform:none;
-    visibility:hidden;
   }
   

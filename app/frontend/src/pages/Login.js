@@ -1,71 +1,34 @@
-import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
-import * as apiService from './apiService';
-import { jwtDecode } from 'jwt-decode';
-import bcrypt from "bcryptjs";
 
 function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-
-    const handleLogin = async () => {
-        try {
-            const salt = await bcrypt.genSalt(12);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            const data = await apiService.apiRequest('login', "POST", {username: username, password: hashedPassword}, false);
-
-            if (data && data.token) {
-                localStorage.setItem('token', data.token);
-
-                // Decode the token to get the user's role (assuming the token is JWT)
-                const decodedToken = jwtDecode(data.token);
-                const userRole = decodedToken.role;
-
-                // Redirect based on the user's role
-                if (userRole === 'COMPETITOR') {
-                    window.location.href = 'dashboard-competitor';
-                } else if (userRole === 'EXPERT') {
-                    window.location.href = 'dashboard-expert';
-                } else if (userRole === 'ADMIN') {
-                    window.location.href = 'dashboard-admin';
-                }
-            } else {
-                alert(data.message);
-            }
-        } catch (err) {
-            alert('Failed to connect to the server');
-        }
-    };
-
     return (
         <div id="base" className="">
-        {/* Username Group (Group) */}
+        {/* Text field & labels (filled) (Group) */}
         <div
             id="u0"
             className="ax_default"
-            data-label="Username Group"
+            data-label="Text field & labels (filled)"
             data-left={404}
             data-top={319}
             data-width={386}
             data-height={112}
             layer-opacity={1}
         >
-            {/* Username_Input (Text field) */}
+            {/* Input field (Text field) */}
             <div
             id="u1"
             className="ax_default text_field transition notrs"
-            data-label="Username_Input"
+            data-label="Input field"
             >
             <div id="u1_div" className="" />
-            <input id="u1_input" type="text" defaultValue="" className="u1_input" value={username} onChange={(e) => setUsername(e.target.value)}/>
+            <input id="u1_input" type="text" defaultValue="" className="u1_input" />
             </div>
-            {/* Username_Label (Rectangle) */}
+            {/* Input label (Rectangle) */}
             <div
             id="u2"
             className="ax_default label transition notrs"
-            data-label="Username_Label"
+            data-label="Input label"
             >
             <div id="u2_div" className="" />
             <div id="u2_text" className="text ">
@@ -90,22 +53,22 @@ function LoginPage() {
             </div>
             </div>
         </div>
-        {/* Password Group (Group) */}
+        {/* Text field & labels (filled) (Group) */}
         <div
             id="u4"
             className="ax_default"
-            data-label="Password Group"
+            data-label="Text field & labels (filled)"
             data-left={404}
             data-top={452}
             data-width={386}
             data-height={112}
             layer-opacity={1}
         >
-            {/* Password_Input (Text field) */}
+            {/* Input field (Text field) */}
             <div
             id="u5"
             className="ax_default text_field transition notrs"
-            data-label="Password_Input"
+            data-label="Input field"
             >
             <div id="u5_div" className="" />
             <input
@@ -113,15 +76,13 @@ function LoginPage() {
                 type="password"
                 defaultValue=""
                 className="u5_input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
             />
             </div>
-            {/* Password_Label (Rectangle) */}
+            {/* Input label (Rectangle) */}
             <div
             id="u6"
             className="ax_default label transition notrs"
-            data-label="Password_Label"
+            data-label="Input label"
             >
             <div id="u6_div" className="" />
             <div id="u6_text" className="text ">
@@ -146,14 +107,8 @@ function LoginPage() {
             </div>
             </div>
         </div>
-
-        {/* Login_Button (Rectangle) */}
-        <div
-            id="u8"
-            className="ax_default shape transition notrs"
-            data-label="Login_Button"
-            onClick={handleLogin}
-        >
+        {/* Unnamed (Rectangle) */}
+        <div id="u8" className="ax_default shape transition notrs">
             <div id="u8_div" className="" />
             <div id="u8_text" className="text ">
             <p>
@@ -172,7 +127,7 @@ function LoginPage() {
         </div>
         {/* Unnamed (Image) */}
         <div id="u10" className="ax_default image transition notrs">
-            <img id="u10_img" className="img " alt="WorldSkills_Logo" src={logo} />
+            <img id="u10_img" className="img " src={logo} />
             <div
             id="u10_text"
             className="text "
@@ -183,6 +138,6 @@ function LoginPage() {
         </div>
         </div>
     );
-}
+};
 
 export default LoginPage;

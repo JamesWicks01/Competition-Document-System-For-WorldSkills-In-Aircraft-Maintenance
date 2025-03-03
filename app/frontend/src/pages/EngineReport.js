@@ -3,359 +3,489 @@ import './css/EngineReport.css';
 function EngineReportPage() {
     return(
         <div id="base" className="">
-        {/* Report_Style (Group) */}
+        {/* Engine_Report_Style (Group) */}
         <div
-            id="u864"
+            id="u707"
             className="ax_default"
-            data-label="Report_Style"
-            data-left={71}
-            data-top={33}
-            data-width={1048}
-            data-height={1198}
+            data-label="Engine_Report_Style"
+            data-left={96}
+            data-top={10}
+            data-width={1009}
+            data-height={1531}
             layer-opacity={1}
         >
             {/* Unnamed (Rectangle) */}
-            <div id="u865" className="ax_default box_1 transition notrs">
-            <div id="u865_div" className="" />
-            <div id="u865_text" className="text ">
+            <div id="u708" className="ax_default box_1 transition notrs">
+            <div id="u708_div" className="" />
+            <div id="u708_text" className="text ">
                 <p>
-                <span>END-OF-SHIFT REPORT</span>
+                <span>DAMAGE SKETCH / DRAWING AREA</span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u866" className="ax_default box_1 transition notrs">
-            <div id="u866_div" className="" />
-            <div id="u866_text" className="text ">
+            <div id="u709" className="ax_default box_1 transition notrs">
+            <div id="u709_div" className="" />
+            <div id="u709_text" className="text ">
                 <p>
-                <span>AIRCRAFT</span>
+                <span>WS AVIATION</span>
+                </p>
+                <p>
+                <span>ENGINE REPORT</span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u867" className="ax_default box_1 transition notrs">
-            <div id="u867_div" className="" />
-            <div id="u867_text" className="text ">
+            <div id="u710" className="ax_default box_1 transition notrs">
+            <div id="u710_div" className="" />
+            <div id="u710_text" className="text ">
                 <p>
-                <span>DATE</span>
+                <span>ENGINE TYPE</span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u868" className="ax_default box_1 transition notrs">
-            <div id="u868_div" className="" />
-            <div id="u868_text" className="text ">
+            <div id="u711" className="ax_default box_1 transition notrs">
+            <div id="u711_div" className="" />
+            <div id="u711_text" className="text ">
                 <p>
-                <span>PREPARED BY</span>
+                <span>SERIAL NUMBER</span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u869" className="ax_default box_1 transition notrs">
-            <div id="u869_div" className="" />
-            <div
-                id="u869_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u870" className="ax_default box_1 transition notrs">
-            <div id="u870_div" className="" />
-            <div
-                id="u870_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u871" className="ax_default box_1 transition notrs">
-            <div id="u871_div" className="" />
-            <div
-                id="u871_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u872" className="ax_default paragraph transition notrs">
-            <div id="u872_div" className="" />
-            <div id="u872_text" className="text ">
+            <div id="u712" className="ax_default box_1 transition notrs">
+            <div id="u712_div" className="" />
+            <div id="u712_text" className="text ">
                 <p>
-                <span>Work Order #(s)</span>
+                <span>ENGINE RUNNING HOURS</span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u873" className="ax_default paragraph transition notrs">
-            <div id="u873_div" className="" />
-            <div id="u873_text" className="text ">
+            <div id="u713" className="ax_default box_1 transition notrs">
+            <div id="u713_div" className="" />
+            <div id="u713_text" className="text ">
+                <p>
+                <span>WORK ORDER #</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u714" className="ax_default box_1 transition notrs">
+            <div id="u714_div" className="" />
+            <div id="u714_text" className="text ">
+                <p>
+                <span>DATE SUBMITTED</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u715" className="ax_default box_1 transition notrs">
+            <div id="u715_div" className="" />
+            <div id="u715_text" className="text ">
+                <p>
+                <span>TASK CARD ID #</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u716" className="ax_default box_1 transition notrs">
+            <div id="u716_div" className="" />
+            <div id="u716_text" className="text ">
+                <p>
+                <span>DAMAGE </span>
+                </p>
+                <p>
+                <span>TYPE</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u717" className="ax_default box_1 transition notrs">
+            <div id="u717_div" className="" />
+            <div id="u717_text" className="text ">
+                <p>
+                <span>DAMAGE DIMENSION</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u718" className="ax_default box_1 transition notrs">
+            <div id="u718_div" className="" />
+            <div id="u718_text" className="text ">
+                <p>
+                <span>LENGTH</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u719" className="ax_default box_1 transition notrs">
+            <div id="u719_div" className="" />
+            <div id="u719_text" className="text ">
+                <p>
+                <span>WIDTH</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u720" className="ax_default box_1 transition notrs">
+            <div id="u720_div" className="" />
+            <div id="u720_text" className="text ">
+                <p>
+                <span>DEPTH</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u721" className="ax_default box_1 transition notrs">
+            <div id="u721_div" className="" />
+            <div id="u721_text" className="text ">
+                <p>
+                <span>DAMAGE DESCRIPTION</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u722" className="ax_default box_1 transition notrs">
+            <div id="u722_div" className="" />
+            <div id="u722_text" className="text ">
+                <p>
+                <span>DAMAGE SKETCH / DRAWING</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u723" className="ax_default box_1 transition notrs">
+            <div id="u723_div" className="" />
+            <div id="u723_text" className="text ">
+                <p>
+                <span>ITEM</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u724" className="ax_default box_1 transition notrs">
+            <div id="u724_div" className="" />
+            <div id="u724_text" className="text ">
+                <p>
+                <span>SERIAL #</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u725" className="ax_default box_1 transition notrs">
+            <div id="u725_div" className="" />
+            <div id="u725_text" className="text ">
+                <p>
+                <span>MAIN DAMAGED PART</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u726" className="ax_default box_1 transition notrs">
+            <div id="u726_div" className="" />
+            <div id="u726_text" className="text ">
+                <p>
+                <span>Prepared By (Signature and ACA#)</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u727" className="ax_default box_1 transition notrs">
+            <div id="u727_div" className="" />
+            <div id="u727_text" className="text ">
+                <p>
+                <span>Reviewed by (Print Name and Signature)</span>
+                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u728" className="ax_default box_1 transition notrs">
+            <div id="u728_div" className="" />
+            <div id="u728_text" className="text ">
                 <p>
                 <span>
-                    The information provided is correct and to the best of my knowledge.
+                    Include reference points, location, measurements and adject
+                    structure as applicable
                 </span>
                 </p>
-                <p>
-                <span>AMO 2019-14</span>
-                </p>
+            </div>
+            </div>
+            {/* Unnamed (Rectangle) */}
+            <div id="u729" className="ax_default box_1 transition notrs">
+            <div id="u729_div" className="" />
+            <div id="u729_text" className="text ">
                 <p>
                 <span>
-                    <br />
+                    This report has been prepared in accordance wit the instructions
+                    contained within the WS Aviation Maintenance Policy and Procedure
+                    Manual
                 </span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u874" className="ax_default paragraph transition notrs">
-            <div id="u874_div" className="" />
-            <div id="u874_text" className="text ">
+            <div id="u730" className="ax_default box_1 transition notrs">
+            <div id="u730_div" className="" />
+            <div id="u730_text" className="text ">
                 <p>
-                <span>Task Card ID#(s)</span>
+                <span>
+                    This report has been reviewed and is ready to submit to manufacture
+                    for approved repair data.
+                </span>
                 </p>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
-            <div id="u875" className="ax_default box_1 transition notrs">
-            <div id="u875_div" className="" />
-            <div
-                id="u875_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u876" className="ax_default box_1 transition notrs">
-            <div id="u876_div" className="" />
-            <div
-                id="u876_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u877" className="ax_default paragraph transition notrs">
-            <div id="u877_div" className="" />
-            <div id="u877_text" className="text ">
+            <div id="u731" className="ax_default box_1 transition notrs">
+            <div id="u731_div" className="" />
+            <div id="u731_text" className="text ">
                 <p>
-                <span>Signature &amp; ACA</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u878" className="ax_default paragraph transition notrs">
-            <div id="u878_div" className="" />
-            <div id="u878_text" className="text ">
-                <p>
-                <span>Steps Accomplished</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u879" className="ax_default paragraph transition notrs">
-            <div id="u879_div" className="" />
-            <div id="u879_text" className="text ">
-                <p>
-                <span>Remaining Steps</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Rectangle) */}
-            <div id="u880" className="ax_default paragraph transition notrs">
-            <div id="u880_div" className="" />
-            <div id="u880_text" className="text ">
-                <p>
-                <span>Difficulties</span>
+                <span>PART #</span>
                 </p>
             </div>
             </div>
         </div>
-        {/* Report_Inputs (Group) */}
+        {/* Engine Report_Inputs (Group) */}
         <div
-            id="u881"
+            id="u732"
             className="ax_default"
-            data-label="Report_Inputs"
-            data-left={71}
-            data-top={101}
-            data-width={1047}
-            data-height={1085}
+            data-label="Engine Report_Inputs"
+            data-left={96}
+            data-top={140}
+            data-width={1009}
+            data-height={1367}
             layer-opacity={1}
         >
-            {/* Aircraft (Text field) */}
+            {/* Engine_Type (Text field) */}
             <div
-            id="u882"
+            id="u733"
             className="ax_default text_field transition notrs"
-            data-label="Aircraft"
+            data-label="Engine_Type"
             >
-            <div id="u882_div" className="" />
+            <div id="u733_div" className="" />
             <input
-                id="u882_input"
+                id="u733_input"
                 type="text"
                 defaultValue=""
-                className="u882_input"
+                className="u733_input"
             />
             </div>
-            {/* Steps_Accomplished (Text area) */}
+            {/* Serial_Number (Text field) */}
             <div
-            id="u883"
-            className="ax_default text_area transition notrs"
-            data-label="Steps_Accomplished"
-            >
-            <div id="u883_div" className="" />
-            <textarea id="u883_input" className="u883_input" defaultValue={""} />
-            </div>
-            {/* Remaining_Steps (Text area) */}
-            <div
-            id="u884"
-            className="ax_default text_area transition notrs"
-            data-label="Remaining_Steps"
-            >
-            <div id="u884_div" className="" />
-            <textarea id="u884_input" className="u884_input" defaultValue={""} />
-            </div>
-            {/* No_Difficulties (Checkbox) */}
-            <div id="u885" className="ax_default checkbox" data-label="No_Difficulties">
-            <label
-                id="u885_input_label"
-                htmlFor="u885_input"
-                style={{ position: "absolute", left: 0 }}
-            >
-                <svg
-                data="images/end-of-shift_report/no_difficulties_u885.svg"
-                id="u885_img"
-                className="img "
-                viewBox="133 1012 13 13"
-                >
-                <path
-                    d="M 133 1012  L 146 1012  L 146 1025  L 133 1025  L 133 1012  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                />
-                <path
-                    d="M 133.5 1012.5  L 145.5 1012.5  L 145.5 1024.5  L 133.5 1024.5  L 133.5 1012.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                />
-                <path
-                    d="M 135.78571428571428 1018.5  L 138.57142857142858 1021.2857142857142  L 143.21428571428572 1014.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                />
-                </svg>
-                <div id="u885_text" className="text ">
-                <p>
-                    <span>No Difficulties</span>
-                </p>
-                </div>
-            </label>
-            <input id="u885_input" type="checkbox" defaultValue="checkbox" />
-            </div>
-            {/* Signature_And_ACA (Text field) */}
-            <div
-            id="u886"
+            id="u734"
             className="ax_default text_field transition notrs"
-            data-label="Signature_And_ACA"
+            data-label="Serial_Number"
             >
-            <div id="u886_div" className="" />
+            <div id="u734_div" className="" />
             <input
-                id="u886_input"
+                id="u734_input"
                 type="text"
                 defaultValue=""
-                className="u886_input"
+                className="u734_input"
             />
             </div>
-            {/* Difficulties (Text area) */}
+            {/* Engine_Running_Hours (Text field) */}
             <div
-            id="u887"
-            className="ax_default text_area transition notrs"
-            data-label="Difficulties"
-            >
-            <div id="u887_div" className="" />
-            <textarea id="u887_input" className="u887_input" defaultValue={""} />
-            </div>
-            {/* Date (Text field) */}
-            <div
-            id="u888"
+            id="u735"
             className="ax_default text_field transition notrs"
-            data-label="Date"
+            data-label="Engine_Running_Hours"
             >
-            <div id="u888_div" className="" />
+            <div id="u735_div" className="" />
             <input
-                id="u888_input"
-                type="date"
-                defaultValue=""
-                className="u888_input"
-            />
-            </div>
-            {/* Prepared_By (Text field) */}
-            <div
-            id="u889"
-            className="ax_default text_field transition notrs"
-            data-label="Prepared_By"
-            >
-            <div id="u889_div" className="" />
-            <input
-                id="u889_input"
+                id="u735_input"
                 type="text"
                 defaultValue=""
-                className="u889_input"
+                className="u735_input"
             />
             </div>
-            {/* Word_Order_Number (Text field) */}
+            {/* Work_Order_Number (Text field) */}
             <div
-            id="u890"
+            id="u736"
             className="ax_default text_field transition notrs"
-            data-label="Word_Order_Number"
+            data-label="Work_Order_Number"
             >
-            <div id="u890_div" className="" />
+            <div id="u736_div" className="" />
             <input
-                id="u890_input"
+                id="u736_input"
                 type="text"
                 defaultValue=""
-                className="u890_input"
+                className="u736_input"
             />
             </div>
             {/* Task_Card_ID (Text field) */}
             <div
-            id="u891"
+            id="u737"
             className="ax_default text_field transition notrs"
             data-label="Task_Card_ID"
             >
-            <div id="u891_div" className="" />
+            <div id="u737_div" className="" />
             <input
-                id="u891_input"
+                id="u737_input"
                 type="text"
                 defaultValue=""
-                className="u891_input"
+                className="u737_input"
+            />
+            </div>
+            {/* Date_Submitted (Text field) */}
+            <div
+            id="u738"
+            className="ax_default text_field transition notrs"
+            data-label="Date_Submitted"
+            >
+            <div id="u738_div" className="" />
+            <input
+                id="u738_input"
+                type="date"
+                defaultValue=""
+                className="u738_input"
+            />
+            </div>
+            {/* Damage_Type (Text field) */}
+            <div
+            id="u739"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Type"
+            >
+            <div id="u739_div" className="" />
+            <input
+                id="u739_input"
+                type="text"
+                defaultValue=""
+                className="u739_input"
+            />
+            </div>
+            {/* Damage_Length (Text field) */}
+            <div
+            id="u740"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Length"
+            >
+            <div id="u740_div" className="" />
+            <input
+                id="u740_input"
+                type="text"
+                defaultValue=""
+                className="u740_input"
+            />
+            </div>
+            {/* Damage_Width (Text field) */}
+            <div
+            id="u741"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Width"
+            >
+            <div id="u741_div" className="" />
+            <input
+                id="u741_input"
+                type="text"
+                defaultValue=""
+                className="u741_input"
+            />
+            </div>
+            {/* Damage_Depth (Text field) */}
+            <div
+            id="u742"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Depth"
+            >
+            <div id="u742_div" className="" />
+            <input
+                id="u742_input"
+                type="text"
+                defaultValue=""
+                className="u742_input"
+            />
+            </div>
+            {/* Damage_Item (Text field) */}
+            <div
+            id="u743"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Item"
+            >
+            <div id="u743_div" className="" />
+            <input
+                id="u743_input"
+                type="text"
+                defaultValue=""
+                className="u743_input"
+            />
+            </div>
+            {/* Damage_Part_Number (Text field) */}
+            <div
+            id="u744"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Part_Number"
+            >
+            <div id="u744_div" className="" />
+            <input
+                id="u744_input"
+                type="text"
+                defaultValue=""
+                className="u744_input"
+            />
+            </div>
+            {/* Damage_Serial_Number (Text field) */}
+            <div
+            id="u745"
+            className="ax_default text_field transition notrs"
+            data-label="Damage_Serial_Number"
+            >
+            <div id="u745_div" className="" />
+            <input
+                id="u745_input"
+                type="text"
+                defaultValue=""
+                className="u745_input"
+            />
+            </div>
+            {/* Damage_Description (Text area) */}
+            <div
+            id="u746"
+            className="ax_default text_area transition notrs"
+            data-label="Damage_Description"
+            >
+            <div id="u746_div" className="" />
+            <textarea id="u746_input" className="u746_input" defaultValue={""} />
+            </div>
+            {/* Reviewed_By (Text field) */}
+            <div
+            id="u747"
+            className="ax_default text_field transition notrs"
+            data-label="Reviewed_By"
+            >
+            <div id="u747_div" className="" />
+            <input
+                id="u747_input"
+                type="text"
+                defaultValue=""
+                className="u747_input"
+            />
+            </div>
+            {/* Prepared_By (Text field) */}
+            <div
+            id="u748"
+            className="ax_default text_field transition notrs"
+            data-label="Prepared_By"
+            >
+            <div id="u748_div" className="" />
+            <input
+                id="u748_input"
+                type="text"
+                defaultValue=""
+                className="u748_input"
             />
             </div>
         </div>
         {/* Save_Button (Rectangle) */}
         <div
-            id="u892"
+            id="u749"
             className="ax_default shape transition notrs"
             data-label="Save_Button"
         >
-            <div id="u892_div" className="" />
-            <div id="u892_text" className="text ">
+            <div id="u749_div" className="" />
+            <div id="u749_text" className="text ">
             <p>
                 <span>Save</span>
             </p>
@@ -363,12 +493,12 @@ function EngineReportPage() {
         </div>
         {/* Back_Button (Rectangle) */}
         <div
-            id="u893"
+            id="u750"
             className="ax_default shape transition notrs"
             data-label="Back_Button"
         >
-            <div id="u893_div" className="" />
-            <div id="u893_text" className="text ">
+            <div id="u750_div" className="" />
+            <div id="u750_text" className="text ">
             <p>
                 <span>Back</span>
             </p>

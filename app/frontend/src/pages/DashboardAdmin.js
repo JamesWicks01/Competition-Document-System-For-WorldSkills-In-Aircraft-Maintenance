@@ -1,10 +1,38 @@
 import './css/DashboardAdmin.css';
+import * as authUtils from './authUtils.js';
+import { useEffect } from 'react';
 
 function DashboardAdminPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
+    function ToolCalibrationRecords_Button() {
+        window.location.href = "/tool-calibration-records";
+    };
+
+    function AccountManagement_Button() {
+        window.location.href = "/account-management";
+    };
+
+    function CreateNewAircraftTechnicalLog_Button() {
+        window.location.href = "/create-new-aircraft-technical-log";
+    };
+
+    function ViewAllDocumentBinders_Button() {
+        window.location.href = "/view-all-document-binders";
+    };
+
+    function PartsAndConsumableRequest_Button() {
+        window.location.href = "/parts-and-consumable-request";
+    };
+
     return(
         <div id="base" className="">
         {/* Unnamed (Rectangle) */}
-        <div id="u37" className="ax_default shape transition notrs">
+        <div id="u37" className="ax_default shape transition notrs" onClick={authUtils.Signout}>
             <div id="u37_div" className="" />
             <div id="u37_text" className="text ">
             <p>
@@ -24,7 +52,7 @@ function DashboardAdminPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u39" className="ax_default shape transition notrs">
+        <div id="u39" className="ax_default shape transition notrs" onClick={PartsAndConsumableRequest_Button}>
             <div id="u39_div" className="" />
             <div id="u39_text" className="text ">
             <p>
@@ -33,7 +61,7 @@ function DashboardAdminPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u40" className="ax_default shape transition notrs">
+        <div id="u40" className="ax_default shape transition notrs" onClick={ToolCalibrationRecords_Button}>
             <div id="u40_div" className="" />
             <div id="u40_text" className="text ">
             <p>
@@ -42,7 +70,7 @@ function DashboardAdminPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u41" className="ax_default shape transition notrs">
+        <div id="u41" className="ax_default shape transition notrs" onClick={AccountManagement_Button}>
             <div id="u41_div" className="" />
             <div id="u41_text" className="text ">
             <p>
@@ -51,7 +79,7 @@ function DashboardAdminPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u42" className="ax_default shape transition notrs">
+        <div id="u42" className="ax_default shape transition notrs" onClick={CreateNewAircraftTechnicalLog_Button}>
             <div id="u42_div" className="" />
             <div id="u42_text" className="text ">
             <p>
@@ -60,8 +88,8 @@ function DashboardAdminPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u43" className="ax_default shape transition notrs">
-            <div id="u43_div" className="" />
+        <div id="u43" className="ax_default shape transition notrs" onClick={ViewAllDocumentBinders_Button}>
+            <div id="u43_div" className=""/>
             <div id="u43_text" className="text ">
             <p>
                 <span>View All Document Binders</span>

@@ -1,7 +1,44 @@
+import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
+import * as apiService from './apiService';
+import { jwtDecode } from 'jwt-decode';
+import bcryptjs from "bcryptjs";
 
 function LoginPage() {
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = async () => {
+        try {
+            const salt = await bcryptjs.genSalt(12);
+            const hashedPassword = await bcryptjs.hash(password, salt);
+            const data = await apiService.apiRequest('login', "POST", {username: username, password: hashedPassword}, false);
+
+            if (data && data.token) {
+                localStorage.setItem('token', data.token);
+
+                // Decode the token to get the user's role (assuming the token is JWT)
+                const decodedToken = jwtDecode(data.token);
+                const userRole = decodedToken.role;
+
+                // Redirect based on the user's role
+                if (userRole === 'COMPETITOR') {
+                    window.location.href = 'dashboard-competitor';
+                } else if (userRole === 'EXPERT') {
+                    window.location.href = 'dashboard-expert';
+                } else if (userRole === 'ADMIN') {
+                    window.location.href = 'dashboard-admin';
+                }
+            } else {
+                alert(data.message);
+            }
+        } catch (err) {
+            alert('Failed to connect to the server');
+        }
+    };
+
     return (
         <div id="base" className="">
         {/* Text field & labels (filled) (Group) */}
@@ -22,7 +59,7 @@ function LoginPage() {
             data-label="Input field"
             >
             <div id="u1_div" className="" />
-            <input id="u1_input" type="text" defaultValue="" className="u1_input" />
+            <input id="u1_input" type="text" defaultValue="" className="u1_input" value={username} onChange={(e) => setUsername(e.target.value)}/>
             </div>
             {/* Input label (Rectangle) */}
             <div
@@ -76,6 +113,8 @@ function LoginPage() {
                 type="password"
                 defaultValue=""
                 className="u5_input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
             </div>
             {/* Input label (Rectangle) */}
@@ -108,7 +147,7 @@ function LoginPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u8" className="ax_default shape transition notrs">
+        <div id="u8" className="ax_default shape transition notrs" onClick={handleLogin}>
             <div id="u8_div" className="" />
             <div id="u8_text" className="text ">
             <p>

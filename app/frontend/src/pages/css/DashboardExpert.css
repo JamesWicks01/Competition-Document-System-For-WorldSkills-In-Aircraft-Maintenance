@@ -40,6 +40,7 @@ body {
   #u31 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:1004px;
     top:40px;
     width:150px;
@@ -196,6 +197,7 @@ body {
   #u33 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:710px;
     top:216px;
     width:205px;
@@ -315,6 +317,7 @@ body {
   #u34 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:710px;
     top:481px;
     width:205px;
@@ -434,6 +437,7 @@ body {
   #u35 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:265px;
     top:273px;
     width:205px;
@@ -553,6 +557,7 @@ body {
   #u36 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:265px;
     top:424px;
     width:205px;

@@ -1,10 +1,34 @@
 import './css/DashboardExpert.css';
+import * as authUtils from './authUtils.js';
+import { useEffect } from 'react';
 
 function DashboardExpertPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
+    function PartsAndConsumableRequest_Button() {
+        window.location.href = "/parts-and-consumable-request";
+    };
+
+    function ToolsCalibrationRecords_Button() {
+        window.location.href = "/tools-calibration-records";
+    };
+
+    function CreateNewAircraftTechnicalLog_Button() {
+        window.location.href = "/create-new-aircraft-technical-log";
+    };
+
+    function ViewAllDocumentBinders_Button() {
+        window.location.href = "/view-all-document-binders";
+    };
+
     return(
         <div id="base" className="">
         {/* Unnamed (Rectangle) */}
-        <div id="u31" className="ax_default shape transition notrs">
+        <div id="u31" className="ax_default shape transition notrs" onClick={authUtils.Signout}>
             <div id="u31_div" className="" />
             <div id="u31_text" className="text ">
             <p>
@@ -24,7 +48,7 @@ function DashboardExpertPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u33" className="ax_default shape transition notrs">
+        <div id="u33" className="ax_default shape transition notrs" onClick={PartsAndConsumableRequest_Button}>
             <div id="u33_div" className="" />
             <div id="u33_text" className="text ">
             <p>
@@ -33,7 +57,7 @@ function DashboardExpertPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u34" className="ax_default shape transition notrs">
+        <div id="u34" className="ax_default shape transition notrs" onClick={ToolsCalibrationRecords_Button}>
             <div id="u34_div" className="" />
             <div id="u34_text" className="text ">
             <p>
@@ -42,7 +66,7 @@ function DashboardExpertPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u35" className="ax_default shape transition notrs">
+        <div id="u35" className="ax_default shape transition notrs" onClick={CreateNewAircraftTechnicalLog_Button}>
             <div id="u35_div" className="" />
             <div id="u35_text" className="text ">
             <p>
@@ -51,7 +75,7 @@ function DashboardExpertPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u36" className="ax_default shape transition notrs">
+        <div id="u36" className="ax_default shape transition notrs" onClick={ViewAllDocumentBinders_Button}>
             <div id="u36_div" className="" />
             <div id="u36_text" className="text ">
             <p>

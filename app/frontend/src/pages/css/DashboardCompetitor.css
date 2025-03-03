@@ -40,6 +40,7 @@ body {
   #u26 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:1004px;
     top:40px;
     width:150px;
@@ -196,6 +197,7 @@ body {
   #u28 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:710px;
     top:216px;
     width:205px;
@@ -315,6 +317,7 @@ body {
   #u29 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:710px;
     top:481px;
     width:205px;
@@ -434,6 +437,7 @@ body {
   #u30 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:265px;
     top:346px;
     width:205px;

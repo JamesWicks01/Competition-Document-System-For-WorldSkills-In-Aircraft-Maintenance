@@ -10,7 +10,7 @@ function DashboardAdminPage() {
     }, []);
 
     function ToolCalibrationRecords_Button() {
-        window.location.href = "/tool-calibration-records";
+        window.location.href = "/tool-calibration-record";
     };
 
     function AccountManagement_Button() {

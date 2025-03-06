@@ -14,7 +14,7 @@ function DashboardExpertPage() {
     };
 
     function ToolsCalibrationRecords_Button() {
-        window.location.href = "/tools-calibration-records";
+        window.location.href = "/tools-calibration-record";
     };
 
     function CreateNewAircraftTechnicalLog_Button() {

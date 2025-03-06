@@ -1,6 +1,120 @@
 import './css/ToolCalibrationRecord.css';
+import React, { useEffect, useState } from "react";
+import * as apiService from './apiService';
+import * as authUtils from './authUtils';
+
 
 function ToolCalibrationRecordPage() {
+
+    useEffect(() => {
+
+        function InsertNewRecordAccess() {
+            const UserRole = authUtils.GetRole();
+            if (UserRole !== "ADMIN" && UserRole !== "EXPERT") {
+                document.getElementById("u161").style.display = "none";
+                document.getElementById("u161").style.visibility = "hidden";
+            }
+        }
+
+        async function fetchData() {
+            try{
+                const response = await apiService.apiRequest("load-tool-calibration-records", "GET");
+                setData(response);
+            } catch (error) {
+                console.error("Error fetch data: ", error);
+            }
+        }
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+        fetchData();
+        InsertNewRecordAccess();
+    }, []);
+
+    const [data, setData] = useState([]);
+    const headers = ["Description", "Part Number", "Serial Number", "Calibration Date", "Calibration Due Date"];
+
+    const Back_Button = () => {
+        authUtils.Back();
+    };
+
+    const NewRecord_Button = () => {
+        document.getElementById("u162").style.display = "block";
+        document.getElementById("u162").style.visibility = "visible";
+    };
+
+    const Cancel_Button = () => {
+        document.getElementById("u162").style.display = "none";
+        document.getElementById("u162").style.visibility = "hidden";
+    };
+
+    const NewRecord = async () => {
+        const description = document.getElementById("u168_input");
+        const partNumber = document.getElementById("u172_input");
+        const serialNumber = document.getElementById("u176_input");
+        const calibrationDate = document.getElementById("u180_input");
+        const calibrationDueDate = document.getElementById("u184_input");
+
+        if (
+            !description.value.trim() ||
+            !partNumber.value.trim() ||
+            !serialNumber.value.trim() ||
+            !calibrationDate.value.trim() ||
+            !calibrationDueDate.value.trim()
+        ) {
+            alert("Please fill in all fields.");
+            return null;
+        }
+
+        const Record = {
+            Description: description.value.trim(),
+            PartNumber: partNumber.value.trim(),
+            SerialNumber: serialNumber.value.trim(),
+            CalibrationDate: calibrationDate.value.trim(),
+            CalibrationDueDate: calibrationDueDate.value.trim(),
+        };
+
+        try {
+            const response = await apiService.apiRequest("new-record", "POST", Record);
+            if(response) {
+                alert("Record added successfully.");
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Failed to add record.");
+            return null;
+        }
+
+        description.value = "";
+        partNumber.value = "";
+        serialNumber.value = "";
+        calibrationDate.value = "";
+        calibrationDueDate.value = "";
+
+        return Record;
+    };
+
+    const SubmitRecord_Button = async () => {
+        const newRecord = await NewRecord();
+        if (!newRecord) {
+            return;
+        }
+        document.getElementById("u162").style.display = "none";
+        document.getElementById("u143").style.display = "block";
+        window.location.reload();
+    };
+
+    const Search = async () => {
+        const searchType = document.getElementById("u146_input").value;
+        const searchInput = document.getElementById("u147_input").value.trim();
+        try {
+            const data = await apiService.apiRequest(`search-tool-calibration-records?searchType=${searchType}&searchInput=${searchInput}`);
+            setData(data);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+            alert("An error occurred while searching for records.");
+        }
+    }
+
     return(
         <div id="base" className="">
         {/* Unnamed (Rectangle) */}
@@ -62,6 +176,7 @@ function ToolCalibrationRecordPage() {
             id="u148"
             className="ax_default shape transition notrs"
             data-label="Search_Button"
+            onClick={Search}
         >
             <div id="u148_div" className="" />
             <div id="u148_text" className="text ">
@@ -70,514 +185,36 @@ function ToolCalibrationRecordPage() {
             </p>
             </div>
         </div>
-        {/* Unnamed (Table) */}
         <div id="u149" className="ax_default">
-            {/* Unnamed (Table cell) */}
-            <div id="u150" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u150.svg"
-                id="u150_img"
-                className="img generatedImage"
-                viewBox="0 0 224 30"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                className="stroke"
-                />
-            </svg>
-            <div id="u150_text" className="text ">
-                <p>
-                <span>Description</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u151" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u151.svg"
-                id="u151_img"
-                className="img generatedImage"
-                viewBox="224 0 224 30"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                transform="matrix(1 0 0 1 224 0 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 224 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 224 0 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u151_text" className="text ">
-                <p>
-                <span>Part Number</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u152" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u152.svg"
-                id="u152_img"
-                className="img generatedImage"
-                viewBox="448 0 224 30"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                transform="matrix(1 0 0 1 448 0 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 448 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 448 0 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u152_text" className="text ">
-                <p>
-                <span>Serial Number</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u153" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u153.svg"
-                id="u153_img"
-                className="img generatedImage"
-                viewBox="672 0 224 30"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                transform="matrix(1 0 0 1 672 0 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 672 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 672 0 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u153_text" className="text ">
-                <p>
-                <span>Calibration Date</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u154" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u154.svg"
-                id="u154_img"
-                className="img generatedImage"
-                viewBox="896 0 224 30"
-            >
-                <path
-                d="M 1 1  L 223 1  L 223 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                transform="matrix(1 0 0 1 896 0 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 223.5 1  L 223.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 0 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u154_text" className="text ">
-                <p>
-                <span>Calibration Due Date</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u155" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u155.svg"
-                id="u155_img"
-                className="img generatedImage"
-                viewBox="0 30 224 69"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 68  L 1 68  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 30 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 68  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 68.5  L 224 68.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 30 )"
-                className="stroke"
-                />
-            </svg>
-            <div
-                id="u155_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u156" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u156.svg"
-                id="u156_img"
-                className="img generatedImage"
-                viewBox="224 30 224 69"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 68  L 1 68  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 224 30 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 68  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 224 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 224 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 68.5  L 224 68.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 224 30 )"
-                className="stroke"
-                />
-            </svg>
-            <div
-                id="u156_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u157" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u157.svg"
-                id="u157_img"
-                className="img generatedImage"
-                viewBox="448 30 224 69"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 68  L 1 68  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 448 30 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 68  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 448 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 448 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 68.5  L 224 68.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 448 30 )"
-                className="stroke"
-                />
-            </svg>
-            <div
-                id="u157_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u158" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u158.svg"
-                id="u158_img"
-                className="img generatedImage"
-                viewBox="672 30 224 69"
-            >
-                <path
-                d="M 1 1  L 224 1  L 224 68  L 1 68  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 672 30 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 68  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 672 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 672 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 68.5  L 224 68.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 672 30 )"
-                className="stroke"
-                />
-            </svg>
-            <div
-                id="u158_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u159" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/tool_calibration_record/u159.svg"
-                id="u159_img"
-                className="img generatedImage"
-                viewBox="896 30 224 69"
-            >
-                <path
-                d="M 1 1  L 223 1  L 223 68  L 1 68  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 896 30 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 68  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 224 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 223.5 1  L 223.5 68  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 30 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 68.5  L 224 68.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(0, 0, 0, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 896 30 )"
-                className="stroke"
-                />
-            </svg>
-            <div
-                id="u159_text"
-                className="text "
-                style={{ display: "none", visibility: "hidden" }}
-            >
-                <p />
-            </div>
-            </div>
+        <table className="table-calibration">
+        <thead>
+          <tr className="table-header">
+            {headers.map((header, index) => (
+              <th key={index} className={`table-cell header-cell u8${index}`}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, rowIndex) => (
+            <tr key={rowIndex} className="table-row">
+              <td className="table-cell">{row.description}</td>
+              <td className="table-cell">{row.part_number}</td>
+              <td className="table-cell">{row.serial_number}</td>
+              <td className="table-cell">{row.calibration_date}</td>
+              <td className="table-cell">{row.calibration_due_date}</td>
+            </tr>
+          ))}
+        </tbody>
+        </table>
+        <div className="buttons-container">
+        <div id="u160" className="button" onClick={Back_Button}>
+            <p><span>Back</span></p>
         </div>
-        {/* Save_And_Submit_Button (Rectangle) */}
-        <div
-            id="u160"
-            className="ax_default shape transition notrs"
-            data-label="Save_And_Submit_Button"
-        >
-            <div id="u160_div" className="" />
-            <div id="u160_text" className="text ">
-            <p>
-                <span>Insert New Record</span>
-            </p>
-            </div>
+
+        <div id="u161" className="button" onClick={NewRecord_Button}>
+            <p><span>Insert New Record</span></p>
         </div>
-        {/* Back (Rectangle) */}
-        <div
-            id="u161"
-            className="ax_default shape transition notrs"
-            data-label="Back"
-        >
-            <div id="u161_div" className="" />
-            <div id="u161_text" className="text ">
-            <p>
-                <span>Back</span>
-            </p>
-            </div>
+        </div>
         </div>
         {/* New_Record (Group) */}
         <div
@@ -616,6 +253,7 @@ function ToolCalibrationRecordPage() {
             id="u165"
             className="ax_default shape transition notrs"
             data-label="Cancel_Button"
+            onClick={Cancel_Button}
             >
             <div id="u165_div" className="" />
             <div id="u165_text" className="text ">
@@ -629,6 +267,7 @@ function ToolCalibrationRecordPage() {
             id="u166"
             className="ax_default shape transition notrs"
             data-label="Submit_Button"
+            onClick={SubmitRecord_Button}
             >
             <div id="u166_div" className="" />
             <div id="u166_text" className="text ">
@@ -711,7 +350,7 @@ function ToolCalibrationRecordPage() {
                 <div id="u172_div" className="" />
                 <input
                 id="u172_input"
-                type="number"
+                type="text"
                 defaultValue=""
                 className="u172_input"
                 />
@@ -765,7 +404,7 @@ function ToolCalibrationRecordPage() {
                 <div id="u176_div" className="" />
                 <input
                 id="u176_input"
-                type="number"
+                type="text"
                 defaultValue=""
                 className="u176_input"
                 />

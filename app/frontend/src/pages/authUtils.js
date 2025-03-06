@@ -37,3 +37,8 @@ export function CheckAccess() {
         window.history.back();
     }
 }
+
+export function Back() {
+    window.history.back();
+}
+

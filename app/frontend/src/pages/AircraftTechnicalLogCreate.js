@@ -1,7 +1,157 @@
 import './css/AircraftTechnicalLogCreate.css';
 import logo from './images/WorldSkills-Logo.png';
+import {useState, useEffect} from 'react';
+import * as apiService from './apiService.js';
+import * as authUtils from './authUtils.js';
 
 function AircraftTechnicalLogCreatePage() {
+
+    const [competitors, setCompetitors] = useState([]);
+    const [isDisabled] = useState(true);
+
+    useEffect(() => {
+
+        async function fetchCompetitorData() {
+            try {
+                const response = await apiService.apiRequest('get-competitors', 'GET');
+                setCompetitors(response);
+            } catch (error) {
+                console.error("Error fetch data: ", error);
+            }
+        };
+        fetchCompetitorData();
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
+    async function saveATL() {
+        const registration = document.getElementById('u327_input');
+        const captain = document.getElementById('u328_input');
+        const captainSignature = document.getElementById('u329_input');
+        const leg1Date = document.getElementById('u330_input');
+        const leg1TimeUp = document.getElementById('u331_input');
+        const leg1TimeDown = document.getElementById('u332_input');
+        const leg1AirTime = document.getElementById('u333_input');
+        const leg1From = document.getElementById('u334_input');
+        const leg1To = document.getElementById('u335_input');
+        const leg2Date = document.getElementById('u336_input');
+        const leg2TimeUp = document.getElementById('u337_input');
+        const leg2TimeDown = document.getElementById('u338_input');
+        const leg2AirTime = document.getElementById('u339_input');
+        const leg2From = document.getElementById('u340_input');
+        const leg2To = document.getElementById('u341_input');
+        const totalBFTime = document.getElementById('u342_input');
+        const totalAirTime = document.getElementById('u343_input');
+        const totalTime = document.getElementById('u344_input');
+        const defects = document.getElementById('u345_input');
+        const reportedBy = document.getElementById('u346_input');
+        const reportedByDate = document.getElementById('u347_input');
+        const workOrderSummary = document.getElementById('u349_input');
+        const resolutions = document.getElementById('u350_input');
+        const resolvedBy = document.getElementById('u351_input');
+        const resolvedByDate = document.getElementById('u352_input');
+        const partNumber = document.getElementById('u353_input');
+        const serialNumberOn = document.getElementById('u354_input');
+        const serialNumberOff = document.getElementById('u355_input');
+        const batchNumber = document.getElementById('u356_input');
+        const deferralNumber = document.getElementById('u357_input');
+        const mel = document.getElementById('u358_input');
+        const category = document.getElementById('u359_input');
+        const independentCheckBy = document.getElementById('u360_input');
+        const independentCheckByDate = document.getElementById('u361_input');
+        const readyForReleaseBy = document.getElementById('u362_input');
+        const readyForReleaseByDate = document.getElementById('u363_input');
+        const pageSequence = document.getElementById('u325_input');
+        const assignedCompetitor = document.getElementById('u373_input');
+
+        const atl = {
+            registration: registration.value.trim(),
+            captain: captain.value.trim(),
+            captainSignature: captainSignature.value.trim(),
+            leg1Date: leg1Date.value.trim(),
+            leg1TimeUp: leg1TimeUp.value.trim(),
+            leg1TimeDown: leg1TimeDown.value.trim(),
+            leg1AirTime: leg1AirTime.value.trim(),
+            leg1From: leg1From.value.trim(),
+            leg1To: leg1To.value.trim(),
+            leg2Date: leg2Date.value.trim(),
+            leg2TimeUp: leg2TimeUp.value.trim(),
+            leg2TimeDown: leg2TimeDown.value.trim(),
+            leg2AirTime: leg2AirTime.value.trim(),
+            leg2From: leg2From.value.trim(),
+            leg2To: leg2To.value.trim(),
+            totalBFTime: totalBFTime.value.trim(),
+            totalAirTime: totalAirTime.value.trim(),
+            totalTime: totalTime.value.trim(),
+            defects: defects.value.trim(),
+            reportedBy: reportedBy.value.trim(),
+            reportedByDate: reportedByDate.value.trim(),
+            workOrderSummary: workOrderSummary.value.trim(),
+            resolutions: resolutions.value.trim(),
+            resolvedBy: resolvedBy.value.trim(),
+            resolvedByDate: resolvedByDate.value.trim(),
+            partNumber: partNumber.value.trim(),
+            serialNumberOn: serialNumberOn.value.trim(),
+            serialNumberOff: serialNumberOff.value.trim(),
+            batchNumber: batchNumber.value.trim(),
+            deferralNumber: deferralNumber.value.trim(),
+            mel: mel.value.trim(),
+            category: category.value.trim(),
+            functionCheck: false,
+            leakCheck: false,
+            independentCheck: false,
+            otherCheck: false,
+            independentCheckBy: independentCheckBy.value.trim(),
+            independentCheckByDate: independentCheckByDate.value.trim(),
+            readyForReleaseBy: readyForReleaseBy.value.trim(),
+            readyForReleaseByDate: readyForReleaseByDate.value.trim(),
+            pageSequence: pageSequence.value.trim(),
+        };
+
+        const createBinder = {
+            user_id: assignedCompetitor.value.trim(),
+        };
+        try {
+            // Await the API request
+            const binderResponse = await apiService.apiRequest('new-document-binder', 'POST', createBinder);
+        
+            if (binderResponse) {
+                console.log("API Response:", binderResponse); // Check what it returns
+                console.log(`Document binder created successfully with ID: ${binderResponse.binderId}`);
+                atl.binderId = binderResponse.binderId
+            }          
+        } catch (error) {
+            console.error("Error creating document binder: ", error);
+        };
+
+        try {
+            const response = await apiService.apiRequest('new-atl', 'POST', atl);
+            if(response) {
+                console.log("API Response:", response); // Check what it returns
+            }
+        } catch (error) {
+            console.error("Error creating document binder: ", error);
+        }
+        
+    };
+
+    function SubmitAssignATL_Button() {
+        document.getElementById('u370').style.display = 'none';
+        document.getElementById('u370').style.visibility = 'hidden';
+        saveATL();
+        
+    };
+
+    function CancelAssignATL_Button() {
+        document.getElementById('u370').style.display = 'none';
+        document.getElementById('u370').style.visibility = 'hidden';
+    };
+
+    function AssignATL_Button() {
+        document.getElementById('u370').style.display = 'block';
+        document.getElementById('u370').style.visibility = 'visible';
+    };
+
     return(
         <div id="base" className="">
         {/* ATL_Style (Group) */}
@@ -808,6 +958,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u349_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Resolutions (Text area) */}
@@ -817,7 +968,7 @@ function AircraftTechnicalLogCreatePage() {
                 data-label="Resolutions"
             >
                 <div id="u350_div" className="" />
-                <textarea id="u350_input" className="u350_input" defaultValue={""} />
+                <textarea id="u350_input" className="u350_input" defaultValue={""} disabled={isDisabled}/>
             </div>
             {/* Resolved_By (Text field) */}
             <div
@@ -831,6 +982,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u351_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Resolved_By_Date (Text field) */}
@@ -845,6 +997,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="date"
                 defaultValue=""
                 className="u352_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Part_Number (Text field) */}
@@ -859,6 +1012,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u353_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Serial_Number_On (Text field) */}
@@ -873,6 +1027,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u354_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Serial_Number_Off (Text field) */}
@@ -887,6 +1042,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u355_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Batch_Number (Text field) */}
@@ -901,6 +1057,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u356_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Deferral_Number (Text field) */}
@@ -915,6 +1072,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u357_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Minimum_Equipment_List (Text field) */}
@@ -929,6 +1087,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u358_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Category (Droplist) */}
@@ -938,7 +1097,7 @@ function AircraftTechnicalLogCreatePage() {
                 data-label="Category"
             >
                 <div id="u359_div" className="" />
-                <select id="u359_input" className="u359_input">
+                <select id="u359_input" className="u359_input" disabled={isDisabled}>
                 <option className="u359_input_option" value="N/A">
                     N/A
                 </option>
@@ -971,6 +1130,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u360_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Independent_Check_By_Date (Text field) */}
@@ -985,6 +1145,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="date"
                 defaultValue=""
                 className="u361_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Ready_For_Release_By (Text field) */}
@@ -999,6 +1160,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="text"
                 defaultValue=""
                 className="u362_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Ready_For_Release_By_Date (Text field) */}
@@ -1013,6 +1175,7 @@ function AircraftTechnicalLogCreatePage() {
                 type="date"
                 defaultValue=""
                 className="u363_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Function_Check (Checkbox) */}
@@ -1063,7 +1226,7 @@ function AircraftTechnicalLogCreatePage() {
                     </p>
                 </div>
                 </label>
-                <input id="u364_input" type="checkbox" defaultValue="checkbox" />
+                <input id="u364_input" type="checkbox" defaultValue="checkbox" disabled={isDisabled} />
             </div>
             {/* Leak_Check (Checkbox) */}
             <div id="u365" className="ax_default checkbox" data-label="Leak_Check">
@@ -1109,7 +1272,7 @@ function AircraftTechnicalLogCreatePage() {
                     </p>
                 </div>
                 </label>
-                <input id="u365_input" type="checkbox" defaultValue="checkbox" />
+                <input id="u365_input" type="checkbox" defaultValue="checkbox" disabled={isDisabled} />
             </div>
             {/* Independent Check (Checkbox) */}
             <div
@@ -1159,7 +1322,7 @@ function AircraftTechnicalLogCreatePage() {
                     </p>
                 </div>
                 </label>
-                <input id="u366_input" type="checkbox" defaultValue="checkbox" />
+                <input id="u366_input" type="checkbox" defaultValue="checkbox" disabled={isDisabled}/>
             </div>
             {/* Other_Check (Checkbox) */}
             <div id="u367" className="ax_default checkbox" data-label="Other_Check">
@@ -1205,7 +1368,7 @@ function AircraftTechnicalLogCreatePage() {
                     </p>
                 </div>
                 </label>
-                <input id="u367_input" type="checkbox" defaultValue="checkbox" />
+                <input id="u367_input" type="checkbox" defaultValue="checkbox" disabled={isDisabled}/>
             </div>
             </div>
         </div>
@@ -1227,6 +1390,7 @@ function AircraftTechnicalLogCreatePage() {
             id="u369"
             className="ax_default shape transition notrs"
             data-label="Assign_ATL_Button"
+            onClick = {AssignATL_Button}
         >
             <div id="u369_div" className="" />
             <div id="u369_text" className="text ">
@@ -1275,21 +1439,21 @@ function AircraftTechnicalLogCreatePage() {
             >
             <div id="u373_div" className="" />
             <select id="u373_input" className="u373_input">
-                <option className="u373_input_option" value="Competitor 1">
-                Competitor 1
-                </option>
-                <option className="u373_input_option" value="Competitor 2">
-                Competitor 2
-                </option>
-                <option className="u373_input_option" value="Competitor 3">
-                Competitor 3
-                </option>
-                <option className="u373_input_option" value="Competitor 4">
-                Competitor 4
-                </option>
-                <option className="u373_input_option" value="Competitor 5">
-                Competitor 5
-                </option>
+                {competitors.length > 0 ? (
+                    competitors.map((competitor) => (
+                    <option
+                        key={competitor.user_id}
+                        className="u373_input_option"
+                        value={competitor.user_id}
+                        >
+                        {competitor.name}
+                        </option>
+                ))
+                ) : (
+                    <option className="u373_input_option" value="N/A">
+                    No Competitors
+                    </option>
+                    )}
             </select>
             </div>
             {/* Assign_Button (Rectangle) */}
@@ -1297,6 +1461,7 @@ function AircraftTechnicalLogCreatePage() {
             id="u374"
             className="ax_default shape transition notrs"
             data-label="Assign_Button"
+            onClick={SubmitAssignATL_Button}
             >
             <div id="u374_div" className="" />
             <div id="u374_text" className="text ">
@@ -1310,6 +1475,7 @@ function AircraftTechnicalLogCreatePage() {
             id="u375"
             className="ax_default shape transition notrs"
             data-label="Cancel_Button"
+            onClick={CancelAssignATL_Button}
             >
             <div id="u375_div" className="" />
             <div id="u375_text" className="text ">

@@ -25,9 +25,9 @@ export function Signout() {
 export function CheckAccess() {
     const token = localStorage.getItem("token");
     const AllowedPages = {
-        ADMIN: ["/dashboard-admin", "/parts-consumable-request", "/tool-calibration-record", "/create-atl"],
-        EXPERT: ["/dashboard-expert", "/parts-consumable-request", "/tool-calibration-record", "/create-atl"],
-        COMPETITOR: ["/dashboard-competitor", "/parts-consumable-request", "/tool-calibration-record"],
+        Admin: ["/dashboard-admin", "/parts-consumable-request", "/tool-calibration-record", "/aircraft-technical-log-create"],
+        Expert: ["/dashboard-expert", "/parts-consumable-request", "/tool-calibration-record", "/aircraft-technical-log-create"],
+        Competitor: ["/dashboard-competitor", "/parts-consumable-request", "/tool-calibration-record"],
     };
     const decodedToken = jwtDecode(token);
     const role = decodedToken.role;

@@ -24,11 +24,11 @@ function LoginPage() {
                 const userRole = decodedToken.role;
 
                 // Redirect based on the user's role
-                if (userRole === 'COMPETITOR') {
+                if (userRole === 'Competitor') {
                     window.location.href = 'dashboard-competitor';
-                } else if (userRole === 'EXPERT') {
+                } else if (userRole === 'Expert') {
                     window.location.href = 'dashboard-expert';
-                } else if (userRole === 'ADMIN') {
+                } else if (userRole === 'Admin') {
                     window.location.href = 'dashboard-admin';
                 }
             } else {

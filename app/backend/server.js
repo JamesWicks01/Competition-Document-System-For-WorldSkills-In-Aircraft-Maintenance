@@ -95,6 +95,79 @@ app.get("/search-tool-calibration-records", (req, res) => {
   });
 });
 
+// **Get All Users That Are Competitors For ATL Assignment**
+app.get("/get-competitors", (req, res) => {
+  const sql = "SELECT user_id , name FROM users WHERE user_role = 'Competitor'";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching competitors:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+});
+
+// **Create New Document Binder**
+app.post("/new-document-binder", (req, res) => {
+  const {user_id} = req.body;
+  const sql = "INSERT INTO document_binders (binder_status, user_id) VALUES (?,?)";
+  const values = ["In Progress", user_id];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error creating document binder:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document binder created successfully", binderId: result.insertId });
+  });
+});
+
+// **Create New Aircraft Technical Log**
+app.post("/new-atl", (req, res) => {
+  const {
+      binderId, registration, captain, captainSignature, pageSequence,
+      leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
+      leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
+      totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
+      workOrderSummary, resolutions, resolvedBy, resolvedByDate,
+      partNumber, serialNumberOn, serialNumberOff, batchNumber,
+      deferralNumber, mel, category, functionCheck, leakCheck, independentCheck, 
+      otherCheck, independentCheckBy, independentCheckByDate, readyForReleaseBy, readyForReleaseByDate
+  } = req.body;
+
+  const sql = `
+      INSERT INTO \`aircraft-technical-logs\` (
+          binder_id, registration, captain, captain_signature, page_sequence,
+          leg1_date, leg1_timeup, leg1_timedown, leg1_airtime, leg1_from, leg1_to,
+          leg2_date, leg2_timeup, leg2_timedown, leg2_airtime, leg2_from, leg2_to,
+          total_bftime, total_airtime, total_time, defects, reported_by, reported_date,
+          work_order_summary_number, resolutions, resolved_by, resolved_date,
+          part_number, serial_number_on, serial_number_off, batch_number,
+          deferral_number, mel, category, function_check, leak_check, independent_check, 
+          other_check, independent_checkby, independent_checkdate, release_by, release_date
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+      binderId, registration, captain, captainSignature, pageSequence,
+      leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
+      leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
+      totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
+      workOrderSummary, resolutions, resolvedBy, resolvedByDate,
+      partNumber, serialNumberOn, serialNumberOff, batchNumber,
+      deferralNumber, mel, category, functionCheck, leakCheck, independentCheck, 
+      otherCheck, independentCheckBy, independentCheckByDate, readyForReleaseBy, readyForReleaseByDate
+  ];
+
+  db.query(sql, values, (err, result) => {
+      if (err) {
+          console.error("Error inserting new ATL:", err);
+          return res.status(500).json({ message: "Internal Server Error" });
+      }
+      res.json({ message: "New ATL created successfully", atlId: result.insertId });
+  });
+});
+
+
 // **Start Server**
 app.listen(5000, () => {
   console.log("Server running on port 5000");

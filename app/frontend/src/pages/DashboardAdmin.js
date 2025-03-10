@@ -18,7 +18,7 @@ function DashboardAdminPage() {
     };
 
     function CreateNewAircraftTechnicalLog_Button() {
-        window.location.href = "/create-new-aircraft-technical-log";
+        window.location.href = "/aircraft-technical-log-create";
     };
 
     function ViewAllDocumentBinders_Button() {
@@ -26,7 +26,7 @@ function DashboardAdminPage() {
     };
 
     function PartsAndConsumableRequest_Button() {
-        window.location.href = "/parts-and-consumable-request";
+        window.location.href = "/parts-consumable-request";
     };
 
     return(

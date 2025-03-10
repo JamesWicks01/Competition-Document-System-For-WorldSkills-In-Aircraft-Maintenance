@@ -1,6 +1,43 @@
 import './css/DocumentBinder.css';
+import * as authUtils from './authUtils.js';
+import { useEffect } from 'react';
 
 function DocumentBinderPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
+    function Back_Button() {
+        authUtils.Back();
+    };
+
+    function Submit_Button() {
+        if (window.confirm("Are you sure? Your won't be able to edit or view any documents in this binder after you submit")) {
+            console.log("Yes");
+        };
+    };
+
+    function Show_NewDocument_Button() {
+        document.getElementById("u96").style.display = "block";
+        document.getElementById("u96").style.visibility = "visible";
+    };
+
+    function Cancel_Button() {
+        document.getElementById("u96").style.display = "none";
+        document.getElementById("u96").style.visibility = "hidden";
+    };
+
+    function New_Document() {
+
+    };
+
+    function Submit_NewDocument_Button() {
+
+    }
+
+
     return(
         <div id="base" className="">
         {/* Unnamed (Rectangle) */}
@@ -19,6 +56,7 @@ function DocumentBinderPage() {
             id="u72"
             className="ax_default shape transition notrs"
             data-label="Submit_Button"
+            onClick={Submit_Button}
         >
             <div id="u72_div" className="" />
             <div id="u72_text" className="text ">
@@ -32,6 +70,7 @@ function DocumentBinderPage() {
             id="u73"
             className="ax_default shape transition notrs"
             data-label="Back_Button"
+            onClick={Back_Button}
         >
             <div id="u73_div" className="" />
             <div id="u73_text" className="text ">
@@ -45,6 +84,7 @@ function DocumentBinderPage() {
             id="u74"
             className="ax_default shape transition notrs"
             data-label="Add_New_Document"
+            onClick={Show_NewDocument_Button}
         >
             <div id="u74_div" className="" />
             <div id="u74_text" className="text ">
@@ -1018,6 +1058,7 @@ function DocumentBinderPage() {
             id="u99"
             className="ax_default shape transition notrs"
             data-label="Cancel_Button"
+            onClick={Cancel_Button}
             >
             <div id="u99_div" className="" />
             <div id="u99_text" className="text ">

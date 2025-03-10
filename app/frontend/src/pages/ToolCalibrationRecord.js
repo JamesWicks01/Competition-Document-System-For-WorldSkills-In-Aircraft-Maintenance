@@ -33,21 +33,21 @@ function ToolCalibrationRecordPage() {
     const [data, setData] = useState([]);
     const headers = ["Description", "Part Number", "Serial Number", "Calibration Date", "Calibration Due Date"];
 
-    const Back_Button = () => {
+    function Back_Button() {
         authUtils.Back();
     };
 
-    const NewRecord_Button = () => {
+    function NewRecord_Button() {
         document.getElementById("u162").style.display = "block";
         document.getElementById("u162").style.visibility = "visible";
     };
 
-    const Cancel_Button = () => {
+    function Cancel_Button() {
         document.getElementById("u162").style.display = "none";
         document.getElementById("u162").style.visibility = "hidden";
     };
 
-    const NewRecord = async () => {
+    async function NewRecord() {
         const description = document.getElementById("u168_input");
         const partNumber = document.getElementById("u172_input");
         const serialNumber = document.getElementById("u176_input");
@@ -93,7 +93,7 @@ function ToolCalibrationRecordPage() {
         return Record;
     };
 
-    const SubmitRecord_Button = async () => {
+    async function SubmitRecord_Button() {
         const newRecord = await NewRecord();
         if (!newRecord) {
             return;
@@ -103,7 +103,7 @@ function ToolCalibrationRecordPage() {
         window.location.reload();
     };
 
-    const Search = async () => {
+    async function Search() {
         const searchType = document.getElementById("u146_input").value;
         const searchInput = document.getElementById("u147_input").value.trim();
         try {

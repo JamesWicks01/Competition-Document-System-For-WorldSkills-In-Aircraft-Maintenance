@@ -10,7 +10,7 @@ function DashboardCompetitorPage() {
     }, []);
 
     function PartsAndConsumableRequest_Button() {
-        window.location.href = "/parts-and-consumable-request";
+        window.location.href = "/parts-consumable-request";
     };
 
     function ToolsCalibrationRecords_Button() {
@@ -18,7 +18,7 @@ function DashboardCompetitorPage() {
     };
 
     function OpenYourDocumentBinder_Button() {
-        window.location.href = "/open-your-document-binder";
+        window.location.href = "/document-binder";
     };
 
     return(

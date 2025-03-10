@@ -97,7 +97,7 @@ app.get("/search-tool-calibration-records", (req, res) => {
 
 // **Get All Users That Are Competitors For ATL Assignment**
 app.get("/get-competitors", (req, res) => {
-  const sql = "SELECT user_id , name FROM users WHERE user_role = 'Competitor'";
+  const sql = "SELECT user_id , CONCAT(user_fname, ' ' , user_lname) AS name FROM users WHERE user_role = 'Competitor'";
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching competitors:", err);
@@ -119,6 +119,11 @@ app.post("/new-document-binder", (req, res) => {
     }
     res.json({ message: "Document binder created successfully", binderId: result.insertId });
   });
+});
+
+// **Get A User's Document Binder**
+app.get("/get-document-binder", (req, res) => {
+
 });
 
 // **Create New Aircraft Technical Log**

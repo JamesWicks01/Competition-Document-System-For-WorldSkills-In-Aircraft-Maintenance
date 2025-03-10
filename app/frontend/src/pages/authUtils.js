@@ -25,9 +25,50 @@ export function Signout() {
 export function CheckAccess() {
     const token = localStorage.getItem("token");
     const AllowedPages = {
-        Admin: ["/dashboard-admin", "/parts-consumable-request", "/tool-calibration-record", "/aircraft-technical-log-create"],
-        Expert: ["/dashboard-expert", "/parts-consumable-request", "/tool-calibration-record", "/aircraft-technical-log-create"],
-        Competitor: ["/dashboard-competitor", "/parts-consumable-request", "/tool-calibration-record"],
+        Admin: [
+            "/account-management",
+            "/aircraft-technical-log",
+            "/aircraft-technical-log-create",
+            "/change-user-password",
+            "/dashboard-admin",
+            "/document-binder",
+            "/end-of-shift-report",
+            "/parts-consumable-request",
+            "/structure-damage-report",
+            "/task-card",
+            "/technical-dispatch-report",
+            "/tool-calibration-record",
+            "/view-all-document-binders",
+            "/work-order-summary"
+        ],
+        Expert: [
+            "/aircraft-technical-log",
+            "/aircraft-technical-log-create",
+            "/change-user-password",
+            "/dashboard-expert",
+            "/document-binder",
+            "/end-of-shift-report",
+            "/parts-consumable-request",
+            "/structure-damage-report",
+            "/task-card",
+            "/technical-dispatch-report",
+            "/tool-calibration-record",
+            "/view-all-document-binders",
+            "/work-order-summary"
+        ],
+        Competitor: [
+            "/aircraft-technical-log",
+            "/change-user-password",
+            "/dashboard-competitor",
+            "/document-binder",
+            "/end-of-shift-report",
+            "/parts-consumable-request",
+            "/structure-damage-report",
+            "/task-card",
+            "/technical-dispatch-report",
+            "/tool-calibration-record",
+            "/work-order-summary"
+        ],
     };
     const decodedToken = jwtDecode(token);
     const role = decodedToken.role;

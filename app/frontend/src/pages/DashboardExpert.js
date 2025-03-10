@@ -10,7 +10,7 @@ function DashboardExpertPage() {
     }, []);
 
     function PartsAndConsumableRequest_Button() {
-        window.location.href = "/parts-and-consumable-request";
+        window.location.href = "/parts-consumable-request";
     };
 
     function ToolsCalibrationRecords_Button() {
@@ -18,7 +18,7 @@ function DashboardExpertPage() {
     };
 
     function CreateNewAircraftTechnicalLog_Button() {
-        window.location.href = "/create-new-aircraft-technical-log";
+        window.location.href = "/aircraft-technical-log-create";
     };
 
     function ViewAllDocumentBinders_Button() {

@@ -95,9 +95,13 @@ app.get("/search-tool-calibration-records", (req, res) => {
   });
 });
 
-// **Get All Users That Are Competitors For ATL Assignment**
+// **Get All Users That Are Competitors That Don't Have ATLs Assigned To Them**
 app.get("/get-competitors", (req, res) => {
-  const sql = "SELECT user_id , CONCAT(user_fname, ' ' , user_lname) AS name FROM users WHERE user_role = 'Competitor'";
+  const sql = `SELECT u.user_id, CONCAT (u.user_fname, ' ', u.user_lname) AS name
+                FROM users u
+                LEFT JOIN document_binders db ON u.user_id = db.user_id
+                WHERE u.user_role = 'Competitor'
+                AND (db.binder_id IS NULL OR db.binder_status != 'In Progress')`;
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching competitors:", err);
@@ -121,15 +125,50 @@ app.post("/new-document-binder", (req, res) => {
   });
 });
 
-// **Get A User's Document Binder**
-app.get("/get-document-binder", (req, res) => {
+// **Load User's Document Binder**
+app.get("/get-user-document-binder", (req, res) => {
+  const {user_id} = req.body;
+  const sql = "SELECT * FROM document_binders WHERE user_id = ?";
+  const values = [user_id];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error loading document binder:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.json(result);
+  });
+});
 
+// **Get a Specific Document Binder By ID**
+app.get("get-document-binder", (req, res) => {
+  const {binder_id} = req.body;
+  const sql = "SELECT * FROM document_binders WHERE binder_id = ?";
+  const values = [binder_id];
+  db.query(sql, values, (err, results) => {
+    if(err) {
+      console.error("Error loading document binder")
+    }
+  })
+}) 
+
+// **Create New Document**
+app.post("/new-document", (req, res) => {
+  const {binder_id , document_name , document_type} = req.body;
+  const sql = "INSERT INTO documents (binder_id, document_name, document_type) VALUES (?,?,?)";
+  const values = [binder_id,document_name,document_type];
+  db.query(sql, values, (err, result) => {
+    if(err) {
+      console.error("Error creating document:", err);
+      return res.status(500).json({message: "Internal Server Error"});
+    }
+    res.json({message:"Document created successfully", documentId: result.insertId});
+  });
 });
 
 // **Create New Aircraft Technical Log**
-app.post("/new-atl", (req, res) => {
+app.post("/create-atl", (req, res) => {
   const {
-      binderId, registration, captain, captainSignature, pageSequence,
+      documentId, registration, captain, captainSignature, pageSequence,
       leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
       leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
       totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
@@ -140,8 +179,8 @@ app.post("/new-atl", (req, res) => {
   } = req.body;
 
   const sql = `
-      INSERT INTO \`aircraft-technical-logs\` (
-          binder_id, registration, captain, captain_signature, page_sequence,
+      INSERT INTO aircraft_technical_logs (
+          document_id, registration, captain, captain_signature, page_sequence,
           leg1_date, leg1_timeup, leg1_timedown, leg1_airtime, leg1_from, leg1_to,
           leg2_date, leg2_timeup, leg2_timedown, leg2_airtime, leg2_from, leg2_to,
           total_bftime, total_airtime, total_time, defects, reported_by, reported_date,
@@ -153,7 +192,7 @@ app.post("/new-atl", (req, res) => {
   `;
 
   const values = [
-      binderId, registration, captain, captainSignature, pageSequence,
+      documentId, registration, captain, captainSignature, pageSequence,
       leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
       leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
       totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
@@ -172,6 +211,35 @@ app.post("/new-atl", (req, res) => {
   });
 });
 
+// **Create New Form
+const allowedTables = [
+  'work_order_summaries',
+  'engine_reports',
+  'technical_dispatch_reports',
+  'structure_damage_reports',
+  'task_cards',
+  'end_of_work_shift_reports',
+  'aircraft_technical_logs'
+];
+
+app.post("/create-new-form", (req, res) => {
+  const {table, documentId} = req.body;
+  if(!table || !documentId) {
+    return res.status(400).json({success: false, message: "Table name and document ID are required"});
+  };
+
+  if(!allowedTables.includes(table)) {
+    return res.status(400).json({success: false, message: "Invalid table name"});
+  };
+
+  const sql = `INSERT INTO \`${table}\` (document_id) VALUES (?)`;
+  db.query(sql, [documentId], (err, result) => {
+    if(err) {
+      return res.status(500).json({ success: false, message: err.message });
+    }
+    res.json({ success: true, message: 'Document ID inserted successfully.' });
+  });
+});
 
 // **Start Server**
 app.listen(5000, () => {

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `parts_consumable_requests` (
 );
 
 CREATE TABLE IF NOT EXISTS `part_requests` (
-    part_reuqest_id INT AUTO_INCREMENT PRIMARY KEY,
+    part_request_id INT AUTO_INCREMENT PRIMARY KEY,
     request_id INT NOT NULL,
     item_number VARCHAR(255),
     part_number VARCHAR(255),
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     password VARCHAR(255) NOT NULL,
     user_role ENUM('Competitor','Expert','Admin') NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    password_reset BOOLEAN
+    password_reset BOOLEAN DEFAULT FALSE
 );
 
 INSERT INTO `users` (user_fname, user_lname, username, password, user_role, password_reset) 
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `documents` (
 CREATE TABLE IF NOT EXISTS `aircraft_technical_logs` (
     atl_id INT AUTO_INCREMENT PRIMARY KEY,
     document_id INT NOT NULL,
-    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     registration VARCHAR(255),
     captain VARCHAR(255),
     captain_signature VARCHAR(255),
@@ -108,11 +108,11 @@ CREATE TABLE IF NOT EXISTS `aircraft_technical_logs` (
     batch_number VARCHAR(255),
     deferral_number VARCHAR(255),
     mel VARCHAR(255),
-    category ENUM('N/A','A','B','C','D','P') NOT NULL,
-    function_check BOOLEAN,
-    leak_check BOOLEAN,
-    independent_check BOOLEAN,
-    other_check BOOLEAN,
+    category ENUM('N/A','A','B','C','D','P') NOT NULL DEFAULT 'N/A',
+    function_check BOOLEAN DEFAULT FALSE,
+    leak_check BOOLEAN DEFAULT FALSE,
+    independent_check BOOLEAN DEFAULT FALSE,
+    other_check BOOLEAN DEFAULT FALSE,
     independent_checkby VARCHAR(255),
     independent_checkdate DATE,
     release_by VARCHAR(255),
@@ -123,14 +123,14 @@ CREATE TABLE IF NOT EXISTS `aircraft_technical_logs` (
 CREATE TABLE IF NOT EXISTS `end_of_work_shift_reports` (
     shift_report_id INT AUTO_INCREMENT PRIMARY KEY,
     document_id INT NOT NULL,
-    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     aircraft VARCHAR(255),
     date DATE,
     prepared_by VARCHAR(255),
     steps_accomplished TEXT,
     remaining_steps TEXT,
     difficulties TEXT,
-    no_difficulties BOOLEAN,
+    no_difficulties BOOLEAN DEFAULT FALSE,
     signature_and_aca VARCHAR(255),
     FOREIGN KEY (document_id) REFERENCES documents(document_id)
 );
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `end_of_work_shift_reports` (
 CREATE TABLE IF NOT EXISTS `task_cards` (
     tc_id INT AUTO_INCREMENT PRIMARY KEY,
     document_id INT NOT NULL,
-    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     tc_number VARCHAR(255),
     ata_chapter VARCHAR(255),
     title VARCHAR(255),
@@ -151,33 +151,33 @@ CREATE TABLE IF NOT EXISTS `task_cards` (
     originated_by VARCHAR(255),
     date_opened DATE,
     defect_description TEXT,
-    deferred_previously BOOLEAN,
+    deferred_previously BOOLEAN DEFAULT FALSE,
     page_sequence_number VARCHAR(255),
     resolution_description TEXT,
     attached_supporting_docs VARCHAR(255),
-    defect_deferred BOOLEAN,
-    defer_category_type_mel BOOLEAN,
-    defer_category_type_non_mel BOOLEAN,
+    defect_deferred BOOLEAN DEFAULT FALSE,
+    defer_category_type_mel BOOLEAN DEFAULT FALSE,
+    defer_category_type_non_mel BOOLEAN DEFAULT FALSE,
     mel_id VARCHAR(255),
-    mel_category ENUM('N/A','A','B','C','D') NOT NULL,
+    mel_category ENUM('N/A','A','B','C','D') NOT NULL DEFAULT 'N/A',
     mel_due_date DATE,
     mel_due_time TIME,
-    function_check BOOLEAN,
+    function_check BOOLEAN DEFAULT FALSE,
     fc_systems_affected VARCHAR(255),
     fc_detailed_on_tc VARCHAR(255),
-    leak_check BOOLEAN,
+    leak_check BOOLEAN DEFAULT FALSE,
     lc_systems_affected VARCHAR(255),
     lc_detailed_on_tc VARCHAR(255),
-    other_check BOOLEAN,
+    other_check BOOLEAN DEFAULT FALSE,
     oc_systems_affected VARCHAR(255),
     oc_detailed_on_tc VARCHAR(255),
-    ic_required BOOLEAN,
+    ic_required BOOLEAN DEFAULT FALSE,
     post_maintenance_inspection VARCHAR(255),
     independent_check_by VARCHAR(255),
     tc_certified_by VARCHAR(255),
     tc_certified_date DATE,
     tc_certified_time TIME,
-    subject_to_test_flight BOOLEAN,
+    subject_to_test_flight BOOLEAN DEFAULT FALSE,
     checks_during_test_flight VARCHAR(255),
     FOREIGN KEY (document_id) REFERENCES documents(document_id)
 );
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `task_cards` (
 CREATE TABLE IF NOT EXISTS `engine_reports` (
     er_id INT AUTO_INCREMENT PRIMARY KEY,
     document_id INT NOT NULL,
-    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     engine_type VARCHAR(255),
     serial_number VARCHAR(255),
     engine_running_hours VARCHAR(255),
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `engine_reports` (
 CREATE TABLE IF NOT EXISTS `structural_damage_reports` (
     sdr_id INT AUTO_INCREMENT PRIMARY KEY,
     document_id INT NOT NULL,
-    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     aircraft_type VARCHAR(255),
     registration VARCHAR(255),
     serial_number VARCHAR(255),
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `structural_damage_reports` (
     airframe_cycles VARCHAR(255),
     work_order_number VARCHAR(255),
     task_card_id VARCHAR(255),
-    damage_type ENUM('Crack','Dent','Puncture','Debond/Void','Corrosion','Rupture','Buckle','Scratch/Nick/Gouge','Other'),
+    damage_type ENUM('Crack','Dent','Puncture','Debond/Void','Corrosion','Rupture','Buckle','Scratch/Nick/Gouge','Other') DEFAULT 'Crack',
     damage_type_other VARCHAR(255),
     damage_position_station VARCHAR(255),
     damage_position_waterline VARCHAR(255),
@@ -239,6 +239,81 @@ CREATE TABLE IF NOT EXISTS `structural_damage_reports` (
     FOREIGN KEY (document_id) REFERENCES documents(document_id)
 );
 
+CREATE TABLE IF NOT EXISTS `technical_dispatch_reports` (
+    tdr_id INT AUTO_INCREMENT PRIMARY KEY,
+    document_id INT NOT NULL,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    registration VARCHAR(255),
+    total_air_time VARCHAR(255),
+    date DATE,
+    maintenance_description TEXT,
+    limitation_date DATE,
+    limitation_total_air_time VARCHAR(255),
+    limitation_cycles VARCHAR(255),
+    airworthiness_directive_numbers VARCHAR(255),
+    airworthiness_directive_description VARCHAR(255),
+    other_tasks VARCHAR(255),
+    prepared_by VARCHAR(255),
+    FOREIGN KEY (document_id) REFERENCES documents(document_id)
+);
 
+CREATE TABLE IF NOT EXISTS `deferred_defects` (
+    dd_id INT AUTO_INCREMENT PRIMARY KEY,
+    tdr_id INT NOT NULL,
+    description VARCHAR(255),
+    type_mel BOOLEAN DEFAULT FALSE,
+    type_nonmel BOOLEAN DEFAULT FALSE,
+    mel_id Varchar(255),
+    mel_category ENUM('N/A','A','B','C','D') DEFAULT 'N/A',
+    due_date DATE,
+    due_time TIME,
+    FOREIGN KEY (tdr_id) REFERENCES technical_dispatch_reports(tdr_id)
+);
 
+CREATE TABLE IF NOT EXISTS `work_order_summaries` (
+    wos_id INT AUTO_INCREMENT PRIMARY KEY,
+    document_id INT NOT NULL,
+    last_updated TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    work_order_summary_number VARCHAR(255),
+    subject VARCHAR(255),
+    summary_page_part1 VARCHAR(255),
+    summary_page_part2 VARCHAR(255),
+    aircraft_type VARCHAR(255),
+    registration VARCHAR(255),
+    serial_number VARCHAR(255),
+    total_task_cards VARCHAR(255),
+    total_airframe_time VARCHAR(255),
+    total_cycles VARCHAR(255),
+    opened_by VARCHAR(255),
+    date_opened DATE,
+    followon_maintenance_checks_yes BOOLEAN DEFAULT FALSE,
+    followon_maintenance_checks_na BOOLEAN DEFAULT FALSE,
+    testflight_requirements_yes BOOLEAN DEFAULT FALSE,
+    testflight_requirements_na BOOLEAN DEFAULT FALSE,
+    deferred_defects_yes BOOLEAN DEFAULT FALSE,
+    wos_affixed_yes BOOLEAN DEFAULT FALSE,
+    date DATE,
+    time TIME,
+    technical_log_page_sequence_number VARCHAR(255),
+    closed_by VARCHAR(255),
+    subject_to_test_flight BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (document_id) REFERENCES documents(document_id)
+);
 
+CREATE TABLE IF NOT EXISTS `included_task_cards` (
+    itc_id INT AUTO_INCREMENT PRIMARY KEY,
+    wos_id INT NOT NULL,
+    id_number INT,
+    title VARCHAR(255),
+    defered_defect BOOLEAN DEFAULT FALSE,
+    function_check BOOLEAN DEFAULT FALSE,
+    leak_check BOOLEAN DEFAULT FALSE,
+    other_check BOOLEAN DEFAULT FALSE,
+    na_check BOOLEAN DEFAULT FALSE,
+    ic_complete_yes BOOLEAN DEFAULT FALSE,
+    ic_complete_na BOOLEAN DEFAULT FALSE,
+    test_flight_yes BOOLEAN DEFAULT FALSE,
+    test_flight_na BOOLEAN DEFAULT FALSE,
+    reviewed_by VARCHAR(255),
+    FOREIGN KEY (wos_id) REFERENCES work_order_summaries(wos_id)
+);

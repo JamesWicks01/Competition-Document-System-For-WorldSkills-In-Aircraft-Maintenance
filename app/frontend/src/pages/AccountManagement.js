@@ -1,6 +1,14 @@
 import './css/AccountManagement.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function AccountManagementPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+    }, []);
+
     return(
         <div id="base" className="">
         {/* Back (Rectangle) */}

@@ -1,6 +1,14 @@
 import './css/ChangeUserPassword.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function ChangeUserPasswordPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* New_Record (Group) */}

@@ -1,6 +1,14 @@
 import './css/TaskCard.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function TaskCardPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* Unnamed (Rectangle) */}

@@ -1141,8 +1141,8 @@ function DocumentBinderPage() {
                 >
                     Technical Dispatch Report
                 </option>
-                <option className="u104_input_option" value="End-Of-Shift Report">
-                    End-Of-Shift Report
+                <option className="u104_input_option" value="End-Of-Work-Shift Report">
+                    End-Of-Work-Shift Report
                 </option>
                 </select>
             </div>

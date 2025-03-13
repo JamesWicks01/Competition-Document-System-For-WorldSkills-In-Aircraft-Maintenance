@@ -1,6 +1,14 @@
 import './css/ViewAllDocumentBinders.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function ViewAllDocumentBindersPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return (
         <div id="base" className="">
         {/* Back (Rectangle) */}

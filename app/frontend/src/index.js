@@ -35,7 +35,7 @@ export default function App() {
         <Route path="/dashboard-competitor" element={<DashboardCompetitorPage />} />
         <Route path="/dashboard-expert" element={<DashboardExpertPage />} />
         <Route path="/document-binder" element={<DocumentBinderPage />} />
-        <Route path="/end-of-shift-report" element={<EndOfShiftReportPage />} />
+        <Route path="/end-of-work-shift-report" element={<EndOfShiftReportPage />} />
         <Route path="/engine-report" element={<EngineReportPage />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/parts-consumable-request" element={<PartsConsumableRequestPage />} />

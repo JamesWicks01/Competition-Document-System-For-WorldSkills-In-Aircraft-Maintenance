@@ -1,6 +1,49 @@
 import './css/EndOfShiftReport.css';
+import {useState, useEffect} from 'react';
+import * as authUtils from './authUtils.js';
+import * as apiService from './apiService.js';
 
 function EndOfShiftReportPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
+    const [checked, setChecked] = useState(false);
+
+    function Back_Button() {
+        authUtils.Back();
+    };
+
+    function SaveReport() {
+        const id = "id";
+        const aircraft = document.getElementById("u882_input");
+        const date = document.getElementById("u888_input");
+        const prepared_by = document.getElementById("u889_input");
+        const steps_accomplished = document.getElementById("u883_input");
+        const work_order_numbers = document.getElementById("u890_input");
+        const task_card_ids = document.getElementById("u891_input");
+        const remaining_steps = document.getElementById("u884_input");
+        const difficulties = document.getElementById("u887_input");
+        const no_difficulties = document.getElementById("u885_input");
+        const signature_and_aca = document.getElementById("u886_input");
+
+        const report = {
+                id: id,
+                aircraft: aircraft.value.trim(),
+                date: date.value.trim(),
+                prepared_by: prepared_by.value.trim(),
+                steps_accomplished: steps_accomplished.value.trim(),
+                work_order_numbers: work_order_numbers.value.trim(),
+                task_card_ids: task_card_ids.value.trim(),
+                remaining_steps: remaining_steps.value.trim(),
+                difficulties: difficulties.value.trim(),
+                no_difficulties: no_difficulties.value.trim(),
+                signature_and_aca: signature_and_aca.value.trim()
+        };
+    }
+    
     return(
         <div id="base" className="">
         {/* Report_Style (Group) */}
@@ -19,7 +62,7 @@ function EndOfShiftReportPage() {
             <div id="u865_div" className="" />
             <div id="u865_text" className="text ">
                 <p>
-                <span>END-OF-SHIFT REPORT</span>
+                <span>END-OF-WORK-SHIFT REPORT</span>
                 </p>
             </div>
             </div>
@@ -224,49 +267,40 @@ function EndOfShiftReportPage() {
             </div>
             {/* No_Difficulties (Checkbox) */}
             <div id="u885" className="ax_default checkbox" data-label="No_Difficulties">
+            <input
+                id="u885_input"
+                type="checkbox"
+                className="u885_input"
+                defaultChecked={checked}
+                onChange={e => setChecked(e.target.checked)}
+                style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
+            />
             <label
                 id="u885_input_label"
                 htmlFor="u885_input"
-                style={{ position: "absolute", left: 0 }}
+                onClick={e => setChecked(e.target.checked)}
+                style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}
             >
-                <svg
-                data="images/end-of-shift_report/no_difficulties_u885.svg"
-                id="u885_img"
-                className="img "
-                viewBox="133 1012 13 13"
+                <div
+                style={{
+                    width: "16px",
+                    height: "16px",
+                    border: "1px solid #797979",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
                 >
-                <path
-                    d="M 133 1012  L 146 1012  L 146 1025  L 133 1025  L 133 1012  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                />
-                <path
-                    d="M 133.5 1012.5  L 145.5 1012.5  L 145.5 1024.5  L 133.5 1024.5  L 133.5 1012.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                />
-                <path
-                    d="M 135.78571428571428 1018.5  L 138.57142857142858 1021.2857142857142  L 143.21428571428572 1014.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                />
-                </svg>
-                <div id="u885_text" className="text ">
+                {checked && (
+                    <span style={{ color: "black", fontWeight: "bold" }}>✔</span>
+                )}
+                </div>
+                <div id="u885_text" className="text">
                 <p>
                     <span>No Difficulties</span>
                 </p>
                 </div>
             </label>
-            <input id="u885_input" type="checkbox" defaultValue="checkbox" />
             </div>
             {/* Signature_And_ACA (Text field) */}
             <div

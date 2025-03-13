@@ -1,6 +1,14 @@
 import './css/StructureDamageReport.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function StructureDamageReportPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* Structure_Damage_Report_Style (Group) */}

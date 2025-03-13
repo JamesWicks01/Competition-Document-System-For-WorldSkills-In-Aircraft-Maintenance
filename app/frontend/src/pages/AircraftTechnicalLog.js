@@ -1,7 +1,15 @@
 import './css/AircraftTechnicalLog.css';
 import logo from './images/WorldSkills-Logo.png';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function AircraftTechnicalLogPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* ATL_Style (Group) */}

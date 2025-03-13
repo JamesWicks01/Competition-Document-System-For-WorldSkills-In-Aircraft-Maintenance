@@ -1,6 +1,14 @@
 import './css/WorkOrderSummary.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function WorkOrderSummaryPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* Unnamed (Rectangle) */}

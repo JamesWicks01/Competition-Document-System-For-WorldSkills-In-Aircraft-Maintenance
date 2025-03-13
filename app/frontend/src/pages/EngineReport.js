@@ -1,6 +1,14 @@
 import './css/EngineReport.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function EngineReportPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* Engine_Report_Style (Group) */}

@@ -128,6 +128,8 @@ CREATE TABLE IF NOT EXISTS `end_of_work_shift_reports` (
     date DATE,
     prepared_by VARCHAR(255),
     steps_accomplished TEXT,
+    work_order_numbers VARCHAR(255),
+    task_card_ids VARCHAR(255),
     remaining_steps TEXT,
     difficulties TEXT,
     no_difficulties BOOLEAN DEFAULT FALSE,

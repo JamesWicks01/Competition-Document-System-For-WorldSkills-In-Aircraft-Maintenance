@@ -1,6 +1,14 @@
 import './css/TechnicalDispatchReport.css';
+import { useEffect } from 'react';
+import * as authUtils from './authUtils.js';
 
 function TechnicalDispatchReportPage() {
+
+    useEffect(() => {
+        authUtils.CheckLoggedIn();
+        authUtils.CheckAccess();
+     }, []);
+
     return(
         <div id="base" className="">
         {/* Save_Button (Rectangle) */}

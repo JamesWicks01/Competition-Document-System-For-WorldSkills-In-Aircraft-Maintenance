@@ -5,17 +5,56 @@ import * as apiService from "./Components/apiService.js";
 import CustomCheckbox from "./Components/CheckboxComponent.js";
 
 function EndOfShiftReportPage() {
+
+  const [checkboxes, setCheckboxes] = useState({
+    no_difficulties: false,
+  })
+
   useEffect(() => {
+    async function LoadData() {
+      const data = { documentID: localStorage.getItem("documentID"), table: "end_of_work_shift_reports" };
+      try {
+          const response = await apiService.apiRequest(`get-form-data?table=${data.table}&documentId=${data.documentID}`);
+  
+          if (response.length > 0) {
+              const report = response[0]; // Extract first object from the array
+  
+              document.getElementById("u882_input").value = report.aircraft || "";
+              document.getElementById("u888_input").value = report.date || "";
+              document.getElementById("u889_input").value = report.prepared_by || "";
+              document.getElementById("u883_input").value = report.steps_accomplished || "";
+              document.getElementById("u890_input").value = report.work_order_numbers || "";
+              document.getElementById("u891_input").value = report.task_card_ids || "";
+              document.getElementById("u884_input").value = report.remaining_steps || "";
+              document.getElementById("u887_input").value = report.difficulties || "";
+              document.getElementById("u886_input").value = report.signature_and_aca || "";
+              setCheckboxes({
+                no_difficulties: report.no_difficulties === 1
+              })
+              return response;
+          }
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      }
+  }
+  
+  LoadData();
+  
+  
     authUtils.CheckLoggedIn();
     authUtils.CheckAccess();
   }, []);
+
+  const handleCheckboxChange = (id, value) => {
+    setCheckboxes((prev) => ({ ...prev, [id]: value }));
+};
 
   function Back_Button() {
     authUtils.Back();
   }
 
-  function SaveReport() {
-    const id = "id";
+  async function SaveReport() {
+    const id = localStorage.getItem("documentID");
     const aircraft = document.getElementById("u882_input");
     const date = document.getElementById("u888_input");
     const prepared_by = document.getElementById("u889_input");
@@ -40,6 +79,18 @@ function EndOfShiftReportPage() {
       no_difficulties: no_difficulties.checked,
       signature_and_aca: signature_and_aca.value.trim(),
     };
+
+    try {
+      const update = await apiService.apiRequest("update-end-of-work-shift-report", "POST", report);
+  
+      // Check API response
+      if (update) {
+        alert(update.message); // Check what it returns
+        // Optionally, handle successful response (e.g., show success message, redirect, etc.)
+      }
+    } catch (error) {
+      alert("Error updating report: ", error);
+    }
   }
 
   return (
@@ -266,7 +317,7 @@ function EndOfShiftReportPage() {
           <textarea id="u884_input" className="u884_input" defaultValue={""} placeholder="Enter Here"/>
         </div>
         {/* No_Difficulties (Checkbox) */}
-        <CustomCheckbox id="u885" label="No Difficulties" />
+        <CustomCheckbox id="u885" label="No Difficulties" initialChecked={checkboxes.no_difficulties} onChange={handleCheckboxChange}/>
         {/* Signature_And_ACA (Text field) */}
         <div
           id="u886"
@@ -357,6 +408,7 @@ function EndOfShiftReportPage() {
         id="u892"
         className="ax_default shape transition notrs"
         data-label="Save_Button"
+        onClick={SaveReport}
       >
         <div id="u892_div" className="" />
         <div id="u892_text" className="text ">

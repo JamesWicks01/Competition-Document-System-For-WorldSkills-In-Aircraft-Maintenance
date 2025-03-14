@@ -34,7 +34,7 @@ app.post("/login", (req, res) => {
 
       const isMatch = bcrypt.compare(password, user.password);
       if (isMatch) {
-        const token = jwt.sign({ id: user.id, username: user.username,  role: user.user_role}, "secretKey", { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, username: user.username,  role: user.user_role, passwordReset:user.password_reset}, "secretKey", { expiresIn: "1h" });
         res.json({ message: "Login successful", token });
       } else {
         res.json({ message: "Invalid credentials" });
@@ -171,11 +171,7 @@ app.post("/create-atl", (req, res) => {
       documentId, registration, captain, captainSignature, pageSequence,
       leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
       leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
-      totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
-      workOrderSummary, resolutions, resolvedBy, resolvedByDate,
-      partNumber, serialNumberOn, serialNumberOff, batchNumber,
-      deferralNumber, mel, category, functionCheck, leakCheck, independentCheck, 
-      otherCheck, independentCheckBy, independentCheckByDate, readyForReleaseBy, readyForReleaseByDate
+      totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate
   } = req.body;
 
   const sql = `
@@ -232,6 +228,111 @@ app.post("/create-new-form", (req, res) => {
     res.json({ success: true, message: 'Document ID inserted successfully.' });
   });
 });
+
+app.get("/get-form-data", (req, res) => {
+  const { table, documentId } = req.query; // Use req.query for GET requests
+
+  if (!table || !documentId) {
+    return res.status(400).json({ success: false, message: "Table name and document ID are required" });
+  }
+
+  if (!allowedTables.includes(table)) {
+    return res.status(400).json({ success: false, message: "Invalid table name" });
+  }
+
+  const sql = `SELECT * FROM \`${table}\` WHERE document_id = ?`;
+  db.query(sql, [documentId], (err, result) => {
+    if (err) {
+      console.error("Error loading document:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.json(result);
+  });
+});
+
+// **Update Forms Requests**
+app.post("/update-end-of-work-shift-report", (req, res) => {
+  const {
+    id,
+    aircraft,
+    date,
+    prepared_by,
+    steps_accomplished,
+    work_order_numbers,
+    task_card_ids,
+    remaining_steps,
+    difficulties,
+    no_difficulties,
+    signature_and_aca
+  } = req.body;
+
+  // Log the received ID for debugging
+  console.log("Received ID:", id);
+
+  // Validate the ID
+  if (!id) {
+    return res.status(400).json({ message: "Document ID is required" });
+  }
+
+  // Correct SQL query with backticks around table name
+  const sql = `
+    UPDATE \`end_of_work_shift_reports\`
+    SET aircraft = ?, date = ?, prepared_by = ?, steps_accomplished = ?,
+        work_order_numbers = ?, task_card_ids = ?, remaining_steps = ?,
+        difficulties = ?, no_difficulties = ?, signature_and_aca = ?
+    WHERE document_id = ?
+  `;
+
+  const values = [
+    aircraft,
+    date,
+    prepared_by,
+    steps_accomplished,
+    work_order_numbers,
+    task_card_ids,
+    remaining_steps,
+    difficulties,
+    no_difficulties,
+    signature_and_aca,
+    id
+  ];
+
+  // Execute the SQL query
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      // Log more detailed error information
+      console.error("SQL Error:", err.code, err.sqlMessage, err.stack);
+      return res.status(500).json({ message: "Internal Server Error", error: err });
+    }
+
+    // Log the result for debugging
+    console.log("Update Result:", result);
+
+    // Check if any row was affected
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "No record found with the given ID" });
+    }
+
+    return res.status(200).json({ message: "Document updated successfully" });
+  });
+});
+
+app.post("update-atl", (req,res) => {
+  const {
+    id,
+    page_sequence,
+    work_order_summary_number,
+    resolutions,
+    resolved_by,
+    resolved_date,
+    part_number,
+    serial_number_on,
+    serial_number_off,
+
+  } = req.body
+})
+
+
 
 // **Start Server**
 app.listen(5000, () => {

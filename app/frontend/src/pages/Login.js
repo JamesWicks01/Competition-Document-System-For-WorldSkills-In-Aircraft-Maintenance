@@ -22,14 +22,19 @@ function LoginPage() {
                 // Decode the token to get the user's role (assuming the token is JWT)
                 const decodedToken = jwtDecode(data.token);
                 const userRole = decodedToken.role;
+                const passwordReset = decodedToken.passwordReset
 
-                // Redirect based on the user's role
-                if (userRole === 'Competitor') {
-                    window.location.href = 'dashboard-competitor';
-                } else if (userRole === 'Expert') {
-                    window.location.href = 'dashboard-expert';
-                } else if (userRole === 'Admin') {
-                    window.location.href = 'dashboard-admin';
+                if (passwordReset) {
+                    window.location.href = 'change-user-password';
+                } else {
+                    // Redirect based on the user's role
+                    const roleRedirects = {
+                        Competitor: 'dashboard-competitor',
+                        Expert: 'dashboard-expert',
+                        Admin: 'dashboard-admin',
+                    };
+            
+                    window.location.href = roleRedirects[userRole]; // 
                 }
             } else {
                 alert(data.message);

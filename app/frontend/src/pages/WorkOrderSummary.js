@@ -1,6 +1,7 @@
 import './css/WorkOrderSummary.css';
 import { useEffect } from 'react';
-import * as authUtils from './authUtils.js';
+import * as authUtils from './Components/authUtils.js';
+import CustomCheckbox from "./Components/CheckboxComponent.js";
 
 function WorkOrderSummaryPage() {
 

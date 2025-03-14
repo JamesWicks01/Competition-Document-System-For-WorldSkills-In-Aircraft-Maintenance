@@ -1,6 +1,7 @@
 import './css/StructureDamageReport.css';
 import { useEffect } from 'react';
-import * as authUtils from './authUtils.js';
+import * as authUtils from './Components/authUtils.js';
+import CustomCheckbox from "./Components/CheckboxComponent.js";
 
 function StructureDamageReportPage() {
 
@@ -699,105 +700,9 @@ function StructureDamageReportPage() {
             />
             </div>
             {/* Damage_Postion_Buttock_Line_LH (Checkbox) */}
-            <div
-            id="u810"
-            className="ax_default checkbox"
-            data-label="Damage_Postion_Buttock_Line_LH"
-            >
-            <label
-                id="u810_input_label"
-                htmlFor="u810_input"
-                style={{ position: "absolute", left: 0 }}
-            >
-                <svg
-                data="images/structure_damage_report/damage_postion_buttock_line_lh_u810.svg"
-                id="u810_img"
-                className="img "
-                viewBox="403 449 13 13"
-                >
-                <path
-                    d="M 403 449  L 416 449  L 416 462  L 403 462  L 403 449  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                />
-                <path
-                    d="M 403.5 449.5  L 415.5 449.5  L 415.5 461.5  L 403.5 461.5  L 403.5 449.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                />
-                <path
-                    d="M 405.7857142857143 455.5  L 408.57142857142856 458.2857142857143  L 413.2142857142857 451.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                />
-                </svg>
-                <div id="u810_text" className="text ">
-                <p>
-                    <span>LH</span>
-                </p>
-                </div>
-            </label>
-            <input id="u810_input" type="checkbox" defaultValue="checkbox" />
-            </div>
+            <CustomCheckbox id="u810" label="LH" />
             {/* Damage_Postion_Buttock_Line_RH (Checkbox) */}
-            <div
-            id="u811"
-            className="ax_default checkbox"
-            data-label="Damage_Postion_Buttock_Line_RH"
-            >
-            <label
-                id="u811_input_label"
-                htmlFor="u811_input"
-                style={{ position: "absolute", left: 0 }}
-            >
-                <svg
-                data="images/structure_damage_report/damage_postion_buttock_line_rh_u811.svg"
-                id="u811_img"
-                className="img "
-                viewBox="403 469 13 13"
-                >
-                <path
-                    d="M 403 469  L 416 469  L 416 482  L 403 482  L 403 469  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                />
-                <path
-                    d="M 403.5 469.5  L 415.5 469.5  L 415.5 481.5  L 403.5 481.5  L 403.5 469.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                />
-                <path
-                    d="M 405.7857142857143 475.5  L 408.57142857142856 478.2857142857143  L 413.2142857142857 471.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                />
-                </svg>
-                <div id="u811_text" className="text ">
-                <p>
-                    <span>RH</span>
-                </p>
-                </div>
-            </label>
-            <input id="u811_input" type="checkbox" defaultValue="checkbox" />
-            </div>
+            <CustomCheckbox id="u811" label="RH" />
         </div>
         </div>  
     );

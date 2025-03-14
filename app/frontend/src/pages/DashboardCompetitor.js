@@ -1,5 +1,5 @@
 import './css/DashboardCompetitor.css';
-import * as authUtils from './authUtils.js';
+import * as authUtils from './Components/authUtils.js';
 import { useEffect } from 'react';
 
 function DashboardCompetitorPage() {

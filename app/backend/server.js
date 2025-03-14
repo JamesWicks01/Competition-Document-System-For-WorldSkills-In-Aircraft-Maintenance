@@ -184,11 +184,7 @@ app.post("/create-atl", (req, res) => {
           leg1_date, leg1_timeup, leg1_timedown, leg1_airtime, leg1_from, leg1_to,
           leg2_date, leg2_timeup, leg2_timedown, leg2_airtime, leg2_from, leg2_to,
           total_bftime, total_airtime, total_time, defects, reported_by, reported_date,
-          work_order_summary_number, resolutions, resolved_by, resolved_date,
-          part_number, serial_number_on, serial_number_off, batch_number,
-          deferral_number, mel, category, function_check, leak_check, independent_check, 
-          other_check, independent_checkby, independent_checkdate, release_by, release_date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
   `;
 
   const values = [
@@ -196,10 +192,6 @@ app.post("/create-atl", (req, res) => {
       leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
       leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
       totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
-      workOrderSummary, resolutions, resolvedBy, resolvedByDate,
-      partNumber, serialNumberOn, serialNumberOff, batchNumber,
-      deferralNumber, mel, category, functionCheck, leakCheck, independentCheck, 
-      otherCheck, independentCheckBy, independentCheckByDate, readyForReleaseBy, readyForReleaseByDate
   ];
 
   db.query(sql, values, (err, result) => {

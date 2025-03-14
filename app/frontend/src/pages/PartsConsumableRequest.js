@@ -1,6 +1,6 @@
 import './css/PartsConsumableRequest.css';
 import { useEffect } from 'react';
-import * as authUtils from './authUtils.js';
+import * as authUtils from './Components/authUtils.js';
 
 function PartsConsumableRequestPage() {
 

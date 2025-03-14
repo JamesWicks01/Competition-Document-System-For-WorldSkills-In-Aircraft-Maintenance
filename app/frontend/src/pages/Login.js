@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
-import * as apiService from './apiService';
+import * as apiService from './Components/apiService.js';
 import { jwtDecode } from 'jwt-decode';
 import bcryptjs from "bcryptjs";
 

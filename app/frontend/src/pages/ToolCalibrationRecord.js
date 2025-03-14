@@ -1,7 +1,7 @@
 import './css/ToolCalibrationRecord.css';
 import React, { useEffect, useState } from "react";
-import * as apiService from './apiService';
-import * as authUtils from './authUtils';
+import * as apiService from './Components/apiService.js';
+import * as authUtils from './Components/authUtils.js';
 
 
 function ToolCalibrationRecordPage() {

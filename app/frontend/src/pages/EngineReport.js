@@ -1,6 +1,6 @@
 import './css/EngineReport.css';
 import { useEffect } from 'react';
-import * as authUtils from './authUtils.js';
+import * as authUtils from './Components/authUtils.js';
 
 function EngineReportPage() {
 

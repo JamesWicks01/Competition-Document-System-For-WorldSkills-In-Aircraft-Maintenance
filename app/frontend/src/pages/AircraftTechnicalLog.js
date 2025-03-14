@@ -1,7 +1,8 @@
 import './css/AircraftTechnicalLog.css';
 import logo from './images/WorldSkills-Logo.png';
 import { useEffect } from 'react';
-import * as authUtils from './authUtils.js';
+import * as authUtils from './Components/authUtils.js';
+import CustomCheckbox from "./Components/CheckboxComponent.js";
 
 function AircraftTechnicalLogPage() {
 
@@ -1024,197 +1025,13 @@ function AircraftTechnicalLogPage() {
                 />
             </div>
             {/* Function_Check (Checkbox) */}
-            <div
-                id="u463"
-                className="ax_default checkbox"
-                data-label="Function_Check"
-            >
-                <label
-                id="u463_input_label"
-                htmlFor="u463_input"
-                style={{ position: "absolute", left: 0 }}
-                >
-                <svg
-                    data="images/aircraft_technical_log_create/function_check_u364.svg"
-                    id="u463_img"
-                    className="img "
-                    viewBox="543 646 13 13"
-                >
-                    <path
-                    d="M 543 646  L 556 646  L 556 659  L 543 659  L 543 646  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                    />
-                    <path
-                    d="M 543.5 646.5  L 555.5 646.5  L 555.5 658.5  L 543.5 658.5  L 543.5 646.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                    />
-                    <path
-                    d="M 545.7857142857143 652.5  L 548.5714285714286 655.2857142857142  L 553.2142857142857 648.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                    />
-                </svg>
-                <div id="u463_text" className="text ">
-                    <p>
-                    <span>Function Check</span>
-                    </p>
-                </div>
-                </label>
-                <input id="u463_input" type="checkbox" defaultValue="checkbox" />
-            </div>
+            <CustomCheckbox id="u463" label="Function Check" />
             {/* Leak_Check (Checkbox) */}
-            <div id="u464" className="ax_default checkbox" data-label="Leak_Check">
-                <label
-                id="u464_input_label"
-                htmlFor="u464_input"
-                style={{ position: "absolute", left: 0 }}
-                >
-                <svg
-                    data="images/aircraft_technical_log_create/leak_check_u365.svg"
-                    id="u464_img"
-                    className="img "
-                    viewBox="551 682 13 13"
-                >
-                    <path
-                    d="M 551 682  L 564 682  L 564 695  L 551 695  L 551 682  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                    />
-                    <path
-                    d="M 551.5 682.5  L 563.5 682.5  L 563.5 694.5  L 551.5 694.5  L 551.5 682.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                    />
-                    <path
-                    d="M 553.7857142857143 688.5  L 556.5714285714286 691.2857142857142  L 561.2142857142857 684.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                    />
-                </svg>
-                <div id="u464_text" className="text ">
-                    <p>
-                    <span>Leak Check</span>
-                    </p>
-                </div>
-                </label>
-                <input id="u464_input" type="checkbox" defaultValue="checkbox" />
-            </div>
+            <CustomCheckbox id="u464" label="Leak Check" />
             {/* Independent Check (Checkbox) */}
-            <div
-                id="u465"
-                className="ax_default checkbox"
-                data-label="Independent Check"
-            >
-                <label
-                id="u465_input_label"
-                htmlFor="u465_input"
-                style={{ position: "absolute", left: 0 }}
-                >
-                <svg
-                    data="images/aircraft_technical_log_create/independent_check_u366.svg"
-                    id="u465_img"
-                    className="img "
-                    viewBox="531 718 13 13"
-                >
-                    <path
-                    d="M 531 718  L 544 718  L 544 731  L 531 731  L 531 718  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                    />
-                    <path
-                    d="M 531.5 718.5  L 543.5 718.5  L 543.5 730.5  L 531.5 730.5  L 531.5 718.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                    />
-                    <path
-                    d="M 533.7857142857143 724.5  L 536.5714285714286 727.2857142857142  L 541.2142857142857 720.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                    />
-                </svg>
-                <div id="u465_text" className="text ">
-                    <p>
-                    <span>Independent Check</span>
-                    </p>
-                </div>
-                </label>
-                <input id="u465_input" type="checkbox" defaultValue="checkbox" />
-            </div>
+            <CustomCheckbox id="u465" label="Independent Check" />
             {/* Other_Check (Checkbox) */}
-            <div id="u466" className="ax_default checkbox" data-label="Other_Check">
-                <label
-                id="u466_input_label"
-                htmlFor="u466_input"
-                style={{ position: "absolute", left: 0 }}
-                >
-                <svg
-                    data="images/aircraft_technical_log_create/other_check_u367.svg"
-                    id="u466_img"
-                    className="img "
-                    viewBox="574 754 13 13"
-                >
-                    <path
-                    d="M 574 754  L 587 754  L 587 767  L 574 767  L 574 754  Z "
-                    fillRule="nonzero"
-                    fill="rgba(255, 255, 255, 1)"
-                    stroke="none"
-                    className="fill"
-                    />
-                    <path
-                    d="M 574.5 754.5  L 586.5 754.5  L 586.5 766.5  L 574.5 766.5  L 574.5 754.5  Z "
-                    strokeWidth={1}
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke"
-                    strokeDashoffset="0.5"
-                    />
-                    <path
-                    d="M 576.7857142857143 760.5  L 579.5714285714286 763.2857142857142  L 584.2142857142857 756.7857142857143  "
-                    strokeWidth="2.7857142857142856"
-                    strokeDasharray={0}
-                    stroke="rgba(121, 121, 121, 1)"
-                    fill="none"
-                    className="stroke btn_check"
-                    />
-                </svg>
-                <div id="u466_text" className="text ">
-                    <p>
-                    <span>Other</span>
-                    </p>
-                </div>
-                </label>
-                <input id="u466_input" type="checkbox" defaultValue="checkbox" />
-            </div>
+            <CustomCheckbox id="u466" label="Other" />
             </div>
         </div>
         {/* Back_Button (Rectangle) */}

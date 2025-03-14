@@ -2587,6 +2587,7 @@ body {
   #u892 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:968px;
     top:1221px;
     width:150px;
@@ -2706,6 +2707,7 @@ body {
   #u893 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:71px;
     top:1221px;
     width:150px;

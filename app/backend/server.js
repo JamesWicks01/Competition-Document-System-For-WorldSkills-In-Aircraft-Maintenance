@@ -241,18 +241,25 @@ app.get("/get-all-document-binders", (req, res) => {
   });
 
 app.get("/search-document-binders", (req, res) => {
-  const {searchType,searchInput} = req.query;
+  const { searchType, searchInput } = req.query;
+  let whereClause = "";
+  let values = [];
+  if (searchType === "user_name") {
+    whereClause = "CONCAT(u.user_fname, ' ', u.user_lname) LIKE ?";
+    values = [`%${searchInput}%`];
+  } else {
+    whereClause = `?? LIKE ?`;
+    values = [searchType, `%${searchInput}%`];
+  }
   const sql = `
     SELECT  
       db.binder_id,
-      CONCAT (u.user_fname, ' ', u.user_lname) AS user_name, 
+      CONCAT(u.user_fname, ' ', u.user_lname) AS user_name, 
       db.binder_status
     FROM document_binders db
     JOIN users u ON db.user_id = u.user_id
-    WHERE ?? LIKE ?
+    WHERE ${whereClause}
     GROUP BY db.binder_id`;
-  const values = [searchType, `%${searchInput}%`];
-
   db.query(sql, values, (err, results) => {
     if (err) {
       console.error("Error fetching searched document binders:", err);
@@ -261,8 +268,7 @@ app.get("/search-document-binders", (req, res) => {
     res.json(results);
   });
 });
-
-
+  
 // ** Server Requests Relating To Account Managment**
 // **Get All Users**
 app.get("/get-users", (req, res) => {

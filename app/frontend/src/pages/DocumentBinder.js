@@ -48,8 +48,10 @@ function DocumentBinderPage() {
                 alert("No binder ID Has Been Found. Redirecting to Back");
                 authUtils.Back();
             } else {
-                document.getElementById('u92').style.visibility = "hidden";
-                document.getElementById('u92').style.display = "none";
+                document.getElementById('u72').style.visibility = "hidden";
+                document.getElementById('u72').style.display = "none";
+                document.getElementById('u74').style.visibility = "hidden";
+                document.getElementById('u74').style.display = "none";
                 fetchSpecificBinder(binderID);
             }
 

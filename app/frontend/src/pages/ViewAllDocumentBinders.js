@@ -8,25 +8,28 @@ function ViewAllDocumentBindersPage() {
     useEffect(() => {
         async function fetchData() {
             try{
-                const response = await api
+                const response = await apiService.apiRequest('get-all-document-binders');
+                setData(response);
+            } catch (error) {
+                alert("Error fetching data: " + error.message);
+                console.error("Error fetching data:", error);
             }
         }
-
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        fetchData();
      }, []);
+
+    const [data, setData] = useState([]);
+
+
+    function openBinder(binder_id) {
+        sessionStorage.setItem('binderID', binder_id);
+        window.location.href = '/document-binder';
+    };
 
     return (
         <div id="base" className="">
-        {/* Back (Rectangle) */}
-        <div id="u44" className="ax_default shape transition notrs" data-label="Back">
-            <div id="u44_div" className="" />
-            <div id="u44_text" className="text ">
-            <p>
-                <span>Back</span>
-            </p>
-            </div>
-        </div>
         {/* Unnamed (Table) */}
         <div id="u45" className="ax_default">
         <table className="table-binder w-full">
@@ -39,11 +42,24 @@ function ViewAllDocumentBindersPage() {
                 </tr>
             </thead>
             <tbody>
-
+                {data.map((row, rowIndex) => (
+                <tr key={rowIndex} className="table-row">
+                    <td className="table-cell">{row.binder_id}</td>
+                    <td className="table-cell">{row.user_name}</td>
+                    <td className="table-cell">{row.binder_status}</td>
+                    <td className="table-cell">
+                        <button onClick={() => openBinder(row.binder_id)}>View Binder</button>
+                    </td>
+                </tr>
+                ))}
             </tbody>
         </table>
+        <div className="buttons-container">
+        <div id="u44" className="button">
+            <p><spam>Back</spam></p>
         </div>
-            
+        </div>
+        </div> 
         {/* Unnamed (Rectangle) */}
         <div id="u65" className="ax_default box_1 transition notrs">
             <div id="u65_div" className="" />

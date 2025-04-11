@@ -21,6 +21,7 @@ function ToolCalibrationRecordPage() {
                 const response = await apiService.apiRequest("load-tool-calibration-records", "GET");
                 setData(response);
             } catch (error) {
+                alert("An error occurred while fetching data.");
                 console.error("Error fetch data: ", error);
             }
         }

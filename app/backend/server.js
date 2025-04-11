@@ -240,6 +240,28 @@ app.get("/get-all-document-binders", (req, res) => {
     });
   });
 
+app.get("/search-document-binders", (req, res) => {
+  const {searchType,searchInput} = req.query;
+  const sql = `
+    SELECT  
+      db.binder_id,
+      CONCAT (u.user_fname, ' ', u.user_lname) AS user_name, 
+      db.binder_status
+    FROM document_binders db
+    JOIN users u ON db.user_id = u.user_id
+    WHERE ?? LIKE ?
+    GROUP BY db.binder_id`;
+  const values = [searchType, `%${searchInput}%`];
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error("Error fetching searched document binders:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+});
+
 
 // ** Server Requests Relating To Account Managment**
 // **Get All Users**

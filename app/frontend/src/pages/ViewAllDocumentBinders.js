@@ -28,6 +28,18 @@ function ViewAllDocumentBindersPage() {
         window.location.href = '/document-binder';
     };
 
+    async function Search(){
+        const searchType = document.getElementById('u67_input').value;
+        const searchInput = document.getElementById('u68_input').value.trim();
+        try {
+            const data = await apiService.apiRequest(`search-document-binders?searchType=${searchType}&searchInput=${searchInput}`);
+            setData(data);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+            alert("An error occured while searching for binders");
+        }
+    }
+
     return (
         <div id="base" className="">
         {/* Unnamed (Table) */}
@@ -88,10 +100,10 @@ function ViewAllDocumentBindersPage() {
         >
             <div id="u67_div" className="" />
             <select id="u67_input" className="u67_input">
-            <option className="u67_input_option" value="Binger ID">
+            <option className="u67_input_option" value="binder_id">
                 Binger ID
             </option>
-            <option className="u67_input_option" value="Assigned Competitor">
+            <option className="u67_input_option" value="user_name">
                 Assigned Competitor
             </option>
             </select>
@@ -110,6 +122,7 @@ function ViewAllDocumentBindersPage() {
             id="u69"
             className="ax_default shape transition notrs"
             data-label="Search_Button"
+            onClick={Search}
         >
             <div id="u69_div" className="" />
             <div id="u69_text" className="text ">

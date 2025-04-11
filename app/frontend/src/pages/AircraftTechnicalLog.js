@@ -1,15 +1,189 @@
 import './css/AircraftTechnicalLog.css';
 import logo from './images/WorldSkills-Logo.png';
-import { useEffect } from 'react';
+import { useState, useEffect } from "react";
 import * as authUtils from './Components/authUtils.js';
+import * as apiService from './Components/apiService.js';
 import CustomCheckbox from "./Components/CheckboxComponent.js";
 
 function AircraftTechnicalLogPage() {
 
+    const [checkboxes, setCheckboxes] = useState({
+        function_check: false,
+        leak_check: false,
+        independent_check: false,
+        other_check: false,
+    });
+    const [isDisabled] = useState(true);
+
     useEffect(() => {
+        async function LoadData() {
+          const data = {
+            document_id: sessionStorage.getItem("document_id"),
+            table: "aircraft_technical_logs"
+          };
+      
+          try {
+            const response = await apiService.apiRequest(
+              `get-document-data?table=${data.table}&document_id=${data.document_id}`
+            );
+      
+            if (response && typeof response === "object") {
+              const form = response; // single object
+      
+              document.getElementById("u424_input").value = form.page_sequence || "";
+              document.getElementById("u426_input").value = form.registration || "";
+              document.getElementById("u427_input").value = form.captain || "";
+              document.getElementById("u428_input").value = form.captain_signature || "";
+              document.getElementById("u429_input").value = form.leg1_date || "";
+              document.getElementById("u430_input").value = form.leg1_timeup || "";
+              document.getElementById("u431_input").value = form.leg1_timedown || "";
+              document.getElementById("u432_input").value = form.leg1_airtime || "";
+              document.getElementById("u433_input").value = form.leg1_from || "";
+              document.getElementById("u434_input").value = form.leg1_to || "";
+              document.getElementById("u435_input").value = form.leg2_date || "";
+              document.getElementById("u436_input").value = form.leg2_timeup || "";
+              document.getElementById("u437_input").value = form.leg2_timedown || "";
+              document.getElementById("u438_input").value = form.leg2_airtime || "";
+              document.getElementById("u439_input").value = form.leg2_from || "";
+              document.getElementById("u440_input").value = form.leg2_to || "";
+              document.getElementById("u441_input").value = form.total_bftime || "";
+              document.getElementById("u442_input").value = form.total_airtime || "";
+              document.getElementById("u443_input").value = form.total_time || "";
+              document.getElementById("u444_input").value = form.defects || "";
+              document.getElementById("u445_input").value = form.reported_by || "";
+              document.getElementById("u446_input").value = form.reported_date || "";
+              document.getElementById("u448_input").value = form.work_order_summary_number || "";
+              document.getElementById("u449_input").value = form.resolutions || "";
+              document.getElementById("u450_input").value = form.resolved_by || "";
+              document.getElementById("u451_input").value = form.resolved_date || "";
+              document.getElementById("u452_input").value = form.part_number || "";
+              document.getElementById("u453_input").value = form.serial_number_on || "";
+              document.getElementById("u454_input").value = form.serial_number_off || "";
+              document.getElementById("u455_input").value = form.batch_number || "";
+              document.getElementById("u456_input").value = form.deferral_number || "";
+              document.getElementById("u457_input").value = form.mel || "";
+              document.getElementById("u458_input").value = form.category || "";
+              document.getElementById("u459_input").value = form.independent_checkby || "";
+              document.getElementById("u460_input").value = form.independent_checkdate || "";
+              document.getElementById("u461_input").value = form.release_by || "";
+              document.getElementById("u462_input").value = form.release_date || "";
+      
+              setCheckboxes({
+                function_check: form.function_check === 1,
+                leak_check: form.leak_check === 1,
+                independent_check: form.independent_check === 1,
+                other_check: form.other_check === 1
+              });
+            }
+          } catch (error) {
+            console.error("Error loading data:", error);
+          }
+        }
+      
+        LoadData();
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
-     }, []);
+      }, []);
+
+    const handleCheckboxChange = (id, value) => {
+        setCheckboxes((prev) => ({ ...prev, [id]: value }));
+     };
+     
+    function Back_Button() {
+        sessionStorage.removeItem("document_id");
+        authUtils.Back();
+    }
+
+     function SaveATL() {
+        const pageSequence = document.getElementById("u424_input");
+        const registrationNumber = document.getElementById("u426_input");
+        const captainName = document.getElementById("u427_input");
+        const captainSignature = document.getElementById("u428_input");
+        const Leg1Date = document.getElementById("u429_input");
+        const Leg1TimeUp = document.getElementById("u430_input");
+        const Leg1TimeDown = document.getElementById("u431_input");
+        const Leg1AirTime = document.getElementById("u432_input");
+        const Leg1From = document.getElementById("u433_input");
+        const Leg1To = document.getElementById("u434_input");
+        const Leg2Date = document.getElementById("u435_input");
+        const Leg2TimeUp = document.getElementById("u436_input");
+        const Leg2TimeDown = document.getElementById("u437_input");
+        const Leg2AirTime = document.getElementById("u438_input");
+        const Leg2From = document.getElementById("u439_input");
+        const Leg2To = document.getElementById("u440_input");
+        const totalTimeBFFlight = document.getElementById("u441_input");
+        const totalAirTime = document.getElementById("u442_input");
+        const totalTime = document.getElementById("u443_input");
+        const defects = document.getElementById("u444_input");
+        const reportedBy = document.getElementById("u445_input");
+        const reportedByDate = document.getElementById("u446_input");
+        const workOrderSummaryNumber = document.getElementById("u448_input");
+        const resolutions = document.getElementById("u449_input");
+        const resolvedBy = document.getElementById("u450_input");
+        const resolvedByDate = document.getElementById("u451_input");
+        const partNumber = document.getElementById("u452_input");
+        const serialNumberOn = document.getElementById("u453_input");
+        const serialNumberOff = document.getElementById("u454_input");
+        const batchNumber = document.getElementById("u455_input");
+        const deferralNumber = document.getElementById("u456_input");
+        const mel = document.getElementById("u457_input");
+        const cat = document.getElementById("u458_input");
+        const independentCheckBy = document.getElementById("u459_input");
+        const independentCheckDate = document.getElementById("u460_input");
+        const readyForReleaseBy = document.getElementById("u461_input");
+        const readyForReleaseDate = document.getElementById("u462_input");
+        const functionCheck = document.getElementById("u463_input");
+        const leakCheck = document.getElementById("u464_input");
+        const independentCheck = document.getElementById("u465_input");
+        const otherCheck = document.getElementById("u466_input");
+
+
+        const data = {
+            "registration": registrationNumber.value.trim(),
+            "captain": captainName.value.trim(),
+            "captain_signature": captainSignature.value.trim(),
+            "page_sequence": pageSequence.value.trim(),
+            "leg1_date": Leg1Date.value.trim(),
+            "leg1_timeup": Leg1TimeUp.value.trim(),
+            "leg1_timedown": Leg1TimeDown.value.trim(),
+            "leg1_airtime": Leg1AirTime.value.trim(),
+            "leg1_from": Leg1From.value.trim(),
+            "leg1_to": Leg1To.value.trim(),
+            "leg2_date": Leg2Date.value.trim(),
+            "leg2_timeup": Leg2TimeUp.value.trim(),
+            "leg2_timedown": Leg2TimeDown.value.trim(),
+            "leg2_airtime": Leg2AirTime.value.trim(),
+            "leg2_from": Leg2From.value.trim(),
+            "leg2_to": Leg2To.value.trim(),
+            "total_bftime": totalTimeBFFlight.value.trim(),
+            "total_airtime": totalAirTime.value.trim(),
+            "total_time": totalTime.value.trim(),
+            "defects": defects.value.trim(),
+            "reported_by": reportedBy.value.trim(),
+            "reported_date": reportedByDate.value.trim(),
+            "work_order_summary_number": workOrderSummaryNumber.value.trim(),
+            "resolutions": resolutions.value.trim(),
+            "resolved_by": resolvedBy.value.trim(),
+            "resolved_date": resolvedByDate.value.trim(),
+            "part_number": partNumber.value.trim(),
+            "serial_number_on": serialNumberOn.value.trim(),
+            "serial_number_off": serialNumberOff.value.trim(),
+            "batch_number": batchNumber.value.trim(),
+            "deferral_number": deferralNumber.value.trim(),
+            "mel": mel.value.trim(),
+            "category": cat.value.trim(),
+            "leak_check": leakCheck.checked,
+            "function_check": functionCheck.checked,
+            "independent_check": independentCheck.checked,
+            "other_check": otherCheck.checked,
+            "independent_checkby": independentCheckBy.value.trim(),
+            "independent_checkdate": independentCheckDate.value.trim(),
+            "release_by": readyForReleaseBy.value.trim(),
+            "release_date": readyForReleaseDate.value.trim()
+        };
+        const document_id = localStorage.getItem("document_id");
+        console.log(data);
+     }
 
     return(
         <div id="base" className="">
@@ -516,6 +690,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u426_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Captain_Name (Text field) */}
@@ -530,6 +705,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u427_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Captain_Signature (Text field) */}
@@ -544,6 +720,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u428_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg1_Date (Text field) */}
@@ -558,6 +735,7 @@ function AircraftTechnicalLogPage() {
                 type="date"
                 defaultValue=""
                 className="u429_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg1_TimeUp (Text field) */}
@@ -572,6 +750,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u430_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg1_TimeDown (Text field) */}
@@ -586,6 +765,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u431_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg1_AirTime (Text field) */}
@@ -600,6 +780,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u432_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg1_From (Text field) */}
@@ -614,6 +795,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u433_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg1_To (Text field) */}
@@ -628,6 +810,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u434_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg2_Date (Text field) */}
@@ -642,6 +825,7 @@ function AircraftTechnicalLogPage() {
                 type="date"
                 defaultValue=""
                 className="u435_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg2_TimeUp (Text field) */}
@@ -656,6 +840,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u436_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg2_TimeDown (Text field) */}
@@ -670,6 +855,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u437_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg2_AirTime (Text field) */}
@@ -684,6 +870,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u438_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg2_From (Text field) */}
@@ -698,6 +885,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u439_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Leg2_To (Text field) */}
@@ -712,6 +900,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u440_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Total_Time_BF_Flight (Text field) */}
@@ -726,6 +915,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u441_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Total_Air_Time (Text field) */}
@@ -740,6 +930,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u442_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Total_Time (Text field) */}
@@ -754,6 +945,7 @@ function AircraftTechnicalLogPage() {
                 type="time"
                 defaultValue=""
                 className="u443_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Defects (Text area) */}
@@ -763,7 +955,7 @@ function AircraftTechnicalLogPage() {
                 data-label="Defects"
             >
                 <div id="u444_div" className="" />
-                <textarea id="u444_input" className="u444_input" defaultValue={""} />
+                <textarea id="u444_input" className="u444_input" defaultValue={""} disabled={isDisabled}/>
             </div>
             {/* Reported_By (Text field) */}
             <div
@@ -777,6 +969,7 @@ function AircraftTechnicalLogPage() {
                 type="text"
                 defaultValue=""
                 className="u445_input"
+                disabled={isDisabled}
                 />
             </div>
             {/* Reported_By_Date (Text field) */}
@@ -791,6 +984,7 @@ function AircraftTechnicalLogPage() {
                 type="date"
                 defaultValue=""
                 className="u446_input"
+                disabled={isDisabled}
                 />
             </div>
             </div>
@@ -1025,13 +1219,13 @@ function AircraftTechnicalLogPage() {
                 />
             </div>
             {/* Function_Check (Checkbox) */}
-            <CustomCheckbox id="u463" label="Function Check" />
+            <CustomCheckbox id="u463" label="Function Check" initialChecked={checkboxes.function_check} onChange={handleCheckboxChange}/>
             {/* Leak_Check (Checkbox) */}
-            <CustomCheckbox id="u464" label="Leak Check" />
+            <CustomCheckbox id="u464" label="Leak Check" initialChecked={checkboxes.leak_check} onChange={handleCheckboxChange}/>
             {/* Independent Check (Checkbox) */}
-            <CustomCheckbox id="u465" label="Independent Check" />
+            <CustomCheckbox id="u465" label="Independent Check" initialChecked={checkboxes.independent_check} onChange={handleCheckboxChange}/>
             {/* Other_Check (Checkbox) */}
-            <CustomCheckbox id="u466" label="Other" />
+            <CustomCheckbox id="u466" label="Other" initialChecked={checkboxes.other_check} onChange={handleCheckboxChange}/>
             </div>
         </div>
         {/* Back_Button (Rectangle) */}
@@ -1039,6 +1233,7 @@ function AircraftTechnicalLogPage() {
             id="u467"
             className="ax_default shape transition notrs"
             data-label="Back_Button"
+            onClick={Back_Button}
         >
             <div id="u467_div" className="" />
             <div id="u467_text" className="text ">
@@ -1052,6 +1247,7 @@ function AircraftTechnicalLogPage() {
             id="u468"
             className="ax_default shape transition notrs"
             data-label="Save_Button"
+            onClick={SaveATL}
         >
             <div id="u468_div" className="" />
             <div id="u468_text" className="text ">

@@ -8968,6 +8968,7 @@ body {
   #u467 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:6px;
     top:788px;
     width:140px;
@@ -9087,6 +9088,7 @@ body {
   #u468 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:1049px;
     top:788px;
     width:140px;

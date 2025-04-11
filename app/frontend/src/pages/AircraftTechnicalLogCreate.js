@@ -25,7 +25,7 @@ function AircraftTechnicalLogCreatePage() {
         authUtils.CheckAccess();
     }, []);
 
-    async function saveATL() {
+    async function createATL() {
         const registration = document.getElementById('u327_input');
         const captain = document.getElementById('u328_input');
         const captainSignature = document.getElementById('u329_input');
@@ -119,28 +119,32 @@ function AircraftTechnicalLogCreatePage() {
             if (binderResponse) {
                 console.log("API Response:", binderResponse); // Check what it returns
                 console.log(`Document binder created successfully with ID: ${binderResponse.binderId}`);
-                atl.binderId = binderResponse.binderId
-            }          
-        } catch (error) {
-            console.error("Error creating document binder: ", error);
-        };
-
-        try {
-            const response = await apiService.apiRequest('new-atl', 'POST', atl);
-            if(response) {
-                console.log("API Response:", response); // Check what it returns
+                // Proceed to create a document
+                const newDocumentResponse = await apiService.apiRequest('new-document', 'POST', {binder_id:binderResponse.binderId, document_name:'Aircraft Technical Log', document_type:"ATL"});
+                if (newDocumentResponse) {
+                    console.log("Document created successfully:", newDocumentResponse);
+                    console.log(`Document created successfully with ID: ${newDocumentResponse.documentId}`);
+                    // Proceed to create an ATL
+                    const createDocumentResponse = await apiService.apiRequest('create-document', 'POST', {document_id:newDocumentResponse.documentId, document_type:"ATL", data:atl});
+                    if (createDocumentResponse) {
+                        console.log("ATL created successfully:", createDocumentResponse);
+                        alert("ATL created successfully!");
+                        window.location.reload();
+                    }
+                }
             }
         } catch (error) {
-            console.error("Error creating document binder: ", error);
-        }
-        
+            console.error("Error creating ATL:", error);
+            alert("Error creating ATL: " + error.message);
+            return null;    
+        };
     };
+
 
     function SubmitAssignATL_Button() {
         document.getElementById('u370').style.display = 'none';
         document.getElementById('u370').style.visibility = 'hidden';
-        saveATL();
-        
+        createATL();
     };
 
     function CancelAssignATL_Button() {

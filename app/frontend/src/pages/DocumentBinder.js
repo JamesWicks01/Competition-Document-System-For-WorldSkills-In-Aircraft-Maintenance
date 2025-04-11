@@ -1,21 +1,92 @@
 import './css/DocumentBinder.css';
 import * as authUtils from './Components/authUtils.js';
-import { useEffect } from 'react';
+import * as apiService from './Components/apiService.js';
+import React, { useEffect, useState } from "react";
 
 function DocumentBinderPage() {
 
     useEffect(() => {
+        async function fetchCompetitorsBinder(data) {
+            
+            try{
+                const response = await apiService.apiRequest(`load-document-binder?user_id=${data}`);
+                if (!response || response.length === 0) {
+                    alert("There is No Document Binder Assigned To You.");
+                    window.location.href = "/dashboard-competitor";
+                }
+                setData(response);
+                const name = response[0];
+                sessionStorage.setItem('binderID', response[0].binder_id);
+                document.getElementById('u71_spam').innerHTML = `${name.user_name} Document Binder`;
+            }   catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        async function fetchSpecificBinder(data) {
+            try {
+                const response = await apiService.apiRequest(`get-document-binder?binder_id=${data}`);
+                if (!response || response.length === 0) {
+                    alert("There is Document Binder Dosen't Exist.");
+                    authUtils.Back();
+                }
+                setData(response);
+                const name = response[0];
+                sessionStorage.setItem('binderID', response[0].binder_id);
+                document.getElementById('u71_spam').innerHTML = `${name.user_name} Document Binder`;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        const userRole = authUtils.GetRole();
+        if (userRole === "Competitor") {
+            const data = authUtils.GetUserId();
+            fetchCompetitorsBinder(data);
+        } else if (userRole === "Admin" || userRole === "Admin") {
+            const binderID = sessionStorage.getItem('binderID');
+            if (!binderID) {
+                alert("No binder ID Has Been Found. Redirecting to Back");
+                authUtils.Back();
+            } else {
+                document.getElementById('u92').style.visibility = "hidden";
+                document.getElementById('u92').style.display = "none";
+                fetchSpecificBinder(binderID);
+            }
+
+
+        }
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
     }, []);
 
+    const [data, setData] = useState([]);
+    const userRole = authUtils.GetRole();
+
     function Back_Button() {
         authUtils.Back();
+        sessionStorage.removeItem('binderID');
     };
 
-    function Submit_Button() {
+    async function Submit_Button() {
         if (window.confirm("Are you sure? Your won't be able to edit or view any documents in this binder after you submit")) {
-            console.log("Yes");
+            const binderID = sessionStorage.getItem('binderID');
+            const data = {
+                binder_id: binderID,
+            };
+            try {
+                const response = await apiService.apiRequest('submit-document-binder', 'POST', data);
+                if (response) {
+                    console.log("Document binder submitted successfully:", response);
+                    alert("Document binder submitted successfully!");
+                    sessionStorage.removeItem('binderID');
+                    window.location.href = "/dashboard-competitor";
+                } else {
+                    alert("Error submitting document binder:", response);
+                }
+            } catch (error) {
+                console.error("Error submitting document binder:", error);
+                alert("Error submitting document binder:", error);
+            }
         };
     };
 
@@ -29,14 +100,126 @@ function DocumentBinderPage() {
         document.getElementById("u96").style.visibility = "hidden";
     };
 
-    function New_Document() {
-
+    async function DeleteDocument_Button(docID, docType) {
+        if (window.confirm("Are you sure? This action cannot be undone.")) {
+            const data = {
+                document_id: docID,
+                document_type: docType,
+            };
+            if (data.document_type === "ATL") {
+                alert("You cannot delete this document type.");
+                return null;
+            };
+            try {
+                const response = await apiService.apiRequest('delete-document', 'DELETE', data);
+                if (response) {
+                    console.log("Document deleted successfully:", response);
+                }
+            } catch (error) {
+                console.error("Error deleting document:", error);
+                alert("Error deleting document:", error);
+                return null;
+            };
+            try {
+                const response = await apiService.apiRequest('delete-document-from-binder', 'DELETE', data);
+                if (response) {
+                    console.log("Documentdeleted successfully:", response);
+                    alert("Document deleted successfully");
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error("Error deleting document:", error);
+                alert("Error deleting document:", error);
+                return null;
+            }
+        };
     };
 
-    function Submit_NewDocument_Button() {
+    async function Add_NewDocument_Button() {
+        const selectedOption = document.getElementById("u104_input").value;
+        const binderID = sessionStorage.getItem('binderID');
+        const documentName = prompt("Enter the name of the document:");
+        if (!documentName) {
+            alert("Document name cannot be empty.");
+            return;
+        }
 
+        const data = {
+            binder_id: binderID,
+            document_name: documentName,
+            document_type: selectedOption,
+        };
+        try {
+            const newDocumentResponse = await apiService.apiRequest('new-document', 'POST', data);
+            if (newDocumentResponse) {
+                console.log("New document added successfully:", newDocumentResponse);
+                console.log("Document ID:", newDocumentResponse.document_id);
+                const createDocumentResponse = await apiService.apiRequest('create-document', 'POST', {document_id:newDocumentResponse.documentId, document_type:data.document_type});
+                if (createDocumentResponse) {
+                    console.log("Document created successfully:", createDocumentResponse);
+                    alert("Document created successfully!");
+                    window.location.reload();
+                }
+            } 
+        } catch (error) {
+            console.error("Error adding new document:", error);
+            alert("Error adding new document:", error);
+            return null;
+        }    
     }
 
+    async function EditDocumentName_Button(docID) {
+        const newName = prompt("Enter the new name for the document:");
+        if (!newName) {
+            alert("Document name cannot be empty.");
+            return;
+        }
+        const data = {
+            document_id: docID,
+            document_name: newName,
+        };
+        try {
+            const response = await apiService.apiRequest('edit-document-name', 'POST', data);
+            if (response) {
+                console.log("Document name updated successfully:", response);
+                alert("Document name updated successfully!");
+                window.location.reload();
+            } else {
+                alert("Error updating document name:", response);
+            }
+        } catch (error) {
+            console.error("Error updating document name:", error);
+            alert("Error updating document name:", error);
+        }
+    };
+
+    function OpenDocument_Button(docID,docType) {
+        if (docType === "ATL") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/aircraft-technical-log";
+        } else if (docType === "EOW") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/end-of-work-shift-report";
+        } else if (docType === "TC") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/task-card";
+        } else if (docType === "ER") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/engine-report";
+        } else if (docType === "SDR") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/structural-damage-report";
+        } else if (docType === "TDR") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/technical-dispatch-report";
+        } else if (docType === "WOS") {
+            sessionStorage.setItem("document_id", docID);
+            window.location.href = "/work-order-summary";
+        } else {
+            alert("Unknown document type:", docType);
+        }
+
+    };
 
     return(
         <div id="base" className="">
@@ -45,37 +228,7 @@ function DocumentBinderPage() {
             <div id="u71_div" className="" />
             <div id="u71_text" className="text ">
             <p>
-                <span>
-                {"{"}COMPETITOR'S NAME {"}"}'S DOCUMENT BINDER
-                </span>
-            </p>
-            </div>
-        </div>
-        {/* Submit_Button (Rectangle) */}
-        <div
-            id="u72"
-            className="ax_default shape transition notrs"
-            data-label="Submit_Button"
-            onClick={Submit_Button}
-        >
-            <div id="u72_div" className="" />
-            <div id="u72_text" className="text ">
-            <p>
-                <span>Submit</span>
-            </p>
-            </div>
-        </div>
-        {/* Back_Button (Rectangle) */}
-        <div
-            id="u73"
-            className="ax_default shape transition notrs"
-            data-label="Back_Button"
-            onClick={Back_Button}
-        >
-            <div id="u73_div" className="" />
-            <div id="u73_text" className="text ">
-            <p>
-                <span>Back</span>
+                <span id="u71_spam">Document Binder</span>
             </p>
             </div>
         </div>
@@ -95,931 +248,40 @@ function DocumentBinderPage() {
         </div>
         {/* Unnamed (Table) */}
         <div id="u75" className="ax_default">
-            {/* Unnamed (Table cell) */}
-            <div id="u76" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u76.svg"
-                id="u76_img"
-                className="img generatedImage"
-                viewBox="0 0 560 34"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 34  L 1 34  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 34  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                className="stroke"
-                />
-            </svg>
-            <div id="u76_text" className="text ">
-                <p>
-                <span>Document Name</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u77" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u77.svg"
-                id="u77_img"
-                className="img generatedImage"
-                viewBox="560 0 560 34"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 34  L 1 34  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(238, 236, 225, 0.9921568627450981)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 0 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 34  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 0 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 34  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 0 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u77_text" className="text ">
-                <p>
-                <span>Last Updated</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u78" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u78.svg"
-                id="u78_img"
-                className="img generatedImage"
-                viewBox="0 34 560 30"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 34 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 34 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 34 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u78_text" className="text ">
-                <p>
-                <span>Aircraft Technical Log</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u79" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u79.svg"
-                id="u79_img"
-                className="img generatedImage"
-                viewBox="560 34 560 30"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 30  L 1 30  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 34 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 34 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 34 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 30  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 34 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u79_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u80" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u80.svg"
-                id="u80_img"
-                className="img generatedImage"
-                viewBox="0 64 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 64 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 64 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 64 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u80_text" className="text ">
-                <p>
-                <span>Work Order Summary</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u81" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u81.svg"
-                id="u81_img"
-                className="img generatedImage"
-                viewBox="560 64 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 64 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 64 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 64 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 64 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u81_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u82" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u82.svg"
-                id="u82_img"
-                className="img generatedImage"
-                viewBox="0 97 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 97 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 97 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 97 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u82_text" className="text ">
-                <p>
-                <span>Task Card 1</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u83" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u83.svg"
-                id="u83_img"
-                className="img generatedImage"
-                viewBox="560 97 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 97 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 97 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 97 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 97 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u83_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u84" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u84.svg"
-                id="u84_img"
-                className="img generatedImage"
-                viewBox="0 130 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 130 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 130 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 130 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u84_text" className="text ">
-                <p>
-                <span>Task Card 2</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u85" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u85.svg"
-                id="u85_img"
-                className="img generatedImage"
-                viewBox="560 130 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 130 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 130 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 130 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 130 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u85_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u86" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u86.svg"
-                id="u86_img"
-                className="img generatedImage"
-                viewBox="0 163 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 163 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 163 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 163 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u86_text" className="text ">
-                <p>
-                <span>Task Card 3</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u87" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u87.svg"
-                id="u87_img"
-                className="img generatedImage"
-                viewBox="560 163 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 163 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 163 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 163 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 163 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u87_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u88" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u88.svg"
-                id="u88_img"
-                className="img generatedImage"
-                viewBox="0 196 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 196 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 196 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 196 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u88_text" className="text ">
-                <p>
-                <span>Engine Report</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u89" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u89.svg"
-                id="u89_img"
-                className="img generatedImage"
-                viewBox="560 196 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 196 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 196 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 196 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 196 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u89_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u90" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u90.svg"
-                id="u90_img"
-                className="img generatedImage"
-                viewBox="0 229 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 229 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 229 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 229 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u90_text" className="text ">
-                <p>
-                <span>Structure Damage Report</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u91" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u91.svg"
-                id="u91_img"
-                className="img generatedImage"
-                viewBox="560 229 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 229 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 229 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 229 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 229 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u91_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u92" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u92.svg"
-                id="u92_img"
-                className="img generatedImage"
-                viewBox="0 262 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 262 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 262 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 262 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u92_text" className="text ">
-                <p>
-                <span>Technical Dispatch Report</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u93" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u93.svg"
-                id="u93_img"
-                className="img generatedImage"
-                viewBox="560 262 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 33  L 1 33  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 262 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 262 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 262 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 33  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 262 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u93_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u94" className="ax_default text_link transition notrs">
-            <svg
-                data="images/your_document_binder/u94.svg"
-                id="u94_img"
-                className="img generatedImage"
-                viewBox="0 295 560 33"
-            >
-                <path
-                d="M 1 1  L 560 1  L 560 32  L 1 32  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 0 295 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 32  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 295 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 295 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 32.5  L 560 32.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 0 295 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u94_text" className="text ">
-                <p>
-                <span>End-Of-Shift Report</span>
-                </p>
-            </div>
-            </div>
-            {/* Unnamed (Table cell) */}
-            <div id="u95" className="ax_default table_cell transition notrs">
-            <svg
-                data="images/your_document_binder/u95.svg"
-                id="u95_img"
-                className="img generatedImage"
-                viewBox="560 295 560 33"
-            >
-                <path
-                d="M 1 1  L 559 1  L 559 32  L 1 32  L 1 1  Z "
-                fillRule="nonzero"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-                transform="matrix(1 0 0 1 560 295 )"
-                className="fill"
-                />
-                <path
-                d="M 0.5 1  L 0.5 32  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 295 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 0.5  L 560 0.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 295 )"
-                className="stroke"
-                />
-                <path
-                d="M 559.5 1  L 559.5 32  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 295 )"
-                className="stroke"
-                />
-                <path
-                d="M 0 32.5  L 560 32.5  "
-                strokeWidth={1}
-                strokeDasharray={0}
-                stroke="rgba(121, 121, 121, 1)"
-                fill="none"
-                transform="matrix(1 0 0 1 560 295 )"
-                className="stroke"
-                />
-            </svg>
-            <div id="u95_text" className="text ">
-                <p>
-                <span>DD/MM/YYYY HH:MM:SS</span>
-                </p>
-            </div>
-            </div>
+        <table className="table-binder w-full">
+            <thead>
+            <tr className="table-header">
+                <th className="table-header text-left">Document Name</th>
+                <th className="table-header text-left">Last Updated</th>
+                <th className="table-header text-left">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {data.map((row, rowIndex) => (
+                <tr key={rowIndex} className="table-row">
+                <td className="table-cell">{row.document_name}</td>
+                <td className="table-cell">{row.last_updated}</td>
+                <td className="table-cell">
+                    <button id="open" onClick={() => OpenDocument_Button(row.document_id, row.document_type)}>Open</button>
+                    {userRole === "Competitor" && (
+                        <>
+                            <button onClick={() => EditDocumentName_Button(row.document_id)}>Edit Name</button>
+                            <button onClick={() => DeleteDocument_Button(row.document_id, row.document_type)}>Delete</button>
+                        </>
+                    )}
+                </td>
+                </tr>
+            ))}
+            </tbody>
+        </table>
+        <div className="buttons-container">
+        <div id="u73" className="button" onClick={Back_Button}>
+            <p><spam>Back</spam></p>
+        </div>
+        <div id="u72" className="button" onClick={Submit_Button}>
+            <p><spam>Submit</spam></p>
+        </div>
+        </div>
         </div>
         {/* New_Document (Group) */}
         <div
@@ -1072,6 +334,7 @@ function DocumentBinderPage() {
             id="u100"
             className="ax_default shape transition notrs"
             data-label="Submit_Button"
+            onClick={Add_NewDocument_Button}
             >
             <div id="u100_div" className="" />
             <div id="u100_text" className="text ">
@@ -1123,25 +386,25 @@ function DocumentBinderPage() {
             <div id="u104" className="ax_default droplist transition notrs">
                 <div id="u104_div" className="" />
                 <select id="u104_input" className="u104_input">
-                <option className="u104_input_option" value="Word Order Summary">
+                <option className="u104_input_option" value="WOS">
                     Word Order Summary
                 </option>
-                <option className="u104_input_option" value="Task Card">
+                <option className="u104_input_option" value="TC">
                     Task Card
                 </option>
-                <option className="u104_input_option" value="Engine Report">
+                <option className="u104_input_option" value="ER">
                     Engine Report
                 </option>
-                <option className="u104_input_option" value="Structure Damage Report">
-                    Structure Damage Report
+                <option className="u104_input_option" value="SDR">
+                    Structural Damage Report
                 </option>
                 <option
                     className="u104_input_option"
-                    value="Technical Dispatch Report"
+                    value="TDR"
                 >
                     Technical Dispatch Report
                 </option>
-                <option className="u104_input_option" value="End-Of-Work-Shift Report">
+                <option className="u104_input_option" value="EOW">
                     End-Of-Work-Shift Report
                 </option>
                 </select>

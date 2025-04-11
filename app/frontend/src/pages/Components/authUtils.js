@@ -17,6 +17,15 @@ export function GetRole() {
     return null;
 }
 
+export function GetUserId() {
+    const token = localStorage.getItem("token");
+    if (token) {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.id;
+    }
+    return null;
+}
+
 export function Signout() {
     localStorage.removeItem("token");
     window.location.href = "/";
@@ -34,7 +43,7 @@ export function CheckAccess() {
             "/document-binder",
             "/end-of-work-shift-report",
             "/parts-consumable-request",
-            "/structure-damage-report",
+            "/structural-damage-report",
             "/task-card",
             "/technical-dispatch-report",
             "/tool-calibration-record",
@@ -81,5 +90,21 @@ export function CheckAccess() {
 
 export function Back() {
     window.history.back();
+}
+
+export function CheckSession() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Your session has expired. Please log in again.");
+        window.location.href = "/";
+    } else {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        if (decodedToken.exp < currentTime) {
+            alert("Your session has expired. Please log in again.");
+            localStorage.removeItem("token");
+            window.location.href = "/";
+        }
+    }
 }
 

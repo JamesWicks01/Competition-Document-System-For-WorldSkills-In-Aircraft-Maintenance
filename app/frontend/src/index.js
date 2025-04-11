@@ -14,7 +14,7 @@ import EndOfShiftReportPage from './pages/EndOfShiftReport';
 import EngineReportPage from './pages/EngineReport';
 import LoginPage from './pages/Login';
 import PartsConsumableRequestPage from './pages/PartsConsumableRequest';
-import StructureDamageReportPage from './pages/StructureDamageReport';
+import StructuralDamageReportPage from './pages/StructuralDamageReport';
 import TaskCardPage from './pages/TaskCard';
 import TechnicalDispatchReportPage from './pages/TechnicalDispatchReport';
 import ToolCalibrationRecordPage from './pages/ToolCalibrationRecord';
@@ -39,7 +39,7 @@ export default function App() {
         <Route path="/engine-report" element={<EngineReportPage />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/parts-consumable-request" element={<PartsConsumableRequestPage />} />
-        <Route path="/structure-damage-report" element={<StructureDamageReportPage />} />
+        <Route path="/structural-damage-report" element={<StructuralDamageReportPage />} />
         <Route path="/task-card" element={<TaskCardPage />} />
         <Route path="/technical-dispatch-report" element={<TechnicalDispatchReportPage />} />
         <Route path="/tool-calibration-record" element={<ToolCalibrationRecordPage />} />

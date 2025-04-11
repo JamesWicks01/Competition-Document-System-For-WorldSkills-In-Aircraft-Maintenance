@@ -14,7 +14,7 @@ function DashboardCompetitorPage() {
     };
 
     function ToolsCalibrationRecords_Button() {
-        window.location.href = "/tools-calibration-record";
+        window.location.href = "/tool-calibration-record";
     };
 
     function OpenYourDocumentBinder_Button() {

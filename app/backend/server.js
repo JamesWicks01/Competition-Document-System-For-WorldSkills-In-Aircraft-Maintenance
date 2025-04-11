@@ -34,7 +34,7 @@ app.post("/login", (req, res) => {
 
       const isMatch = bcrypt.compare(password, user.password);
       if (isMatch) {
-        const token = jwt.sign({ id: user.id, username: user.username,  role: user.user_role, passwordReset:user.password_reset}, "secretKey", { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.user_id, username: user.username,  role: user.user_role, passwordReset:user.password_reset}, "secretKey", { expiresIn: "1h" });
         res.json({ message: "Login successful", token });
       } else {
         res.json({ message: "Invalid credentials" });
@@ -45,6 +45,37 @@ app.post("/login", (req, res) => {
   });
 });
 
+//** Server Request Relating To ATL Creation and Assignment **/
+// **Get All Users That Are Competitors That Don't Have ATLs Assigned To Them**
+app.get("/get-competitors", (req, res) => {
+  const sql = `SELECT u.user_id, CONCAT (u.user_fname, ' ', u.user_lname) AS name
+                FROM users u
+                LEFT JOIN document_binders db ON u.user_id = db.user_id
+                WHERE u.user_role = 'Competitor'
+                AND (db.binder_id IS NULL OR db.binder_status != 'In Progress')`;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching competitors:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+});
+// **Create New Document Binder**
+app.post("/new-document-binder", (req, res) => {
+  const {user_id} = req.body;
+  const sql = "INSERT INTO document_binders (binder_status, user_id) VALUES (?,?)";
+  const values = ["In Progress", user_id];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error creating document binder:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document binder created successfully", binderId: result.insertId });
+  });
+});
+
+// ** Server Requests Relating To Tool Calibration Records **/
 // **New Tool Calibration Record**
 app.post("/new-record", (req, res) => {
   const {Description, PartNumber, SerialNumber, CalibrationDate, CalibrationDueDate} = req.body;
@@ -62,7 +93,7 @@ app.post("/new-record", (req, res) => {
 });
 // **Load Tool Calibration Records**
 app.get("/load-tool-calibration-records", (req, res) => {
-  const sql = `SELECT description, part_number, serial_number, 
+  const sql = `SELECT calibration_id, description, part_number, serial_number, 
                   DATE_FORMAT(calibration_date, '%d/%m/%Y') AS calibration_date, 
                   DATE_FORMAT(calibration_due_date, '%d/%m/%Y') AS calibration_due_date
               FROM tool_calibration_records`;
@@ -79,7 +110,7 @@ app.get("/load-tool-calibration-records", (req, res) => {
 app.get("/search-tool-calibration-records", (req, res) => {
   const { searchType, searchInput } = req.query;
   // Query the database with a LIKE search for partial matches
-  const sql = `SELECT description, part_number, serial_number, 
+  const sql = `SELECT calibration_id, description, part_number, serial_number, 
                   DATE_FORMAT(calibration_date, '%d/%m/%Y') AS calibration_date, 
                   DATE_FORMAT(calibration_due_date, '%d/%m/%Y') AS calibration_due_date
                FROM tool_calibration_records
@@ -95,61 +126,133 @@ app.get("/search-tool-calibration-records", (req, res) => {
   });
 });
 
-// **Get All Users That Are Competitors That Don't Have ATLs Assigned To Them**
-app.get("/get-competitors", (req, res) => {
-  const sql = `SELECT u.user_id, CONCAT (u.user_fname, ' ', u.user_lname) AS name
-                FROM users u
-                LEFT JOIN document_binders db ON u.user_id = db.user_id
-                WHERE u.user_role = 'Competitor'
-                AND (db.binder_id IS NULL OR db.binder_status != 'In Progress')`;
-  db.query(sql, (err, results) => {
+app.get("/delete-tool-calibration-record", (req, res) => {
+  const { calibration_id } = req.query;
+  const sql = "DELETE FROM tool_calibration_records WHERE calibration_id = ?";
+  db.query(sql, [calibration_id], (err, result) => {
     if (err) {
-      console.error("Error fetching competitors:", err);
+      console.error("Error deleting record:", err);
       return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Record deleted successfully" });
+  });
+});
+
+// ** Server Request Relating To Document Binders and Document Creation**
+// **Get a Specific Document Binder By ID And Load The Documents Within**
+app.get("/get-document-binder", (req, res) => {
+  const {binder_id} = req.query;
+  const sql = `SELECT 
+                db.binder_id,
+                CONCAT (u.user_fname, ' ', u.user_lname) AS user_name,
+                db.binder_status, 
+                d.document_id, 
+                d.document_name, 
+                d.document_type,
+                GREATEST(
+                  COALESCE(atl.last_updated, '1970-01-01 00:00:00'),
+                  COALESCE(eow.last_updated, '1970-01-01 00:00:00'),
+                  COALESCE(tc.last_updated, '1970-01-01 00:00:00'),
+                  COALESCE(er.last_updated, '1970-01-01 00:00:00'),
+                  COALESCE(sdr.last_updated, '1970-01-01 00:00:00'),
+                  COALESCE(tdr.last_updated, '1970-01-01 00:00:00'),
+                  COALESCE(wos.last_updated, '1970-01-01 00:00:00')
+                ) AS last_updated
+              FROM document_binders db
+              JOIN users u ON db.user_id = u.user_id
+              JOIN documents d ON db.binder_id = d.binder_id
+              LEFT JOIN aircraft_technical_logs atl ON d.document_id = atl.document_id
+              LEFT JOIN end_of_work_shift_reports eow ON d.document_id = eow.document_id
+              LEFT JOIN task_cards tc ON d.document_id = tc.document_id
+              LEFT JOIN engine_reports er ON d.document_id = er.document_id
+              LEFT JOIN structural_damage_reports sdr ON d.document_id = sdr.document_id
+              LEFT JOIN technical_dispatch_reports tdr ON d.document_id = tdr.document_id
+              LEFT JOIN work_order_summaries wos ON d.document_id = wos.document_id
+              WHERE db.binder_id = ?
+              GROUP BY d.document_id`;
+  const values = [binder_id];
+  db.query(sql, values, (err, results) => {
+    if(err) {
+      console.error("Error loading document binder:", err);
+      return res.status(500).json({message: "Internal Server Error"});
+    }
+    res.json(results);
+  });
+});
+// ** Load User's In Progress Document Binders And Documents Within **/
+app.get("/load-document-binder", (req, res) => {
+  const {user_id} = req.query;
+    const sql = `
+      SELECT 
+          db.binder_id,
+          CONCAT (u.user_fname, ' ', u.user_lname) AS user_name, 
+          db.binder_status, 
+          d.document_id, 
+          d.document_name, 
+          d.document_type,
+          GREATEST(
+            COALESCE(atl.last_updated, '1970-01-01 00:00:00'),
+            COALESCE(eow.last_updated, '1970-01-01 00:00:00'),
+            COALESCE(tc.last_updated, '1970-01-01 00:00:00'),
+            COALESCE(er.last_updated, '1970-01-01 00:00:00'),
+            COALESCE(sdr.last_updated, '1970-01-01 00:00:00'),
+            COALESCE(tdr.last_updated, '1970-01-01 00:00:00'),
+            COALESCE(wos.last_updated, '1970-01-01 00:00:00')
+          ) AS last_updated
+      FROM document_binders db
+      jOIN users u ON db.user_id = u.user_id
+      JOIN documents d ON db.binder_id = d.binder_id
+      LEFT JOIN aircraft_technical_logs atl ON d.document_id = atl.document_id
+      LEFT JOIN end_of_work_shift_reports eow ON d.document_id = eow.document_id
+      LEFT JOIN task_cards tc ON d.document_id = tc.document_id
+      LEFT JOIN engine_reports er ON d.document_id = er.document_id
+      LEFT JOIN structural_damage_reports sdr ON d.document_id = sdr.document_id
+      LEFT JOIN technical_dispatch_reports tdr ON d.document_id = tdr.document_id
+      LEFT JOIN work_order_summaries wos ON d.document_id = wos.document_id
+      WHERE db.user_id = ? AND db.binder_status = 'In Progress'
+      GROUP BY d.document_id`;
+  const values = [user_id];
+  db.query(sql, values, (err, results) => {
+    if(err) {
+      console.error("Error loading document binder:", err);
+      return res.status(500).json({message: "Internal Server Error"});
     }
     res.json(results);
   });
 });
 
-// **Create New Document Binder**
-app.post("/new-document-binder", (req, res) => {
-  const {user_id} = req.body;
-  const sql = "INSERT INTO document_binders (binder_status, user_id) VALUES (?,?)";
-  const values = ["In Progress", user_id];
-  db.query(sql, values, (err, result) => {
+// **Get All Document Binders**
+app.get("/get-all-document-binders", (req, res) => {
+  const sql = `
+    SELECT  
+        db.binder_id,
+        CONCAT (u.user_fname, ' ', u.user_lname) AS user_name, 
+        db.binder_status
+    FROM document_binders db
+    JOIN users u ON db.user_id = u.user_id
+    GROUP BY db.binder_id`;
+  db.query(sql, (err, results) => {
+    if(err) {
+      console.error("Error loading document binders:", err);
+      return res.status(500).json({message: "Internal Server Error"});
+    }
+    res.json(results);
+    });
+  });
+
+
+// ** Server Requests Relating To Account Managment**
+// **Get All Users**
+app.get("/get-users", (req, res) => {
+  const sql = `SELECT user_id, CONCAT(user_fname, ' ', user_lname) AS name, user_role,username FROM users`;  
+  db.query(sql, (err, results) => {
     if (err) {
-      console.error("Error creating document binder:", err);
+      console.error("Error fetching users:", err);
       return res.status(500).json({ message: "Internal Server Error" });
     }
-    res.json({ message: "Document binder created successfully", binderId: result.insertId });
+    res.json(results);
   });
 });
-
-// **Load User's Document Binder**
-app.get("/get-user-document-binder", (req, res) => {
-  const {user_id} = req.body;
-  const sql = "SELECT * FROM document_binders WHERE user_id = ?";
-  const values = [user_id];
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("Error loading document binder:", err);
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.json(result);
-  });
-});
-
-// **Get a Specific Document Binder By ID**
-app.get("get-document-binder", (req, res) => {
-  const {binder_id} = req.body;
-  const sql = "SELECT * FROM document_binders WHERE binder_id = ?";
-  const values = [binder_id];
-  db.query(sql, values, (err, results) => {
-    if(err) {
-      console.error("Error loading document binder")
-    }
-  })
-}) 
 
 // **Create New Document**
 app.post("/new-document", (req, res) => {
@@ -165,172 +268,560 @@ app.post("/new-document", (req, res) => {
   });
 });
 
-// **Create New Aircraft Technical Log**
-app.post("/create-atl", (req, res) => {
-  const {
-      documentId, registration, captain, captainSignature, pageSequence,
-      leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
-      leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
-      totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate
-  } = req.body;
+app.post("/create-document", (req, res) => {
+  const { document_id, document_type, data } = req.body;
+  let sql = "";
+  let values = [];
 
-  const sql = `
+  switch (document_type) {
+    case "ATL":
+      sql = `
       INSERT INTO aircraft_technical_logs (
           document_id, registration, captain, captain_signature, page_sequence,
           leg1_date, leg1_timeup, leg1_timedown, leg1_airtime, leg1_from, leg1_to,
           leg2_date, leg2_timeup, leg2_timedown, leg2_airtime, leg2_from, leg2_to,
-          total_bftime, total_airtime, total_time, defects, reported_by, reported_date,
+          total_bftime, total_airtime, total_time, defects, reported_by, reported_date
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-  `;
-
-  const values = [
-      documentId, registration, captain, captainSignature, pageSequence,
-      leg1Date, leg1TimeUp, leg1TimeDown, leg1AirTime, leg1From, leg1To,
-      leg2Date, leg2TimeUp, leg2TimeDown, leg2AirTime, leg2From, leg2To,
-      totalBFTime, totalAirTime, totalTime, defects, reportedBy, reportedByDate,
-  ];
-
+    `;
+    values = [
+      document_id, data.registration, data.captain, data.captainSignature, data.pageSequence,
+      data.leg1Date, data.leg1TimeUp, data.leg1TimeDown, data.leg1AirTime, data.leg1From, data.leg1To,
+      data.leg2Date, data.leg2TimeUp, data.leg2TimeDown, data.leg2AirTime, data.leg2From, data.leg2To,
+      data.totalBFTime, data.totalAirTime, data.totalTime, data.defects, data.reportedBy, data.reportedByDate,
+    ];
+    break;
+  case "EOW":
+    sql = `INSERT INTO end_of_work_shift_reports (document_id) VALUES (?)`;
+    values = [document_id];
+    break;
+  case "TC":
+    sql = `INSERT INTO task_cards (document_id) VALUES (?)`;
+    values = [document_id];
+    break;
+  case "ER":
+    sql = `INSERT INTO engine_reports (document_id) VALUES (?)`;
+    values = [document_id];
+    break;
+  case "SDR":
+    sql = `INSERT INTO structural_damage_reports (document_id) VALUES (?)`;
+    values = [document_id];
+    break;
+  case "TDR":
+    sql = `INSERT INTO technical_dispatch_reports (document_id) VALUES (?)`;
+    values = [document_id];
+    break;
+  case "WOS":
+    sql = `INSERT INTO work_order_summaries (document_id) VALUES (?)`;
+    values = [document_id];
+    break;
+  default:
+    return res.status(400).json({ message: "Invalid document type" });
+  }
   db.query(sql, values, (err, result) => {
-      if (err) {
-          console.error("Error inserting new ATL:", err);
-          return res.status(500).json({ message: "Internal Server Error" });
-      }
-      res.json({ message: "New ATL created successfully", atlId: result.insertId });
-  });
-});
-
-// **Create New Form
-const allowedTables = [
-  'work_order_summaries',
-  'engine_reports',
-  'technical_dispatch_reports',
-  'structure_damage_reports',
-  'task_cards',
-  'end_of_work_shift_reports',
-  'aircraft_technical_logs'
-];
-
-app.post("/create-new-form", (req, res) => {
-  const {table, documentId} = req.body;
-  if(!table || !documentId) {
-    return res.status(400).json({success: false, message: "Table name and document ID are required"});
-  };
-
-  if(!allowedTables.includes(table)) {
-    return res.status(400).json({success: false, message: "Invalid table name"});
-  };
-
-  const sql = `INSERT INTO \`${table}\` (document_id) VALUES (?)`;
-  db.query(sql, [documentId], (err, result) => {
-    if(err) {
-      return res.status(500).json({ success: false, message: err.message });
+    if (err) {
+      console.error("Error creating document:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
-    res.json({ success: true, message: 'Document ID inserted successfully.' });
+    res.json({ message: "Document created successfully", documentId: result.insertId });
   });
 });
 
-app.get("/get-form-data", (req, res) => {
-  const { table, documentId } = req.query; // Use req.query for GET requests
+app.post("/submit-document-binder", (req, res) => {
+  const { binder_id } = req.body;
+  const sql = "UPDATE document_binders SET binder_status = 'Submitted' WHERE binder_id = ?";
+  db.query(sql, [binder_id], (err, result) => {
+    if (err) {
+      console.error("Error updating document binder:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document binder updated successfully" });
+  });
+});
 
-  if (!table || !documentId) {
-    return res.status(400).json({ success: false, message: "Table name and document ID are required" });
+app.delete("/delete-document", (req, res) => {
+  const {document_id, document_type} = req.body;
+  let sql = "";
+  let values = [];
+  switch (document_type) {
+    case "ATL":
+      sql = `DELETE FROM aircraft_technical_logs WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    case "EOW":
+      sql = `DELETE FROM end_of_work_shift_reports WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    case "TC":
+      sql = `DELETE FROM task_cards WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    case "ER":
+      sql = `DELETE FROM engine_reports WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    case "SDR":
+      sql = `DELETE FROM structural_damage_reports WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    case "TDR":
+      sql = `DELETE FROM technical_dispatch_reports WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    case "WOS":
+      sql = `DELETE FROM work_order_summaries WHERE document_id = ?`;
+      values = [document_id];
+      break;
+    default:
+      return res.status(400).json({ message: "Invalid document type" });
   }
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error deleting document:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document deleted successfully" });
+  });
+});
 
-  if (!allowedTables.includes(table)) {
-    return res.status(400).json({ success: false, message: "Invalid table name" });
-  }
+app.delete("/delete-document-from-binder", (req, res) => {
+  const { document_id } = req.body;
+  const sql = "DELETE FROM documents WHERE document_id = ?";
+  db.query(sql, [document_id], (err, result) => {
+    if (err) {
+      console.error("Error deleting document:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document deleted successfully" });
+  });
+});
 
+app.post("/edit-document-name", (req, res) => {
+  const { document_id, document_name } = req.body;
+  const sql = "UPDATE documents SET document_name = ? WHERE document_id = ?";
+  db.query(sql, [document_name, document_id], (err, result) => {
+    if (err) {
+      console.error("Error updating document name:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document name updated successfully" });
+  });
+});
+
+app.get("/get-document-data", (req, res) => {
+  const { table, document_id } = req.query;
   const sql = `SELECT * FROM \`${table}\` WHERE document_id = ?`;
-  db.query(sql, [documentId], (err, result) => {
+  db.query(sql, [document_id], (err, result) => {
     if (err) {
-      console.error("Error loading document:", err);
-      return res.status(500).json({ message: "Database error", error: err });
+      console.error("Error fetching form data:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
-    res.json(result);
+    res.json(result[0]);
   });
 });
 
-// **Update Forms Requests**
-app.post("/update-end-of-work-shift-report", (req, res) => {
-  const {
-    id,
-    aircraft,
-    date,
-    prepared_by,
-    steps_accomplished,
-    work_order_numbers,
-    task_card_ids,
-    remaining_steps,
-    difficulties,
-    no_difficulties,
-    signature_and_aca
-  } = req.body;
-
-  // Log the received ID for debugging
-  console.log("Received ID:", id);
-
-  // Validate the ID
-  if (!id) {
-    return res.status(400).json({ message: "Document ID is required" });
+app.post("/update-document-data", (req, res) => {
+  const { document_type, data } = req.body;
+  let sql = "";
+  let values = [];
+  switch(document_type) {
+    case "ATL":
+      sql = `
+        UPDATE aircraft_technical_logs SET
+        registration = ?,
+        captain = ?,
+        captain_signature = ?,
+        page_sequence = ?,
+        leg1_date = ?,
+        leg1_timeup = ?,
+        leg1_timedown = ?,
+        leg1_airtime = ?,
+        leg1_from = ?,
+        leg1_to = ?,
+        leg2_date = ?,
+        leg2_timeup = ?,
+        leg2_timedown = ?,
+        leg2_airtime = ?,
+        leg2_from = ?,
+        leg2_to = ?,
+        total_bftime = ?,
+        total_airtime = ?,
+        total_time = ?,
+        defects = ?,
+        reported_by = ?,
+        reported_date = ?,
+        work_order_summary_number = ?,
+        resolutions = ?,
+        resolved_by = ?,
+        resolved_date = ?,
+        part_number = ?,
+        serial_number_on = ?,
+        serial_number_off = ?,
+        batch_number = ?,
+        deferral_number = ?,
+        mel = ?,
+        category = ?,
+        function_check = ?,
+        leak_check = ?,
+        independent_checkby = ?,
+        independent_checkdate = ?,
+        release_by = ?,
+        release_date = ?,`
+      values = [
+        data.registration,
+        data.captain,
+        data.captain_signature,
+        data.page_sequence,
+        data.leg1_date,
+        data.leg1_timeup,
+        data.leg1_timedown,
+        data.leg1_airtime,
+        data.leg1_from,
+        data.leg1_to,
+        data.leg2_date,
+        data.leg2_timeup,
+        data.leg2_timedown,
+        data.leg2_airtime,
+        data.leg2_from,
+        data.leg2_to,
+        data.total_bftime,
+        data.total_airtime,
+        data.total_time,
+        data.defects,
+        data.reported_by,
+        data.reported_date,
+        data.work_order_summary_number,
+        data.resolutions,
+        data.resolved_by,
+        data.resolved_date,
+        data.part_number,
+        data.serial_number_on,
+        data.serial_number_off,
+        data.batch_number,
+        data.deferral_number,
+        data.mel,
+        data.category,
+        data.function_check,
+        data.leak_check,
+        data.independent_checkby,
+        data.independent_checkdate,
+        data.release_by,
+        data.release_date,
+        data.document_id
+      ];
+      break;
+    case "EOW":
+      sql = `
+        UPDATE end_of_work_shift_reports SET 
+        aircraft = ?,
+        date = ?,
+        prepared_by = ?,
+        steps_accomplished = ?,
+        work_order_numbers = ?,
+        task_card_numbers = ?,
+        remaining_steps = ?,
+        difficulties = ?,
+        no_difficulties = ?,
+        signature_and_aca = ?
+        WHERE document_id = ?`;
+      values = [
+        data.aircraft,
+        data.date,
+        data.preparedBy,
+        data.stepsAccomplished,
+        data.workOrderNumbers,
+        data.taskCardNumbers,
+        data.remainingSteps,
+        data.difficulties,
+        data.noDifficulties,
+        data.signatureAndACA,
+        data.document_id
+      ];
+      break;
+    case "TC":
+      sql = `
+        UPDATE task_cards SET
+        tc_number = ?,
+        ata_chapter = ?,
+        title = ?,
+        aircraft_type = ?,
+        registration = ?,
+        serial_number = ?,
+        work_order_number = ?,
+        total_airframe_time = ?,
+        airframe_cycles = ?,
+        originated_by = ?,
+        date_opened = ?,
+        defect_description = ?,
+        deferred_previously = ?,
+        page_sequence_number = ?,
+        resolution_description = ?,
+        attacted_supporting_docs = ?,
+        defect_deferred = ?,
+        defer_category_type_mel = ?,
+        defer_category_type_non_mel = ?,
+        mel_id = ?,
+        mel_category = ?,
+        mel_due_date = ?,
+        mel_due_time = ?,
+        function_check = ?,
+        fc_systems_affected = ?,
+        fc_detialed_on_tc = ?,
+        leak_check = ?,
+        lc_systems_affected = ?,
+        lc_detialed_on_tc = ?,
+        other_check = ?,
+        oc_systems_affected = ?,
+        oc_detialed_on_tc = ?,
+        ic_required = ?,
+        post_maintenance_inspection = ?,
+        independent_check_by = ?,
+        tc_certified_by = ?,
+        tc_certified_date = ?,
+        tc_certified_time = ?,
+        subject_to_test_flight = ?,
+        checks_during_test_flight = ?
+        WHERE document_id = ?`;
+      values = [
+        data.tc_number,
+        data.ata_chapter,
+        data.title,
+        data.aircraft_type,
+        data.registration,
+        data.serial_number,
+        data.work_order_number,
+        data.total_airframe_time,
+        data.airframe_cycles,
+        data.originated_by,
+        data.date_opened,
+        data.defect_description,
+        data.deferred_previously,
+        data.page_sequence_number,
+        data.resolution_description,
+        data.attacted_supporting_docs,
+        data.defect_deferred,
+        data.defer_category_type_mel,
+        data.defer_category_type_non_mel,
+        data.mel_id,
+        data.mel_category,
+        data.mel_due_date,
+        data.mel_due_time,
+        data.function_check,
+        data.fc_systems_affected,
+        data.fc_detialed_on_tc,
+        data.leak_check,
+        data.lc_systems_affected,
+        data.lc_detialed_on_tc,
+        data.other_check,
+        data.oc_systems_affected,
+        data.oc_detialed_on_tc,
+        data.ic_required,
+        data.post_maintenance_inspection,
+        data.independent_check_by,
+        data.tc_certified_by,
+        data.tc_certified_date,
+        data.tc_certified_time,
+        data.subject_to_test_flight,
+        data.checks_during_test_flight,
+        data.document_id
+      ];
+      break;
+    case "ER":
+      sql = `
+        UPDATE engine_reports SET
+        engine_type = ?,
+        serial_number = ?,
+        engine_running_hours = ?,
+        work_order_number = ?,
+        task_card_id = ?,
+        date_submitted = ?,
+        damage_type = ?,
+        damage_dimension_length = ?,
+        damage_dimension_width = ?,
+        damage_dimension_depth = ?,
+        damaged_item = ?,
+        damaged_part_number = ?,
+        damaged_serial_number = ?,
+        damage_description = ?,
+        damage_drawing = ?,
+        prepared_by = ?,
+        reviewed_by = ?,`
+      values = [
+        data.engine_type,
+        data.serial_number,
+        data.engine_running_hours,
+        data.work_order_number,
+        data.task_card_id,
+        data.date_submitted,
+        data.damage_type,
+        data.damage_dimension_length,
+        data.damage_dimension_width,
+        data.damage_dimension_depth,
+        data.damaged_item,
+        data.damaged_part_number,
+        data.damaged_serial_number,
+        data.damage_description,
+        data.damage_drawing,
+        data.prepared_by,
+        data.reviewed_by,
+        data.document_id
+      ];
+      break;
+    case "SDR":
+      sql = `
+        UPDATE structural_damage_reports SET
+        aircraft_type = ?,
+        registration = ?,
+        serial_number = ?,
+        date_submitted = ?,
+        total_airframe_time = ?,
+        airframe_cycles = ?,
+        work_order_number = ?,
+        task_card_id = ?,
+        damage_type = ?,
+        damage_type_other = ?,
+        damage_position_station = ?,
+        damage_position_waterline = ?,
+        damage_position_buttockline = ?,
+        damage_position_buttockline_lh = ?,
+        damage_position_buttockline_rh = ?,
+        damage_position_length = ?,
+        damage_position_width = ?,
+        damage_position_depth = ?,
+        damaged_part_number = ?,
+        damaged_serial_number = ?,
+        damaged_tsn = ?,
+        damaged_description = ?,
+        mechanism = ?,
+        damaged_drawing = ?,
+        prepared_by = ?,
+        reviewed_by = ?
+        WHERE document_id = ?`;
+      values = [
+        data.aircraft_type,
+        data.registration,
+        data.serial_number,
+        data.date_submitted,
+        data.total_airframe_time,
+        data.airframe_cycles,
+        data.work_order_number,
+        data.task_card_id,
+        data.damage_type,
+        data.damage_type_other,
+        data.damage_position_station,
+        data.damage_position_waterline,
+        data.damage_position_buttockline,
+        data.damage_position_buttockline_lh,
+        data.damage_position_buttockline_rh,
+        data.damage_position_length,
+        data.damage_position_width,
+        data.damage_position_depth,
+        data.damaged_part_number,
+        data.damaged_serial_number,
+        data.damaged_tsn,
+        data.damaged_description,
+        data.mechanism,
+        data.damaged_drawing,
+        data.prepared_by,
+        data.reviewed_by,
+        data.document_id
+      ];
+      break;
+    case "TDR":
+      sql = `
+        UPDATE technical_dispatch_reports SET
+        registration = ?,
+        total_air_time = ?,
+        date = ?,
+        maintenance_description = ?,
+        limitation_date = ?,
+        limitation_total_air_time = ?,
+        limitation_cycles = ?,
+        airworthiness_directive_numbers = ?,
+        airworthiness_directive_description = ?,
+        other_tasks = ?,
+        prepared_by = ?
+        WHERE document_id = ?`;
+      values = [
+        data.registration,
+        data.total_air_time,
+        data.date,
+        data.maintenance_description,
+        data.limitation_date,
+        data.limitation_total_air_time,
+        data.limitation_cycles,
+        data.airworthiness_directive_numbers,
+        data.airworthiness_directive_description,
+        data.other_tasks,
+        data.prepared_by,
+        data.document_id
+      ];
+      break;
+    case "WOS":
+      sql = `
+        UPDATE work_order_summaries SET
+        work_order_summary_number = ?,
+        subject = ?,
+        summary_page_part1 = ?,
+        summary_page_part2 = ?,
+        aircraft_type = ?,
+        registration = ?,
+        serial_number = ?,
+        total_task_cards = ?,
+        total_airframe_time = ?,
+        total_cycles = ?,
+        opened_by = ?,
+        date_opened = ?,
+        followon_maintenance_checks_yes = ?,
+        followon_maintenance_checks_na = ?,
+        testflight_required_yes = ?,
+        testflight_required_na = ?,
+        deferred_defects_yes = ?,
+        wos_affixed_yes = ?,
+        date = ?,
+        time = ?,
+        technical_log_page_sequence_number = ?,
+        closed_by = ?,
+        subject_to_test_flight = ?
+        WHERE document_id = ?`;
+      values = [
+        data.work_order_summary_number,
+        data.subject,
+        data.summary_page_part1,
+        data.summary_page_part2,
+        data.aircraft_type,
+        data.registration,
+        data.serial_number,
+        data.total_task_cards,
+        data.total_airframe_time,
+        data.total_cycles,
+        data.opened_by,
+        data.date_opened,
+        data.followon_maintenance_checks_yes,
+        data.followon_maintenance_checks_na,
+        data.testflight_required_yes,
+        data.testflight_required_na,
+        data.deferred_defects_yes,
+        data.wos_affixed_yes,
+        data.date,
+        data.time,
+        data.technical_log_page_sequence_number,
+        data.closed_by,
+        data.subject_to_test_flight,
+        data.document_id
+      ];
+      break;
+    default:
+      return res.status(400).json({ message: "Invalid document type" });
   }
-
-  // Correct SQL query with backticks around table name
-  const sql = `
-    UPDATE \`end_of_work_shift_reports\`
-    SET aircraft = ?, date = ?, prepared_by = ?, steps_accomplished = ?,
-        work_order_numbers = ?, task_card_ids = ?, remaining_steps = ?,
-        difficulties = ?, no_difficulties = ?, signature_and_aca = ?
-    WHERE document_id = ?
-  `;
-
-  const values = [
-    aircraft,
-    date,
-    prepared_by,
-    steps_accomplished,
-    work_order_numbers,
-    task_card_ids,
-    remaining_steps,
-    difficulties,
-    no_difficulties,
-    signature_and_aca,
-    id
-  ];
-
-  // Execute the SQL query
   db.query(sql, values, (err, result) => {
     if (err) {
-      // Log more detailed error information
-      console.error("SQL Error:", err.code, err.sqlMessage, err.stack);
-      return res.status(500).json({ message: "Internal Server Error", error: err });
+      console.error("Error updating document:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
-
-    // Log the result for debugging
-    console.log("Update Result:", result);
-
-    // Check if any row was affected
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "No record found with the given ID" });
-    }
-
-    return res.status(200).json({ message: "Document updated successfully" });
+    res.json({ message: "Document updated successfully" });
   });
+
 });
-
-app.post("update-atl", (req,res) => {
-  const {
-    id,
-    page_sequence,
-    work_order_summary_number,
-    resolutions,
-    resolved_by,
-    resolved_date,
-    part_number,
-    serial_number_on,
-    serial_number_off,
-
-  } = req.body
-})
 
 
 

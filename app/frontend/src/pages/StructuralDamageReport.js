@@ -1,9 +1,9 @@
-import './css/StructureDamageReport.css';
+import './css/StructuralDamageReport.css';
 import { useEffect } from 'react';
 import * as authUtils from './Components/authUtils.js';
 import CustomCheckbox from "./Components/CheckboxComponent.js";
 
-function StructureDamageReportPage() {
+function StructuralDamageReportPage() {
 
     useEffect(() => {
         authUtils.CheckLoggedIn();
@@ -12,11 +12,11 @@ function StructureDamageReportPage() {
 
     return(
         <div id="base" className="">
-        {/* Structure_Damage_Report_Style (Group) */}
+        {/* Structural_Damage_Report_Style (Group) */}
         <div
             id="u751"
             className="ax_default"
-            data-label="Structure_Damage_Report_Style"
+            data-label="Structural_Damage_Report_Style"
             data-left={97}
             data-top={9}
             data-width={1009}
@@ -708,4 +708,4 @@ function StructureDamageReportPage() {
     );
 };
 
-export default StructureDamageReportPage;
+export default StructuralDamageReportPage;

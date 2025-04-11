@@ -10,7 +10,7 @@ function ToolCalibrationRecordPage() {
 
         function InsertNewRecordAccess() {
             const UserRole = authUtils.GetRole();
-            if (UserRole !== "ADMIN" && UserRole !== "EXPERT") {
+            if (UserRole !== "Admin" && UserRole !== "Expert") {
                 document.getElementById("u161").style.display = "none";
                 document.getElementById("u161").style.visibility = "hidden";
             }
@@ -31,7 +31,8 @@ function ToolCalibrationRecordPage() {
     }, []);
 
     const [data, setData] = useState([]);
-    const headers = ["Description", "Part Number", "Serial Number", "Calibration Date", "Calibration Due Date"];
+    const headers = ["Description", "Part Number", "Serial Number", "Calibration Date", "Calibration Due Date", "Actions"];
+    const userRole = authUtils.GetRole();
 
     function Back_Button() {
         authUtils.Back();
@@ -112,6 +113,24 @@ function ToolCalibrationRecordPage() {
         } catch (error) {
             console.error("Error fetching data: ", error);
             alert("An error occurred while searching for records.");
+        }
+    }
+
+    async function DeleteRecord(calibration_id) {
+        const confirmation = window.confirm("Are you sure you want to delete this record?");
+        if(!confirmation) {
+            return;
+        } else {
+          try {
+            const response = await apiService.apiRequest(`delete-tool-calibration-record?calibration_id=${calibration_id}`);
+            if(response) {
+                alert("Record deleted successfully.");
+                window.location.reload();
+            }
+          } catch (error) {
+            console.error("Error deleting record: ", error);
+            alert("Failed to delete record.");
+          }
         }
     }
 
@@ -202,6 +221,11 @@ function ToolCalibrationRecordPage() {
               <td className="table-cell">{row.serial_number}</td>
               <td className="table-cell">{row.calibration_date}</td>
               <td className="table-cell">{row.calibration_due_date}</td>
+              <td className="table-cell">
+                {(userRole === "Admin" || userRole === "Expert") &&  (
+                    <button onClick={() => DeleteRecord(row.calibration_id)}>Delete Record</button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

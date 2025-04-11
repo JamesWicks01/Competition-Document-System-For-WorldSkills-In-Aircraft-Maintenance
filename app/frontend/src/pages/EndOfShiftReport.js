@@ -12,12 +12,12 @@ function EndOfShiftReportPage() {
 
   useEffect(() => {
     async function LoadData() {
-      const data = { documentID: localStorage.getItem("documentID"), table: "end_of_work_shift_reports" };
+      const data = { document_id: sessionStorage.getItem("document_id"), table: "end_of_work_shift_reports" };
       try {
-          const response = await apiService.apiRequest(`get-form-data?table=${data.table}&documentId=${data.documentID}`);
+          const response = await apiService.apiRequest(`get-document-data?table=${data.table}&document_id=${data.document_id}`);
   
-          if (response.length > 0) {
-              const report = response[0]; // Extract first object from the array
+          if (response && typeof response === "object") {
+              const report = response; // Extract first object from the array
   
               document.getElementById("u882_input").value = report.aircraft || "";
               document.getElementById("u888_input").value = report.date || "";
@@ -54,7 +54,7 @@ function EndOfShiftReportPage() {
   }
 
   async function SaveReport() {
-    const id = localStorage.getItem("documentID");
+    const id = sessionStorage.getItem("document_id");
     const aircraft = document.getElementById("u882_input");
     const date = document.getElementById("u888_input");
     const prepared_by = document.getElementById("u889_input");

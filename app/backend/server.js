@@ -139,6 +139,17 @@ app.get("/delete-tool-calibration-record", (req, res) => {
 });
 
 // ** Server Request Relating To Document Binders and Document Creation**
+app.post("/submit-document-binder", (req, res) => {
+  const { binder_id } = req.body;
+  const sql = "UPDATE document_binders SET binder_status = 'Submitted' WHERE binder_id = ?";
+  db.query(sql, [binder_id], (err, result) => {
+    if (err) {
+      console.error("Error updating document binder:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json({ message: "Document binder updated successfully" });
+  });
+});
 // **Get a Specific Document Binder By ID And Load The Documents Within**
 app.get("/get-document-binder", (req, res) => {
   const {binder_id} = req.query;
@@ -272,7 +283,7 @@ app.get("/search-document-binders", (req, res) => {
 // ** Server Requests Relating To Account Managment**
 // **Get All Users**
 app.get("/get-users", (req, res) => {
-  const sql = `SELECT user_id, CONCAT(user_fname, ' ', user_lname) AS name, user_role,username FROM users`;  
+  const sql = `SELECT user_id, CONCAT(user_fname, ' ', user_lname) AS name, user_role,username FROM users GROUP BY user_id`;  
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching users:", err);
@@ -282,6 +293,33 @@ app.get("/get-users", (req, res) => {
   });
 });
 
+app.get("/search-users", (req, res) => {
+  const { searchType, searchInput } = req.query;
+  let whereClause = "";
+  let values = [];
+  if (searchType === "name") {
+    whereClause = "CONCAT(u.user_fname, ' ', u.user_lname) LIKE ?";
+    values = [`%${searchInput}%`];
+  } else {
+    whereClause = `?? LIKE ?`;
+    values = [searchType, `%${searchInput}%`];
+  }
+  const sql = `SELECT user_id, CONCAT(user_fname, ' ', user_lname) AS name, user_role,username FROM users WHERE ${whereClause} GROUP BY user_id`;
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error("Error fetching searched users:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+})
+
+app.post("/create-user", (req, res) => {
+  
+})
+
+
+// ** Server Request Relating to From Creation and Updating**
 // **Create New Document**
 app.post("/new-document", (req, res) => {
   const {binder_id , document_name , document_type} = req.body;
@@ -351,18 +389,6 @@ app.post("/create-document", (req, res) => {
       return res.status(500).json({ message: "Internal Server Error" });
     }
     res.json({ message: "Document created successfully", documentId: result.insertId });
-  });
-});
-
-app.post("/submit-document-binder", (req, res) => {
-  const { binder_id } = req.body;
-  const sql = "UPDATE document_binders SET binder_status = 'Submitted' WHERE binder_id = ?";
-  db.query(sql, [binder_id], (err, result) => {
-    if (err) {
-      console.error("Error updating document binder:", err);
-      return res.status(500).json({ message: "Internal Server Error" });
-    }
-    res.json({ message: "Document binder updated successfully" });
   });
 });
 

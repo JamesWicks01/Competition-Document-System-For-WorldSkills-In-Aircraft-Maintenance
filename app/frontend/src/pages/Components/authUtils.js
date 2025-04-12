@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+import bcryptjs from "bcryptjs";
 
 export function CheckLoggedIn() {
     const token = localStorage.getItem("token");
@@ -107,4 +108,21 @@ export function CheckSession() {
         }
     }
 }
+
+export function generatePassword(length = 12) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?£$%&';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      password += chars[randomIndex];
+    }
+    return password;
+}
+
+export async function hashString(string) {
+    const salt = await bcryptjs.genSalt(12);
+    const hashedString = await bcryptjs.hash(string, salt);
+    return hashedString;
+}
+  
 

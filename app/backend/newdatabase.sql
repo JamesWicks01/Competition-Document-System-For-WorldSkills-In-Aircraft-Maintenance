@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     password VARCHAR(255) NOT NULL,
     user_role ENUM('Competitor','Expert','Admin') NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    password_reset BOOLEAN DEFAULT FALSE
+    password_reset BOOLEAN DEFAULT TRUE
 );
 
 INSERT INTO `users` (user_fname, user_lname, username, password, user_role, password_reset) 

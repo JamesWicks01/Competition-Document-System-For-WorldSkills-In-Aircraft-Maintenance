@@ -22,6 +22,42 @@ function AccountManagementPage() {
 
     const [data, setData] = useState([]);
 
+    async function Search() {
+        const searchType = document.getElementById("u273_input").value;
+        const searchInput = document.getElementById("u274_input").value.trim();
+        try {
+            const data = await apiService.apiRequest(`search-users?searchType=${searchType}&searchInput=${searchInput}`)
+            setData(data)
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+            alert("An error occurred while searching for users.");
+        }
+    }
+
+    function createAccountButton() {
+        document.getElementById("u240").style.display = "block";
+        document.getElementById("u240").style.visibility = "visible";
+    }
+
+    async function createAccount(){
+        const firstName = document.getElementById("u246_input");
+        const lastName = document.getElementById("u250_input");
+        const username = document.getElementById("u254_input");
+        const role = document.getElementById("u260_input");
+        const password = authUtils.generatePassword();
+        const hashedPassword = authUtils.hashString(password);
+
+        const data = {
+            user_fname:firstName.value.trim(),
+            user_lname:lastName.value.trim(),
+            username:username.value.trim(),
+            user_role:role.value,
+            password:hashedPassword
+        };
+        console.log("New Password:",password);
+        console.log(data);
+    }
+
     return(
         <div id="base" className="">
         {/* Back (Rectangle) */}
@@ -70,6 +106,7 @@ function AccountManagementPage() {
             id="u215"
             className="ax_default shape transition notrs"
             data-label="New_User"
+            onClick={createAccountButton}
         >
             <div id="u215_div" className="" />
             <div id="u215_text" className="text ">
@@ -444,6 +481,7 @@ function AccountManagementPage() {
             id="u244"
             className="ax_default shape transition notrs"
             data-label="Save_Button"
+            onClick={createAccount}
             >
             <div id="u244_div" className="" />
             <div id="u244_text" className="text ">
@@ -526,7 +564,7 @@ function AccountManagementPage() {
                 <div id="u250_div" className="" />
                 <input
                 id="u250_input"
-                type="number"
+                type="text"
                 defaultValue=""
                 className="u250_input"
                 />
@@ -580,7 +618,7 @@ function AccountManagementPage() {
                 <div id="u254_div" className="" />
                 <input
                 id="u254_input"
-                type="number"
+                type="text"
                 defaultValue=""
                 className="u254_input"
                 />
@@ -657,14 +695,14 @@ function AccountManagementPage() {
             <div id="u260" className="ax_default droplist transition notrs">
                 <div id="u260_div" className="" />
                 <select id="u260_input" className="u260_input">
-                <option className="u260_input_option" value="COMPETITOR">
-                    COMPETITOR
+                <option className="u260_input_option" value="Competitor">
+                    Competitor
                 </option>
-                <option className="u260_input_option" value="EXPERT">
-                    EXPERT
+                <option className="u260_input_option" value="Expert">
+                    Expert
                 </option>
-                <option className="u260_input_option" value="ADMIN">
-                    ADMIN
+                <option className="u260_input_option" value="Admin">
+                    Admin
                 </option>
                 </select>
             </div>
@@ -821,13 +859,13 @@ function AccountManagementPage() {
         >
             <div id="u273_div" className="" />
             <select id="u273_input" className="u273_input">
-            <option className="u273_input_option" value="User ID">
+            <option className="u273_input_option" value="user_id">
                 User ID
             </option>
-            <option className="u273_input_option" value="Name">
+            <option className="u273_input_option" value="name">
                 Name
             </option>
-            <option className="u273_input_option" value="Username">
+            <option className="u273_input_option" value="username">
                 Username
             </option>
             </select>

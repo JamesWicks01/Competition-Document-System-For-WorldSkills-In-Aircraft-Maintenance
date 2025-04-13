@@ -8,6 +8,7 @@ function WorkOrderSummaryPage() {
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
      }, []);
 
     return(

@@ -23,6 +23,7 @@ function AircraftTechnicalLogCreatePage() {
         fetchCompetitorData();
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
     }, []);
 
     async function createATL() {

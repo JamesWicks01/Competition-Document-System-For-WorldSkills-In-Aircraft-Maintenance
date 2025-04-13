@@ -17,6 +17,7 @@ function ViewAllDocumentBindersPage() {
         }
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
         fetchData();
      }, []);
 

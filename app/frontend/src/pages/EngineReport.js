@@ -1,12 +1,14 @@
 import './css/EngineReport.css';
 import { useEffect } from 'react';
 import * as authUtils from './Components/authUtils.js';
+import DrawingCanvas from "./Components/DrawingCanvas.js";
 
 function EngineReportPage() {
 
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
      }, []);
 
     return(
@@ -24,11 +26,8 @@ function EngineReportPage() {
         >
             {/* Unnamed (Rectangle) */}
             <div id="u708" className="ax_default box_1 transition notrs">
-            <div id="u708_div" className="" />
-            <div id="u708_text" className="text ">
-                <p>
-                <span>DAMAGE SKETCH / DRAWING AREA</span>
-                </p>
+                    <div style={{ width: '1007px', height: '721px'}}>
+                        <DrawingCanvas />
             </div>
             </div>
             {/* Unnamed (Rectangle) */}

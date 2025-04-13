@@ -7,6 +7,7 @@ function DashboardAdminPage() {
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
     }, []);
 
     function ToolCalibrationRecords_Button() {

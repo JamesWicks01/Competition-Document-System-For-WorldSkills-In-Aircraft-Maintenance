@@ -18,6 +18,7 @@ function AccountManagementPage() {
         fetchData();
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
     }, []);
 
     const [data, setData] = useState([]);

@@ -43,6 +43,7 @@ function EndOfShiftReportPage() {
   
     authUtils.CheckLoggedIn();
     authUtils.CheckAccess();
+    authUtils.CheckSession();
   }, []);
 
   const handleCheckboxChange = (id, value) => {

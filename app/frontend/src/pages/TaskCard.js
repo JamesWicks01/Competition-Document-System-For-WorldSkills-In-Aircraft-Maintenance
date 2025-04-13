@@ -8,6 +8,7 @@ function TaskCardPage() {
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
      }, []);
 
     return(

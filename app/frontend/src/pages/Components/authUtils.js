@@ -49,7 +49,8 @@ export function CheckAccess() {
             "/technical-dispatch-report",
             "/tool-calibration-record",
             "/view-all-document-binders",
-            "/work-order-summary"
+            "/work-order-summary",
+            "/engine-report"
         ],
         Expert: [
             "/aircraft-technical-log",
@@ -59,12 +60,13 @@ export function CheckAccess() {
             "/document-binder",
             "/end-of-work-shift-report",
             "/parts-consumable-request",
-            "/structure-damage-report",
+            "/structural-damage-report",
             "/task-card",
             "/technical-dispatch-report",
             "/tool-calibration-record",
             "/view-all-document-binders",
-            "/work-order-summary"
+            "/work-order-summary",
+            "/engine-report"
         ],
         Competitor: [
             "/aircraft-technical-log",
@@ -73,11 +75,12 @@ export function CheckAccess() {
             "/document-binder",
             "/end-of-work-shift-report",
             "/parts-consumable-request",
-            "/structure-damage-report",
+            "/structural-damage-report",
             "/task-card",
             "/technical-dispatch-report",
             "/tool-calibration-record",
-            "/work-order-summary"
+            "/work-order-summary",
+            "/engine-report"
         ],
     };
     const decodedToken = jwtDecode(token);

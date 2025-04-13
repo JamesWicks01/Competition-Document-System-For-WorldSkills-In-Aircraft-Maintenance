@@ -2,12 +2,14 @@ import './css/StructuralDamageReport.css';
 import { useEffect } from 'react';
 import * as authUtils from './Components/authUtils.js';
 import CustomCheckbox from "./Components/CheckboxComponent.js";
+import DrawingCanvas from "./Components/DrawingCanvas.js";
 
 function StructuralDamageReportPage() {
 
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
      }, []);
 
     return(
@@ -253,11 +255,8 @@ function StructuralDamageReportPage() {
             </div>
             {/* Unnamed (Rectangle) */}
             <div id="u777" className="ax_default box_1 transition notrs">
-            <div id="u777_div" className="" />
-            <div id="u777_text" className="text ">
-                <p>
-                <span>DAMAGE SKECTCH / DRAWING AREA</span>
-                </p>
+            <div style={{ width: '1008px', height: '722px'}}>
+            <DrawingCanvas />
             </div>
             </div>
             {/* Unnamed (Rectangle) */}

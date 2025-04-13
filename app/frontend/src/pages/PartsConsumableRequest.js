@@ -7,6 +7,7 @@ function PartsConsumableRequestPage() {
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
      }, []);
 
     return(

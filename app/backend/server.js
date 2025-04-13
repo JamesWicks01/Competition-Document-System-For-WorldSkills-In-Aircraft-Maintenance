@@ -34,7 +34,7 @@ app.post("/login", (req, res) => {
 
       const isMatch = bcrypt.compare(password, user.password);
       if (isMatch) {
-        const token = jwt.sign({ id: user.user_id, username: user.username,  role: user.user_role, passwordReset:user.password_reset}, "secretKey", { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.user_id, username: user.username,  role: user.user_role, passwordReset:user.password_reset}, "secretKey", { expiresIn: "3h" });
         res.json({ message: "Login successful", token });
       } else {
         res.json({ message: "Invalid credentials" });
@@ -671,7 +671,8 @@ app.post("/update-document-data", (req, res) => {
         independent_checkby = ?,
         independent_checkdate = ?,
         release_by = ?,
-        release_date = ?,`
+        release_date = ?
+        WHERE document_id = ?`
       values = [
         data.registration,
         data.captain,
@@ -850,7 +851,8 @@ app.post("/update-document-data", (req, res) => {
         damage_description = ?,
         damage_drawing = ?,
         prepared_by = ?,
-        reviewed_by = ?,`
+        reviewed_by = ?
+        WHERE document_id = ?`
       values = [
         data.engine_type,
         data.serial_number,

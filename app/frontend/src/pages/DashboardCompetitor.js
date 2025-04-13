@@ -7,6 +7,7 @@ function DashboardCompetitorPage() {
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
     }, []);
 
     function PartsAndConsumableRequest_Button() {

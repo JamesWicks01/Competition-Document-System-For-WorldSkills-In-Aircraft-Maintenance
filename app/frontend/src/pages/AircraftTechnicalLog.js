@@ -83,6 +83,7 @@ function AircraftTechnicalLogPage() {
         LoadData();
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();        
       }, []);
 
     const handleCheckboxChange = (id, value) => {
@@ -94,7 +95,7 @@ function AircraftTechnicalLogPage() {
         authUtils.Back();
     }
 
-     function SaveATL() {
+     async function SaveATL() {
         const pageSequence = document.getElementById("u424_input");
         const registrationNumber = document.getElementById("u426_input");
         const captainName = document.getElementById("u427_input");
@@ -179,10 +180,17 @@ function AircraftTechnicalLogPage() {
             "independent_checkby": independentCheckBy.value.trim(),
             "independent_checkdate": independentCheckDate.value.trim(),
             "release_by": readyForReleaseBy.value.trim(),
-            "release_date": readyForReleaseDate.value.trim()
+            "release_date": readyForReleaseDate.value.trim(),
+            "document_id": sessionStorage.getItem("document_id")
         };
-        const document_id = localStorage.getItem("document_id");
-        console.log(data);
+        try {
+            const response = await apiService.apiRequest("update-document-data", "POST", {document_type:"ATL", data:data});
+            if (response) {
+                alert("Aircraft Technical Log Saved Successfully");
+            }
+        } catch (error) {
+            alert(error.message);
+        }
      }
 
     return(

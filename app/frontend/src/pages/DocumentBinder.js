@@ -59,6 +59,7 @@ function DocumentBinderPage() {
         }
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
     }, []);
 
     const [data, setData] = useState([]);

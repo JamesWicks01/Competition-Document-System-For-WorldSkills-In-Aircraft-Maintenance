@@ -27,6 +27,7 @@ function ToolCalibrationRecordPage() {
         }
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        authUtils.CheckSession();
         fetchData();
         InsertNewRecordAccess();
     }, []);

@@ -295,16 +295,31 @@ app.get("/get-users", (req, res) => {
 
 app.get("/search-users", (req, res) => {
   const { searchType, searchInput } = req.query;
-  let whereClause = "";
+  let sql = `
+    SELECT user_id, 
+           CONCAT(user_fname, ' ', user_lname) AS name, 
+           user_role,
+           username 
+    FROM users 
+    WHERE `;
   let values = [];
+
   if (searchType === "name") {
-    whereClause = "CONCAT(u.user_fname, ' ', u.user_lname) LIKE ?";
+    sql += "CONCAT(user_fname, ' ', user_lname) LIKE ?";
     values = [`%${searchInput}%`];
   } else {
-    whereClause = `?? LIKE ?`;
-    values = [searchType, `%${searchInput}%`];
+    // Whitelist valid search types to avoid SQL injection
+    const allowedColumns = ["username", "user_id"];
+    if (!allowedColumns.includes(searchType)) {
+      return res.status(400).json({ message: "Invalid search type" });
+    }
+
+    sql += `${searchType} LIKE ?`;
+    values = [`%${searchInput}%`];
   }
-  const sql = `SELECT user_id, CONCAT(user_fname, ' ', user_lname) AS name, user_role,username FROM users WHERE ${whereClause} GROUP BY user_id`;
+
+  sql += " GROUP BY user_id";
+
   db.query(sql, values, (err, results) => {
     if (err) {
       console.error("Error fetching searched users:", err);
@@ -312,12 +327,149 @@ app.get("/search-users", (req, res) => {
     }
     res.json(results);
   });
-})
+});
 
-app.post("/create-user", (req, res) => {
-  
-})
+app.post("/new-user", (req, res) => {
+  const { user_fname, user_lname, username, password, user_role } = req.body;
+  // Check if username already exists
+  const checkUsernameSql = `SELECT * FROM users WHERE username = ?`;
+  const checkUsernameValue = [username];
+  db.query(checkUsernameSql, checkUsernameValue, (err, results) => {
+    if (err) {
+      console.error("Error checking username:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
 
+    if (results.length > 0) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    // If username is unique, proceed with insertion
+    const sql = `INSERT INTO users (user_fname, user_lname, username, password, user_role) VALUES (?, ?, ?, ?, ?)`;
+    const values = [
+      user_fname,
+      user_lname,
+      username,
+      password,
+      user_role,
+    ];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error("Error creating user:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+      res.json({ message: "User created successfully" });
+    });
+  });
+});
+
+
+app.post("/delete-user", (req, res) => {
+  const {user_id} = req.query;
+  const sql = `DELETE FROM users WHERE user_id = ?`;
+  const values = [user_id];
+  db.query(sql, values, (err, result) => {
+    if(err) {
+      console.error("Error deleting user:", err);
+      return res.status(500).json({message: "Internal Server Error"});
+    }
+    res.json({message:"Deleted User Successfully"});
+  });
+});
+
+app.get("/find-user-data", (req, res) => {
+  const { user_id } = req.query;
+
+  const sql = `
+    SELECT user_id, user_fname, user_lname, user_role, username 
+    FROM users 
+    WHERE user_id = ?
+  `;
+  const values = [user_id];
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error("Error fetching user:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(results[0]);
+  });
+});
+
+
+app.post("/update-user", (req, res) => {
+  const {user_id, user_fname, user_lname, username, user_role} = req.body;
+
+  // Check if the new username already exists for another user
+  const checkUsernameSql = `SELECT * FROM users WHERE username = ? AND user_id != ?`;
+  db.query(checkUsernameSql, [username, user_id], (err, results) => {
+    if (err) {
+      console.error("Error checking username:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    if (results.length > 0) {
+      return res.status(400).json({ message: "Username already in use by another user" });
+    }
+
+    // Proceed to update the user info (excluding password)
+    const sql = `
+      UPDATE users 
+      SET user_fname = ?, user_lname = ?, username = ?, user_role = ?
+      WHERE user_id = ?
+    `;
+    const values = [
+      user_fname,
+      user_lname,
+      username,
+      user_role,
+      user_id
+    ];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error("Error updating user:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+
+      res.json({ message: "User updated successfully" });
+    });
+  });
+});
+
+app.post("/reset-password", (req, res) => {
+  const {user_id, password} = req.body;
+  const sql = `UPDATE users SET password = ?, password_reset = TRUE WHERE user_id = ?`;
+  const values = [password, user_id];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error resetting user password:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    res.json({ message: "Successfully reset user password" });
+  });
+});
+
+app.post("/new-password", (req, res) => {
+  const {data} = req.body;
+  const sql = `UPDATE users SET password = ?, password_reset = FALSE WHERE user_id = ?`;
+  const values = [data.password, data.user_id];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error setting new user password:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    res.json({ message: "Successfully added new user password" });
+  });
+})
 
 // ** Server Request Relating to From Creation and Updating**
 // **Create New Document**

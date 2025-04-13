@@ -34,9 +34,31 @@ function AccountManagementPage() {
         }
     }
 
+    function backButton() {
+        authUtils.Back()
+    }
+
     function createAccountButton() {
         document.getElementById("u240").style.display = "block";
         document.getElementById("u240").style.visibility = "visible";
+    }
+
+    function cancelCreateAccountButton() {
+        document.getElementById("u240").style.display = "none";
+        document.getElementById("u240").style.visibility = "hidden";
+    }
+
+    function cancelEditAccountButton() {
+        document.getElementById("u216").style.display = "none";
+        document.getElementById("u216").style.visibility = "hidden";
+        sessionStorage.removeItem("edited_user_id")
+    }
+
+    function okayNewPassword() {
+        document.getElementById("u263").style.display = "none";
+        document.getElementById("u263").style.visibility = "hidden";
+        document.getElementById("u266_spam").innerHTML = "";
+        window.location.reload();
     }
 
     async function createAccount(){
@@ -45,7 +67,17 @@ function AccountManagementPage() {
         const username = document.getElementById("u254_input");
         const role = document.getElementById("u260_input");
         const password = authUtils.generatePassword();
-        const hashedPassword = authUtils.hashString(password);
+        const hashedPassword = await authUtils.hashString(password);
+
+        if (
+            !firstName.value.trim() ||
+            !lastName.value.trim() ||
+            !username.value.trim() ||
+            !role.value
+        ) {
+            alert("Please fill in all fields.");
+            return;
+        }
 
         const data = {
             user_fname:firstName.value.trim(),
@@ -54,25 +86,128 @@ function AccountManagementPage() {
             user_role:role.value,
             password:hashedPassword
         };
-        console.log("New Password:",password);
-        console.log(data);
+
+        try {
+            const response = await apiService.apiRequest("new-user", "POST", data);
+            if(response) {
+                alert("User added successfully.");
+                document.getElementById("u240").style.display = "none";
+                document.getElementById("u240").style.visibility = "hidden";
+                document.getElementById("u263").style.display = "block";
+                document.getElementById("u263").style.visibility = "visible";
+                document.getElementById("u266_spam").innerHTML = password;
+            }
+        } catch (error) {
+            console.log(error);
+            alert(error.message);
+            return null;
+        }  
+    }
+
+    async function deleteAccount(account_id) {
+        const currentUser_id = authUtils.GetUserId();
+        if (currentUser_id === account_id) {
+            alert("You Can't Delete Your Own Account Please Try A Different User")
+            return;
+        }
+        const confirmation = window.confirm("Are you sure you want to delete this account?");
+        if(!confirmation) {
+            return;
+        }
+        try {
+            const response = await apiService.apiRequest(`delete-user?user_id=${account_id}`, "POST");
+            if(response) {
+                alert("User deleted successfully.");
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error deleting user: ", error);
+            alert("Failed to delete user.");
+        }
+    }
+
+    async function editAccountButton(account_id) {
+        try{
+            const response = await apiService.apiRequest(`find-user-data?user_id=${account_id}`);
+            if(response) {
+                document.getElementById("u222_input").value = response.user_fname;
+                document.getElementById("u226_input").value = response.user_lname;
+                document.getElementById("u230_input").value = response.username;
+                document.getElementById("u236_input").value = response.user_role;
+                sessionStorage.setItem("edited_user_id", response.user_id);
+                document.getElementById("u216").style.display = "block";
+                document.getElementById("u216").style.visibility = "visible";
+            } 
+        } catch (error) {
+            console.error("Error getting user data: ", error);
+            alert(error.message);
+        }
+    }
+
+    async function editAccount(){
+        const firstName = document.getElementById("u222_input");
+        const lastName = document.getElementById("u226_input");
+        const username = document.getElementById("u230_input");
+        const role = document.getElementById("u236_input");
+        const userID = sessionStorage.getItem("edited_user_id");
+
+        if (
+            !firstName.value.trim() ||
+            !lastName.value.trim() ||
+            !username.value.trim() ||
+            !role.value
+        ) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        const data = {
+            user_id: userID,
+            user_fname: firstName.value.trim(),
+            user_lname: lastName.value.trim(),
+            username: username.value.trim(),
+            user_role: role.value
+        };
+        try {
+            const response = await apiService.apiRequest("update-user", "POST", data);
+            if (response) {
+                alert("Edited Account Successfully");
+                sessionStorage.removeItem("edited_user_id")
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error updating user: ", error);
+            alert(error.message);
+        }
+    }
+
+    async function resetPassword() {
+        const user_id = sessionStorage.getItem("edited_user_id")
+        const password = authUtils.generatePassword();
+        const hashedPassword = await authUtils.hashString(password);
+
+        const data = {
+            user_id: user_id,
+            password: hashedPassword
+        }
+        try {
+            const response = await apiService.apiRequest("reset-password", "POST", data);
+            if (response) {
+                alert("Reset Password successfully.");
+                document.getElementById("u216").style.display = "none";
+                document.getElementById("u216").style.visibility = "hidden";
+                document.getElementById("u263").style.display = "block";
+                document.getElementById("u263").style.visibility = "visible";
+                document.getElementById("u266_spam").innerHTML = password;
+            }
+        } catch (error) {
+            console.error("Error resetting password: ", error);
+            alert(error.message);
+        }
     }
 
     return(
         <div id="base" className="">
-        {/* Back (Rectangle) */}
-        <div
-            id="u187"
-            className="ax_default shape transition notrs"
-            data-label="Back"
-        >
-            <div id="u187_div" className="" />
-            <div id="u187_text" className="text ">
-            <p>
-                <span>Back</span>
-            </p>
-            </div>
-        </div>
         {/* Unnamed (Table) */}
         <div id="u188" className="ax_default">
         <table className="table-users w-full">
@@ -93,27 +228,21 @@ function AccountManagementPage() {
                 <td className="table-cell">{row.username}</td>
                 <td className="table-cell">{row.user_role}</td>
                 <td className="table-cell">
-                <button>Edit User</button>
-                <button>Delete User</button>
+                <button onClick={() => editAccountButton(row.user_id)}>Edit User</button>
+                <button onClick={() => deleteAccount(row.user_id)}>Delete User</button>
                 </td>
             </tr>
           ))}
         </tbody>
         </table>
+        <div className="buttons-container">
+        <div className="button" onClick={backButton}>
+            <p><span>Back</span></p>
         </div>
-        {/* New_User (Rectangle) */}
-        <div
-            id="u215"
-            className="ax_default shape transition notrs"
-            data-label="New_User"
-            onClick={createAccountButton}
-        >
-            <div id="u215_div" className="" />
-            <div id="u215_text" className="text ">
-            <p>
-                <span>Add New User</span>
-            </p>
-            </div>
+        <div className="button" onClick={createAccountButton}>
+            <p><span>Add New User</span></p>
+        </div>
+        </div>
         </div>
         {/* Edit_User (Group) */}
         <div
@@ -152,6 +281,7 @@ function AccountManagementPage() {
             id="u219"
             className="ax_default shape transition notrs"
             data-label="Cancel_Button"
+            onClick={cancelEditAccountButton}
             >
             <div id="u219_div" className="" />
             <div id="u219_text" className="text ">
@@ -165,6 +295,7 @@ function AccountManagementPage() {
             id="u220"
             className="ax_default shape transition notrs"
             data-label="Submit_Button"
+            onClick={editAccount}
             >
             <div id="u220_div" className="" />
             <div id="u220_text" className="text ">
@@ -247,7 +378,7 @@ function AccountManagementPage() {
                 <div id="u226_div" className="" />
                 <input
                 id="u226_input"
-                type="number"
+                type="text"
                 defaultValue=""
                 className="u226_input"
                 />
@@ -301,7 +432,7 @@ function AccountManagementPage() {
                 <div id="u230_div" className="" />
                 <input
                 id="u230_input"
-                type="number"
+                type="text"
                 defaultValue=""
                 className="u230_input"
                 />
@@ -378,14 +509,14 @@ function AccountManagementPage() {
             <div id="u236" className="ax_default droplist transition notrs">
                 <div id="u236_div" className="" />
                 <select id="u236_input" className="u236_input">
-                <option className="u236_input_option" value="COMPETITOR">
-                    COMPETITOR
+                <option className="u236_input_option" value="Competitor">
+                    Competitor
                 </option>
-                <option className="u236_input_option" value="EXPERT">
-                    EXPERT
+                <option className="u236_input_option" value="Expert">
+                    Expert
                 </option>
-                <option className="u236_input_option" value="ADMIN">
-                    ADMIN
+                <option className="u236_input_option" value="Admin">
+                    Admin
                 </option>
                 </select>
             </div>
@@ -422,6 +553,7 @@ function AccountManagementPage() {
             id="u239"
             className="ax_default shape transition notrs"
             data-label="Reset_Password"
+            onClick={resetPassword}
             >
             <div id="u239_div" className="" />
             <div id="u239_text" className="text ">
@@ -468,6 +600,7 @@ function AccountManagementPage() {
             id="u243"
             className="ax_default shape transition notrs"
             data-label="Cancel_Button"
+            onClick={cancelCreateAccountButton}
             >
             <div id="u243_div" className="" />
             <div id="u243_text" className="text ">
@@ -763,6 +896,7 @@ function AccountManagementPage() {
             id="u265"
             className="ax_default shape transition notrs"
             data-label="Okay_Button"
+            onClick={okayNewPassword}
             >
             <div id="u265_div" className="" />
             <div id="u265_text" className="text ">
@@ -776,7 +910,7 @@ function AccountManagementPage() {
             <div id="u266_div" className="" />
             <div id="u266_text" className="text ">
                 <p>
-                <span>Password123</span>
+                <span id="u266_spam"></span>
                 </p>
             </div>
             </div>
@@ -786,7 +920,7 @@ function AccountManagementPage() {
             <div id="u267_text" className="text ">
                 <p>
                 <span>
-                    This is a tempory password the user will have to create a new
+                    This is a temporary password the user will have to create a new
                     password once they have logged in{" "}
                 </span>
                 </p>
@@ -884,6 +1018,7 @@ function AccountManagementPage() {
             id="u275"
             className="ax_default shape transition notrs"
             data-label="Search_Button"
+            onClick={Search}
         >
             <div id="u275_div" className="" />
             <div id="u275_text" className="text ">

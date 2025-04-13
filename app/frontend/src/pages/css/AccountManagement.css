@@ -1817,6 +1817,7 @@ body {
   #u219 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:432px;
     top:579px;
     width:143px;
@@ -1936,6 +1937,7 @@ body {
   #u220 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:632px;
     top:579px;
     width:143px;
@@ -3641,6 +3643,7 @@ body {
   #u239 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:503px;
     top:503px;
     width:195px;
@@ -3853,6 +3856,7 @@ body {
   #u243 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:432px;
     top:579px;
     width:143px;
@@ -5726,6 +5730,7 @@ body {
   #u265 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:524px;
     top:415px;
     width:144px;
@@ -6365,6 +6370,7 @@ body {
   #u275 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:1017px;
     top:69px;
     width:123px;

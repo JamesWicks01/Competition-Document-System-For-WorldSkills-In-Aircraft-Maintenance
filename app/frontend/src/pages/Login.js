@@ -2,8 +2,8 @@ import {useState} from 'react';
 import './css/Login.css';
 import logo from './images/WorldSkills-Logo.png';
 import * as apiService from './Components/apiService.js';
+import * as authUtils from './Components/authUtils.js'
 import { jwtDecode } from 'jwt-decode';
-import bcryptjs from "bcryptjs";
 
 function LoginPage() {
 
@@ -12,8 +12,7 @@ function LoginPage() {
 
     const handleLogin = async () => {
         try {
-            const salt = await bcryptjs.genSalt(12);
-            const hashedPassword = await bcryptjs.hash(password, salt);
+            const hashedPassword = await authUtils.hashString(password);
             const data = await apiService.apiRequest('login', "POST", {username: username, password: hashedPassword}, false);
 
             if (data && data.token) {

@@ -1,6 +1,7 @@
 import './css/ChangeUserPassword.css';
 import { useEffect } from 'react';
 import * as authUtils from './Components/authUtils.js';
+import * as apiService from './Components/apiService.js';
 
 function ChangeUserPasswordPage() {
 
@@ -8,6 +9,52 @@ function ChangeUserPasswordPage() {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
      }, []);
+
+     async function changeButton() {
+        const responseToCheckSame = checkTheSame();
+        if (!responseToCheckSame) {
+            alert("The Passwords are not the same");
+            return;
+        }
+        const newPassword = document.getElementById("u19_input").value.trim();
+        const hashedPassword = await authUtils.hashString(newPassword);
+        const userID = authUtils.GetUserId();
+
+        const data = {
+            user_id: userID,
+            password: hashedPassword
+        };
+
+        try {
+            const response = await apiService.apiRequest("new-password", "POST", data);
+            if (response) {
+                alert("Password Changed Successfully")
+                const userRole = authUtils.GetRole();
+                const roleRedirects = {
+                    Competitor: 'dashboard-competitor',
+                    Expert: 'dashboard-expert',
+                    Admin: 'dashboard-admin',
+                };
+        
+                window.location.href = roleRedirects[userRole]; 
+            }
+        } catch (error) {
+            console.error("Error changing password: ", error);
+            alert("Failed to change password.");
+        }
+        
+     };
+
+     function checkTheSame() {
+        const newPassword = document.getElementById("u19_input").value.trim();
+        const confirmNewPassword = document.getElementById("u23_input").value.trim();
+      
+        console.log(newPassword);
+        console.log(confirmNewPassword);
+      
+        return newPassword === confirmNewPassword;
+      }
+      
 
     return(
         <div id="base" className="">
@@ -36,6 +83,7 @@ function ChangeUserPasswordPage() {
             id="u17"
             className="ax_default shape transition notrs"
             data-label="Submit_Button"
+            onClick={changeButton}
             >
             <div id="u17_div" className="" />
             <div id="u17_text" className="text ">

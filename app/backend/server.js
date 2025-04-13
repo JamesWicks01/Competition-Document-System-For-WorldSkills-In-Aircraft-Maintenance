@@ -458,9 +458,9 @@ app.post("/reset-password", (req, res) => {
 });
 
 app.post("/new-password", (req, res) => {
-  const {data} = req.body;
+  const {user_id , password} = req.body;
   const sql = `UPDATE users SET password = ?, password_reset = FALSE WHERE user_id = ?`;
-  const values = [data.password, data.user_id];
+  const values = [password, user_id];
   db.query(sql, values, (err, result) => {
     if (err) {
       console.error("Error setting new user password:", err);

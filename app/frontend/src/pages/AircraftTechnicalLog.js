@@ -34,13 +34,13 @@ function AircraftTechnicalLogPage() {
               document.getElementById("u426_input").value = form.registration || "";
               document.getElementById("u427_input").value = form.captain || "";
               document.getElementById("u428_input").value = form.captain_signature || "";
-              document.getElementById("u429_input").value = form.leg1_date || "";
+              document.getElementById("u429_input").value = form.leg1_date ? form.leg1_date.split("T")[0] : "";
               document.getElementById("u430_input").value = form.leg1_timeup || "";
               document.getElementById("u431_input").value = form.leg1_timedown || "";
               document.getElementById("u432_input").value = form.leg1_airtime || "";
               document.getElementById("u433_input").value = form.leg1_from || "";
               document.getElementById("u434_input").value = form.leg1_to || "";
-              document.getElementById("u435_input").value = form.leg2_date || "";
+              document.getElementById("u435_input").value = form.leg2_date ? form.leg2_date.split("T")[0] : "";
               document.getElementById("u436_input").value = form.leg2_timeup || "";
               document.getElementById("u437_input").value = form.leg2_timedown || "";
               document.getElementById("u438_input").value = form.leg2_airtime || "";
@@ -51,11 +51,11 @@ function AircraftTechnicalLogPage() {
               document.getElementById("u443_input").value = form.total_time || "";
               document.getElementById("u444_input").value = form.defects || "";
               document.getElementById("u445_input").value = form.reported_by || "";
-              document.getElementById("u446_input").value = form.reported_date || "";
+              document.getElementById("u446_input").value = form.reported_date ? form.reported_date.split("T")[0] : "";
               document.getElementById("u448_input").value = form.work_order_summary_number || "";
               document.getElementById("u449_input").value = form.resolutions || "";
               document.getElementById("u450_input").value = form.resolved_by || "";
-              document.getElementById("u451_input").value = form.resolved_date || "";
+              document.getElementById("u451_input").value = form.resolved_date ? form.resolved_date.split("T")[0] : "";
               document.getElementById("u452_input").value = form.part_number || "";
               document.getElementById("u453_input").value = form.serial_number_on || "";
               document.getElementById("u454_input").value = form.serial_number_off || "";
@@ -64,7 +64,7 @@ function AircraftTechnicalLogPage() {
               document.getElementById("u457_input").value = form.mel || "";
               document.getElementById("u458_input").value = form.category || "";
               document.getElementById("u459_input").value = form.independent_checkby || "";
-              document.getElementById("u460_input").value = form.independent_checkdate || "";
+              document.getElementById("u460_input").value = form.independent_checkdate ? form.independent_checkdate.split("T")[0] : "";
               document.getElementById("u461_input").value = form.release_by || "";
               document.getElementById("u462_input").value = form.release_date || "";
       

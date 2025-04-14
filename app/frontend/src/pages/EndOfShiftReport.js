@@ -20,7 +20,7 @@ function EndOfShiftReportPage() {
               const report = response; // Extract first object from the array
   
               document.getElementById("u882_input").value = report.aircraft || "";
-              document.getElementById("u888_input").value = report.date || "";
+              document.getElementById("u888_input").value = report.date ? report.date.split("T")[0] : "";
               document.getElementById("u889_input").value = report.prepared_by || "";
               document.getElementById("u883_input").value = report.steps_accomplished || "";
               document.getElementById("u890_input").value = report.work_order_numbers || "";
@@ -55,7 +55,7 @@ function EndOfShiftReportPage() {
   }
 
   async function SaveReport() {
-    const id = sessionStorage.getItem("document_id");
+    const document_id = sessionStorage.getItem("document_id");
     const aircraft = document.getElementById("u882_input");
     const date = document.getElementById("u888_input");
     const prepared_by = document.getElementById("u889_input");
@@ -68,7 +68,7 @@ function EndOfShiftReportPage() {
     const signature_and_aca = document.getElementById("u886_input");
 
     const report = {
-      id: id,
+      document_id: document_id,
       aircraft: aircraft.value.trim(),
       date: date.value.trim(),
       prepared_by: prepared_by.value.trim(),
@@ -82,12 +82,11 @@ function EndOfShiftReportPage() {
     };
 
     try {
-      const update = await apiService.apiRequest("update-end-of-work-shift-report", "POST", report);
+      const update = await apiService.apiRequest("update-document-data", "POST", {document_type:"EOW", data:report});
   
       // Check API response
       if (update) {
         alert(update.message); // Check what it returns
-        // Optionally, handle successful response (e.g., show success message, redirect, etc.)
       }
     } catch (error) {
       alert("Error updating report: ", error);

@@ -1,15 +1,116 @@
 import './css/EngineReport.css';
-import { useEffect } from 'react';
+import { useEffect , useRef } from 'react';
 import * as authUtils from './Components/authUtils.js';
+import * as apiService from './Components/apiService.js';
 import DrawingCanvas from "./Components/DrawingCanvas.js";
 
 function EngineReportPage() {
 
     useEffect(() => {
+        async function LoadData() {
+            const data = {
+                document_id: sessionStorage.getItem("document_id"),
+                table: "engine_reports"
+            };
+        
+            try {
+                const response = await apiService.apiRequest(
+                    `get-document-data?table=${data.table}&document_id=${data.document_id}`
+                );
+        
+                if (response && typeof response === "object") {
+                    const form = response;
+                    document.getElementById("u733_input").value = form.engine_type || "";
+                    document.getElementById("u734_input").value = form.serial_number || "";
+                    document.getElementById("u735_input").value = form.engine_running_hours || "";
+                    document.getElementById("u736_input").value = form.work_order_number || "";
+                    document.getElementById("u737_input").value = form.task_card_id || "";
+                    document.getElementById("u738_input").value = form.date_submitted ? form.date_submitted.split("T")[0] : "";
+                    document.getElementById("u739_input").value = form.damage_type || "";
+                    document.getElementById("u740_input").value = form.damage_length || "";
+                    document.getElementById("u741_input").value = form.damage_width || "";
+                    document.getElementById("u742_input").value = form.damage_depth || "";
+                    document.getElementById("u743_input").value = form.damage_item || "";
+                    document.getElementById("u744_input").value = form.damage_part_number || "";
+                    document.getElementById("u745_input").value = form.damage_serial_number || "";
+                    document.getElementById("u746_input").value = form.damage_description || "";
+                    document.getElementById("u747_input").value = form.reviewed_by || "";
+                    document.getElementById("u748_input").value = form.prepared_by || "";
+        
+                    if (form.damage_drawing && canvasRef.current) {
+                        // Check if damage_drawing is a string and parse it
+                        const drawingData = typeof form.damage_drawing === "string"
+                            ? JSON.parse(form.damage_drawing)  // If it's a string, parse it
+                            : form.damage_drawing;            // Otherwise, use the data directly
+                        
+                        // Load the drawing paths into the canvas
+                        canvasRef.current.loadPaths(drawingData);
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading data:", error);
+            }
+        
+        }
+
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
         authUtils.CheckSession();
+        LoadData();
      }, []);
+
+     const canvasRef = useRef();
+
+     async function saveDocument() {
+        const engine_type = document.getElementById("u733_input");
+        const serial_number = document.getElementById("u734_input");
+        const engine_running_hours = document.getElementById("u735_input");
+        const work_order_number = document.getElementById("u736_input");
+        const task_card_id = document.getElementById("u737_input");
+        const date_submitted = document.getElementById("u738_input");
+        const damage_type = document.getElementById("u739_input");
+        const damage_length = document.getElementById("u740_input");
+        const damage_width = document.getElementById("u741_input");
+        const damage_depth = document.getElementById("u742_input");
+        const damage_item = document.getElementById("u743_input");
+        const damage_part_number = document.getElementById("u744_input");
+        const damage_serial_number = document.getElementById("u745_input");
+        const damage_description = document.getElementById("u746_input");
+        const reviewed_by = document.getElementById("u747_input");
+        const prepared_by = document.getElementById("u748_input");
+        const damage_drawing = await canvasRef.current?.exportPaths();  // Get drawing data
+        const document_id = sessionStorage.getItem("document_id");
+    
+        const data = {
+            document_id: document_id,
+            engine_type: engine_type.value.trim(),
+            serial_number: serial_number.value.trim(),
+            engine_running_hours: engine_running_hours.value.trim(),
+            work_order_number: work_order_number.value.trim(),
+            task_card_id: task_card_id.value.trim(),
+            date_submitted: date_submitted.value.trim(),
+            damage_type: damage_type.value.trim(),
+            damage_length: damage_length.value.trim(),
+            damage_width: damage_width.value.trim(),
+            damage_depth: damage_depth.value.trim(),
+            damage_item: damage_item.value.trim(),
+            damage_part_number: damage_part_number.value.trim(),
+            damage_serial_number: damage_serial_number.value.trim(),
+            damage_description: damage_description.value.trim(),
+            reviewed_by: reviewed_by.value.trim(),
+            prepared_by: prepared_by.value.trim(),
+            damage_drawing: damage_drawing  // Include the drawing data in the request
+        }
+    
+        try {
+            const response = await apiService.apiRequest("update-document-data", "POST", {document_type:"ER", data:data});
+            if (response) {
+                alert("Engine Report Saved Successfully");
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    }
 
     return(
         <div id="base" className="">
@@ -26,8 +127,8 @@ function EngineReportPage() {
         >
             {/* Unnamed (Rectangle) */}
             <div id="u708" className="ax_default box_1 transition notrs">
-                    <div style={{ width: '1007px', height: '721px'}}>
-                        <DrawingCanvas />
+                    <div>
+                        <DrawingCanvas ref={canvasRef} width={1007} height={721}/>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
@@ -490,6 +591,7 @@ function EngineReportPage() {
             id="u749"
             className="ax_default shape transition notrs"
             data-label="Save_Button"
+            onClick={saveDocument}
         >
             <div id="u749_div" className="" />
             <div id="u749_text" className="text ">

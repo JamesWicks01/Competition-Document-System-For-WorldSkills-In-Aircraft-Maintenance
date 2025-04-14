@@ -390,7 +390,7 @@ function DocumentBinderPage() {
                 <div id="u104_div" className="" />
                 <select id="u104_input" className="u104_input">
                 <option className="u104_input_option" value="WOS">
-                    Word Order Summary
+                    Work Order Summary
                 </option>
                 <option className="u104_input_option" value="TC">
                     Task Card

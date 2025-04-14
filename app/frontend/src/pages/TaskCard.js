@@ -427,6 +427,28 @@ function TaskCardPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
+        <div id="u702" className="ax_default box_1 transition notrs">
+            <div id="u702_div" className="" />
+            <div
+            id="u702_text"
+            className="text "
+            style={{ display: "none", visibility: "hidden" }}
+            >
+            <p />
+            </div>
+        </div>
+        {/* Unnamed (Rectangle) */}
+        <div id="u704" className="ax_default box_1 transition notrs">
+            <div id="u704_div" className="" />
+            <div
+            id="u704_text"
+            className="text "
+            style={{ display: "none", visibility: "hidden" }}
+            >
+            <p />
+            </div>
+        </div>
+        {/* Unnamed (Rectangle) */}
         <div id="u637" className="ax_default box_1 transition notrs">
             <div id="u637_div" className="" />
             <div id="u637_text" className="text ">
@@ -1101,7 +1123,7 @@ function TaskCardPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u702" className="ax_default box_1 transition notrs">
+        {/* <div id="u702" className="ax_default box_1 transition notrs">
             <div id="u702_div" className="" />
             <div
             id="u702_text"
@@ -1110,7 +1132,7 @@ function TaskCardPage() {
             >
             <p />
             </div>
-        </div>
+        </div> */}
         {/* Unnamed (Rectangle) */}
         <div id="u703" className="ax_default paragraph transition notrs">
             <div id="u703_div" className="" />
@@ -1121,7 +1143,7 @@ function TaskCardPage() {
             </div>
         </div>
         {/* Unnamed (Rectangle) */}
-        <div id="u704" className="ax_default box_1 transition notrs">
+        {/* <div id="u704" className="ax_default box_1 transition notrs">
             <div id="u704_div" className="" />
             <div
             id="u704_text"
@@ -1130,7 +1152,7 @@ function TaskCardPage() {
             >
             <p />
             </div>
-        </div>
+        </div> */}
         {/* Unnamed (Rectangle) */}
         <div id="u705" className="ax_default paragraph transition notrs">
             <div id="u705_div" className="" />

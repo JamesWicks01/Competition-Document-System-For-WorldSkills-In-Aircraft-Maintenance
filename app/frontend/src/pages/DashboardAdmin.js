@@ -57,7 +57,7 @@ function DashboardAdminPage() {
             <div id="u39_div" className="" />
             <div id="u39_text" className="text ">
             <p>
-                <span>Parts and Consumable Request</span>
+                <span>View All Parts and Consumable Request</span>
             </p>
             </div>
         </div>

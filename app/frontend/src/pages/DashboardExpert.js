@@ -53,7 +53,7 @@ function DashboardExpertPage() {
             <div id="u33_div" className="" />
             <div id="u33_text" className="text ">
             <p>
-                <span>Parts and Consumable Request</span>
+                <span>View All Parts and Consumable Request</span>
             </p>
             </div>
         </div>

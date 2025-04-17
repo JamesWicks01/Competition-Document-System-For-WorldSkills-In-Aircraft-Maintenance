@@ -27,26 +27,24 @@ function EngineReportPage() {
                     document.getElementById("u737_input").value = form.task_card_id || "";
                     document.getElementById("u738_input").value = form.date_submitted ? form.date_submitted.split("T")[0] : "";
                     document.getElementById("u739_input").value = form.damage_type || "";
-                    document.getElementById("u740_input").value = form.damage_length || "";
-                    document.getElementById("u741_input").value = form.damage_width || "";
-                    document.getElementById("u742_input").value = form.damage_depth || "";
-                    document.getElementById("u743_input").value = form.damage_item || "";
-                    document.getElementById("u744_input").value = form.damage_part_number || "";
-                    document.getElementById("u745_input").value = form.damage_serial_number || "";
+                    document.getElementById("u740_input").value = form.damage_dimension_length || "";
+                    document.getElementById("u741_input").value = form.damage_dimension_width || "";
+                    document.getElementById("u742_input").value = form.damage_dimension_depth || "";
+                    document.getElementById("u743_input").value = form.damaged_item || "";
+                    document.getElementById("u744_input").value = form.damaged_part_number || "";
+                    document.getElementById("u745_input").value = form.damaged_serial_number || "";
                     document.getElementById("u746_input").value = form.damage_description || "";
                     document.getElementById("u747_input").value = form.reviewed_by || "";
                     document.getElementById("u748_input").value = form.prepared_by || "";
-        
-                    if (form.damage_drawing && canvasRef.current) {
-                        // Check if damage_drawing is a string and parse it
-                        const drawingData = typeof form.damage_drawing === "string"
-                            ? JSON.parse(form.damage_drawing)  // If it's a string, parse it
-                            : form.damage_drawing;            // Otherwise, use the data directly
-                        
-                        // Load the drawing paths into the canvas
-                        canvasRef.current.loadPaths(drawingData);
+
+                    if (response && response.damage_drawing && canvasRef.current) {
+                          const drawingData = typeof response.damage_drawing === 'string'
+                            ? JSON.parse(response.damage_drawing)
+                            : response.damage_drawing;
+                  
+                          canvasRef.current.loadPaths(drawingData);
                     }
-                }
+                }   
             } catch (error) {
                 console.error("Error loading data:", error);
             }
@@ -60,6 +58,10 @@ function EngineReportPage() {
      }, []);
 
      const canvasRef = useRef();
+
+     function Back_Button() {
+        authUtils.Back();
+     }
 
      async function saveDocument() {
         const engine_type = document.getElementById("u733_input");
@@ -90,12 +92,12 @@ function EngineReportPage() {
             task_card_id: task_card_id.value.trim(),
             date_submitted: date_submitted.value.trim(),
             damage_type: damage_type.value.trim(),
-            damage_length: damage_length.value.trim(),
-            damage_width: damage_width.value.trim(),
-            damage_depth: damage_depth.value.trim(),
-            damage_item: damage_item.value.trim(),
-            damage_part_number: damage_part_number.value.trim(),
-            damage_serial_number: damage_serial_number.value.trim(),
+            damage_dimension_length: damage_length.value.trim(),
+            damage_dimension_width: damage_width.value.trim(),
+            damage_dimension_depth: damage_depth.value.trim(),
+            damaged_item: damage_item.value.trim(),
+            damaged_part_number: damage_part_number.value.trim(),
+            damaged_serial_number: damage_serial_number.value.trim(),
             damage_description: damage_description.value.trim(),
             reviewed_by: reviewed_by.value.trim(),
             prepared_by: prepared_by.value.trim(),
@@ -605,6 +607,7 @@ function EngineReportPage() {
             id="u750"
             className="ax_default shape transition notrs"
             data-label="Back_Button"
+            onClick={Back_Button}
         >
             <div id="u750_div" className="" />
             <div id="u750_text" className="text ">

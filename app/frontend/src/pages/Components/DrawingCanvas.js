@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from 'react';
 
 const DrawingCanvas = forwardRef(({ width, height }, ref) => {
   const canvasRef = useRef(null);
@@ -11,7 +17,7 @@ const DrawingCanvas = forwardRef(({ width, height }, ref) => {
   useImperativeHandle(ref, () => ({
     clearCanvas: () => clearCanvas(),
     loadPaths: (drawingData) => loadPaths(drawingData),
-    exportPaths: () => exportPaths(), // Expose exportPaths method
+    exportPaths: () => exportPaths(),
   }));
 
   useEffect(() => {
@@ -22,43 +28,64 @@ const DrawingCanvas = forwardRef(({ width, height }, ref) => {
     ctxRef.current.lineWidth = 5;
   }, []);
 
+  const getCanvasOffset = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    const isTouch = e.touches && e.touches.length > 0;
+    const x = isTouch ? e.touches[0].clientX - rect.left : e.nativeEvent.offsetX;
+    const y = isTouch ? e.touches[0].clientY - rect.top : e.nativeEvent.offsetY;
+
+    return { x, y };
+  };
+
   const startDrawing = (e) => {
+    e.preventDefault();
+    const { x, y } = getCanvasOffset(e);
+
     if (isErasing) {
       setIsDrawing(false);
-      erase(e);
+      erase(x, y);
       return;
     }
+
     setIsDrawing(true);
-    const { offsetX, offsetY } = e.nativeEvent;
-    setCurrentPath([{ x: offsetX, y: offsetY }]);
+    setCurrentPath([{ x, y }]);
   };
 
   const stopDrawing = () => {
     if (!isDrawing) return;
     setIsDrawing(false);
-    if (!isErasing) {
-      setPaths((prevPaths) => [...prevPaths, currentPath]);
+
+    if (!isErasing && currentPath.length > 0) {
+      setPaths((prev) => [...prev, currentPath]);
     }
+
     setCurrentPath([]);
   };
 
   const draw = (e) => {
+    e.preventDefault();
     if (!isDrawing) return;
-    const { offsetX, offsetY } = e.nativeEvent;
+
+    const { x, y } = getCanvasOffset(e);
+
     setCurrentPath((prevPath) => {
-      const newPath = [...prevPath, { x: offsetX, y: offsetY }];
+      const newPath = [...prevPath, { x, y }];
       drawOnCanvas(newPath);
       return newPath;
     });
   };
 
   const drawOnCanvas = (path) => {
-    ctxRef.current.clearRect(0, 0, width, height); // Clear the canvas before redrawing
+    if (!Array.isArray(paths)) return;
+    ctxRef.current.clearRect(0, 0, width, height);
     paths.forEach((p) => drawPath(p));
     drawPath(path);
   };
 
   const drawPath = (path) => {
+    if (path.length < 2) return;
     ctxRef.current.beginPath();
     ctxRef.current.moveTo(path[0].x, path[0].y);
     path.forEach((point) => {
@@ -67,26 +94,25 @@ const DrawingCanvas = forwardRef(({ width, height }, ref) => {
     ctxRef.current.stroke();
   };
 
-  const erase = (e) => {
-    const { offsetX, offsetY } = e.nativeEvent;
-    const newPaths = paths.map((path) => removeSegmentFromPath(path, offsetX, offsetY));
+  const erase = (x, y) => {
+    const newPaths = paths.map((path) => removeSegmentFromPath(path, x, y));
     setPaths(newPaths);
     redrawCanvas(newPaths);
   };
 
-  const removeSegmentFromPath = (path, offsetX, offsetY) => {
-    const radius = 15; // Eraser radius
+  const removeSegmentFromPath = (path, x, y) => {
+    const radius = 15;
     const newPath = [];
-    
+
     for (let i = 0; i < path.length - 1; i++) {
       const start = path[i];
       const end = path[i + 1];
-      if (!lineSegmentIntersectCircle(start, end, offsetX, offsetY, radius)) {
+      if (!lineSegmentIntersectCircle(start, end, x, y, radius)) {
         newPath.push(start);
       }
     }
-    
-    newPath.push(path[path.length - 1]); // Always add the last point
+
+    newPath.push(path[path.length - 1]);
     return newPath;
   };
 
@@ -105,6 +131,7 @@ const DrawingCanvas = forwardRef(({ width, height }, ref) => {
   };
 
   const redrawCanvas = (newPaths) => {
+    if (!Array.isArray(newPaths)) return;
     ctxRef.current.clearRect(0, 0, width, height);
     newPaths.forEach((path) => drawPath(path));
   };
@@ -119,18 +146,31 @@ const DrawingCanvas = forwardRef(({ width, height }, ref) => {
   };
 
   const loadPaths = (drawingData) => {
-    drawingData.forEach((path) => {
-      drawPath(path);
-    });
+    try {
+      const parsedPaths = Array.isArray(drawingData)
+        ? drawingData
+        : typeof drawingData === 'string'
+        ? JSON.parse(drawingData)
+        : [];
+
+      if (!Array.isArray(parsedPaths)) {
+        console.warn('Invalid drawing data:', parsedPaths);
+        return;
+      }
+
+      setPaths(parsedPaths);
+      redrawCanvas(parsedPaths);
+    } catch (error) {
+      console.error('Failed to load drawing paths:', error);
+    }
   };
 
-  // Export the paths as a JSON string
   const exportPaths = () => {
-    return JSON.stringify(paths); // Simply return the paths as a JSON string
+    return paths;
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', touchAction: 'none' }}>
       <canvas
         ref={canvasRef}
         width={width}
@@ -139,6 +179,9 @@ const DrawingCanvas = forwardRef(({ width, height }, ref) => {
         onMouseUp={stopDrawing}
         onMouseMove={draw}
         onMouseOut={stopDrawing}
+        onTouchStart={startDrawing}
+        onTouchMove={draw}
+        onTouchEnd={stopDrawing}
         style={{ border: '1px solid black', display: 'block' }}
       />
       <div

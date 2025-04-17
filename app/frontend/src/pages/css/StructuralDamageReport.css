@@ -1639,6 +1639,7 @@ body {
   #u785 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:956px;
     top:1567px;
     width:150px;
@@ -1758,6 +1759,7 @@ body {
   #u786 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:97px;
     top:1567px;
     width:150px;

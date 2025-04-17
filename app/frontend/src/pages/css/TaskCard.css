@@ -10064,6 +10064,7 @@ body {
   #u701 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:946px;
     top:1502px;
     width:150px;
@@ -10349,6 +10350,7 @@ body {
   #u706 {
     border-width:0px;
     position:absolute;
+    cursor: pointer;
     left:96px;
     top:1502px;
     width:150px;

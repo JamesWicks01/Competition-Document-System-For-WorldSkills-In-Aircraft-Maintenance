@@ -1,16 +1,153 @@
 import './css/StructuralDamageReport.css';
-import { useEffect } from 'react';
+import { useEffect , useState , useRef } from 'react';
 import * as authUtils from './Components/authUtils.js';
+import * as apiService from './Components/apiService.js';
 import CustomCheckbox from "./Components/CheckboxComponent.js";
 import DrawingCanvas from "./Components/DrawingCanvas.js";
 
 function StructuralDamageReportPage() {
 
     useEffect(() => {
+        async function FetchData() {
+            const data = {
+                document_id: sessionStorage.getItem("document_id"),
+                table: "structural_damage_reports"
+            };
+
+            try {
+                const response = await apiService.apiRequest(
+                    `get-document-data?table=${data.table}&document_id=${data.document_id}`
+                );
+                if (response && typeof response === "object") {
+                    const form = response;
+                    document.getElementById("u787_input").value = form.aircraft_type || "";
+                    document.getElementById("u788_input").value = form.registration || "";
+                    document.getElementById("u789_input").value = form.serial_number || "";
+                    document.getElementById("u790_input").value = form.date_submitted ? form.date_submitted.split("T")[0] : "";
+                    document.getElementById("u791_input").value = form.total_airframe_time || "";
+                    document.getElementById("u792_input").value = form.airframe_cycles || "";
+                    document.getElementById("u793_input").value = form.work_order_number || "";
+                    document.getElementById("u794_input").value = form.task_card_id || "";
+                    document.getElementById("u795_input").value = form.damage_type_other || "";
+                    document.getElementById("u796_input").value = form.damage_type || "";
+                    document.getElementById("u797_input").value = form.damage_position_station || "";
+                    document.getElementById("u798_input").value = form.damage_position_waterline || "";
+                    document.getElementById("u799_input").value = form.damage_position_buttockline || "";
+                    document.getElementById("u800_input").value = form.damage_dimension_length || "";
+                    document.getElementById("u801_input").value = form.damage_dimension_width || "";
+                    document.getElementById("u802_input").value = form.damage_dimension_depth || "";
+                    document.getElementById("u803_input").value = form.damaged_part_number || "";
+                    document.getElementById("u804_input").value = form.damaged_serial_number || "";
+                    document.getElementById("u805_input").value = form.damaged_tsn || "";
+                    document.getElementById("u806_input").value = form.damaged_description || "";
+                    document.getElementById("u807_input").value = form.mechanism || "";
+                    document.getElementById("u808_input").value = form.prepared_by || "";
+                    document.getElementById("u809_input").value = form.reviewed_by || "";
+                    setCheckboxes({
+                        LH: form.damage_position_buttockline_lh === 1,
+                        RH: form.damage_position_buttockline_rh === 1
+                    });
+                    if (response && response.damage_drawing && canvasRef.current) {
+                        const drawingData = typeof response.damage_drawing === 'string'
+                          ? JSON.parse(response.damage_drawing)
+                          : response.damage_drawing;
+                
+                        canvasRef.current.loadPaths(drawingData);
+                    };
+                }
+            } catch (error) {
+                console.error("Error loading data:", error);
+            };
+        }
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
         authUtils.CheckSession();
+        FetchData();
      }, []);
+
+    const [checkboxes, setCheckboxes] = useState({
+        LH : false,
+        RH: false
+    });
+
+     const handleCheckboxChange = (id, value) => {
+        setCheckboxes((prev) => ({ ...prev, [id]: value }));
+     };
+
+    const canvasRef = useRef();
+
+    function Back_Button(){
+        authUtils.Back()
+    }
+
+     async function SaveDocument() {
+        const aircraft_type = document.getElementById("u787_input");
+        const registration = document.getElementById("u788_input");
+        const serial_number = document.getElementById("u789_input");
+        const date_submitted = document.getElementById("u790_input");
+        const total_airframe_time = document.getElementById("u791_input");
+        const airframe_cycles = document.getElementById("u792_input");
+        const work_order_number = document.getElementById("u793_input");
+        const task_card_id = document.getElementById("u794_input");
+        const damage_type_other = document.getElementById("u795_input");
+        const damage_type = document.getElementById("u796_input");
+        const damage_position_station = document.getElementById("u797_input");
+        const damage_position_water_line = document.getElementById("u798_input");
+        const damage_position_buttock_line = document.getElementById("u799_input");
+        const damage_length = document.getElementById("u800_input");
+        const damage_width = document.getElementById("u801_input");
+        const damage_depth = document.getElementById("u802_input");
+        const damaged_part_number = document.getElementById("u803_input");
+        const damaged_serial_number = document.getElementById("u804_input");
+        const damaged_tsn = document.getElementById("u805_input");
+        const damage_description = document.getElementById("u806_input");
+        const mechanism = document.getElementById("u807_input");
+        const damage_drawing = await canvasRef.current?.exportPaths(); 
+        const prepared_by = document.getElementById("u808_input");
+        const reviewed_by = document.getElementById("u809_input");
+        const damaged_position_button_line_LH = document.getElementById("u810_input");
+        const damaged_position_button_line_RH = document.getElementById("u811_input");
+
+        const data = {
+            aircraft_type: aircraft_type.value.trim(),
+            registration: registration.value.trim(),
+            serial_number: serial_number.value.trim(),
+            date_submitted: date_submitted.value.trim(),
+            total_airframe_time: total_airframe_time.value.trim(),
+            airframe_cycles: airframe_cycles.value.trim(),
+            work_order_number: work_order_number.value.trim(),
+            task_card_id: task_card_id.value.trim(),
+            damage_type_other: damage_type_other.value.trim(),
+            damage_type: damage_type.value.trim(),
+            damage_position_station: damage_position_station.value.trim(),
+            damage_position_waterline: damage_position_water_line.value.trim(),
+            damage_position_buttock_line: damage_position_buttock_line.value.trim(),
+            damage_dimension_length: damage_length.value.trim(),
+            damage_dimension_width: damage_width.value.trim(),
+            damage_dimension_depth: damage_depth.value.trim(),
+            damaged_part_number: damaged_part_number.value.trim(),
+            damaged_serial_number: damaged_serial_number.value.trim(),
+            damaged_tsn: damaged_tsn.value.trim(),
+            damaged_description: damage_description.value.trim(),
+            mechanism: mechanism.value.trim(),
+            damage_drawing: damage_drawing,
+            prepared_by: prepared_by.value.trim(),
+            reviewed_by: reviewed_by.value.trim(),
+            damage_position_buttock_line_lh: damaged_position_button_line_LH.checked,
+            damage_position_buttock_line_rh: damaged_position_button_line_RH.checked,
+            document_id: sessionStorage.getItem("document_id")
+        };
+        try {
+            const response = await apiService.apiRequest("update-document-data", "POST", {document_type:"SDR", data:data});
+            if (response) {
+                alert("Structural Damage Report Saved Successfully");
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+
+
+     }
 
     return(
         <div id="base" className="">
@@ -255,8 +392,8 @@ function StructuralDamageReportPage() {
             </div>
             {/* Unnamed (Rectangle) */}
             <div id="u777" className="ax_default box_1 transition notrs">
-            <div style={{ width: '1008px', height: '722px'}}>
-            <DrawingCanvas />
+                    <div>
+                        <DrawingCanvas ref={canvasRef} width={1008} height={722}/>
             </div>
             </div>
             {/* Unnamed (Rectangle) */}
@@ -342,6 +479,7 @@ function StructuralDamageReportPage() {
             id="u785"
             className="ax_default shape transition notrs"
             data-label="Save_Button"
+            onClick={SaveDocument}
             >
             <div id="u785_div" className="" />
             <div id="u785_text" className="text ">
@@ -355,6 +493,7 @@ function StructuralDamageReportPage() {
             id="u786"
             className="ax_default shape transition notrs"
             data-label="Back_Button"
+            onClick={Back_Button}
             >
             <div id="u786_div" className="" />
             <div id="u786_text" className="text ">
@@ -699,9 +838,9 @@ function StructuralDamageReportPage() {
             />
             </div>
             {/* Damage_Postion_Buttock_Line_LH (Checkbox) */}
-            <CustomCheckbox id="u810" label="LH" />
+            <CustomCheckbox id="u810" label="LH" initialChecked={checkboxes.LH} onChange={handleCheckboxChange}/>
             {/* Damage_Postion_Buttock_Line_RH (Checkbox) */}
-            <CustomCheckbox id="u811" label="RH" />
+            <CustomCheckbox id="u811" label="RH" initialChecked={checkboxes.RH} onChange={handleCheckboxChange} />
         </div>
         </div>  
     );

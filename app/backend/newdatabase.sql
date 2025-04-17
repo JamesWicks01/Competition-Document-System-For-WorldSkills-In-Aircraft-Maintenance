@@ -164,16 +164,20 @@ CREATE TABLE IF NOT EXISTS `task_cards` (
     mel_category ENUM('N/A','A','B','C','D') NOT NULL DEFAULT 'N/A',
     mel_due_date DATE,
     mel_due_time TIME,
-    function_check BOOLEAN DEFAULT FALSE,
+    function_check_yes BOOLEAN DEFAULT FALSE, -- New
+    function_check_no BOOLEAN DEFAULT FALSE, -- New
     fc_systems_affected VARCHAR(255),
     fc_detailed_on_tc VARCHAR(255),
-    leak_check BOOLEAN DEFAULT FALSE,
+    leak_check_yes BOOLEAN DEFAULT FALSE, -- New
+    leak_check_no  BOOLEAN DEFAULT FALSE, -- New
     lc_systems_affected VARCHAR(255),
     lc_detailed_on_tc VARCHAR(255),
-    other_check BOOLEAN DEFAULT FALSE,
+    other_check_yes BOOLEAN DEFAULT FALSE, -- New
+    other_check_no BOOLEAN DEFAULT FALSE, -- New
     oc_systems_affected VARCHAR(255),
     oc_detailed_on_tc VARCHAR(255),
-    ic_required BOOLEAN DEFAULT FALSE,
+    ic_required_yes BOOLEAN DEFAULT FALSE, -- New
+    ic_required_no BOOLEAN DEFAULT FALSE, --New
     post_maintenance_inspection VARCHAR(255),
     independent_check_by VARCHAR(255),
     tc_certified_by VARCHAR(255),

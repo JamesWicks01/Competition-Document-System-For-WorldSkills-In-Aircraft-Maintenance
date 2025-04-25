@@ -1,8 +1,9 @@
-import './css/TaskCard.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import { useEffect , useState } from 'react';
 import * as authUtils from './Components/authUtils.js';
 import * as apiService from './Components/apiService.js';
 import CustomCheckbox from './Components/CheckboxComponent.js';
+import dayjs from 'dayjs';
 
 function TaskCardPage() {
 
@@ -24,14 +25,14 @@ function TaskCardPage() {
                     document.getElementById("u680_input").value = report.total_airframe_time || "";
                     document.getElementById("u679_input").value = report.airframe_cycles || "";
                     document.getElementById("u681_input").value = report.originated_by || "";
-                    document.getElementById("u684_input").value = report.date_opened ? report.date_opened.split("T")[0] : "";
+                    document.getElementById("u684_input").value = dayjs(report.date_opened).format('YYYY-MM-DD');
                     document.getElementById("u685_input").value = report.defect_description || "";
                     document.getElementById("u666_input").value = report.page_sequence_number || "";
                     document.getElementById("u686_input").value = report.resolution_description || "";
                     document.getElementById("u672_input").value = report.attached_supporting_docs || "";
                     document.getElementById("u687_input").value = report.mel_id || "";
                     document.getElementById("u669_input").value = report.mel_category || "";
-                    document.getElementById("u688_input").value = report.mel_due_date ? report.mel_due_date.split("T")[0] : "";
+                    document.getElementById("u688_input").value = dayjs(report.mel_due_date).format('YYYY-MM-DD');
                     document.getElementById("u689_input").value = report.mel_due_time || "";
                     document.getElementById("u690_input").value = report.fc_systems_affected || "";
                     document.getElementById("u673_input").value = report.fc_detailed_on_tc || "";
@@ -42,7 +43,7 @@ function TaskCardPage() {
                     document.getElementById("u691_input").value = report.post_maintenance_inspection || "";
                     document.getElementById("u692_input").value = report.independent_check_by || "";
                     document.getElementById("u693_input").value = report.tc_certified_by || "";
-                    document.getElementById("u694_input").value = report.tc_certified_date ? report.tc_certified_date.split("T")[0] : "";
+                    document.getElementById("u694_input").value = dayjs(report.tc_certified_date).format('YYYY-MM-DD');
                     document.getElementById("u695_input").value = report.tc_certified_time || "";
                     document.getElementById("u696_input").value = report.checks_during_test_flight || "";
                     setCheckboxes({
@@ -70,6 +71,12 @@ function TaskCardPage() {
         authUtils.CheckAccess();
         authUtils.CheckSession();
         FetchData();
+        const cssFile = '/css/TaskCard.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
      }, []);
 
      const [checkboxes, setCheckboxes] = useState({
@@ -93,6 +100,7 @@ function TaskCardPage() {
      };
 
     function Back_Button(){
+        sessionStorage.removeItem("document_id");
         authUtils.Back();
     };
 

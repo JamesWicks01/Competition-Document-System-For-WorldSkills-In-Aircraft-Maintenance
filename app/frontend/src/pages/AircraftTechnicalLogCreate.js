@@ -1,4 +1,4 @@
-import './css/AircraftTechnicalLogCreate.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import logo from './images/WorldSkills-Logo.png';
 import {useState, useEffect} from 'react';
 import * as apiService from './Components/apiService.js';
@@ -24,6 +24,12 @@ function AircraftTechnicalLogCreatePage() {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
         authUtils.CheckSession();
+        const cssFile = '/css/AircraftTechnicalLogCreate.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
     }, []);
 
     async function createATL() {

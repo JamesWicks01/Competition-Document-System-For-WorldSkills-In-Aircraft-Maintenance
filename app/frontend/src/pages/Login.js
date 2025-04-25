@@ -1,11 +1,20 @@
-import {useState} from 'react';
-import './css/Login.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
+import {useState,useEffect} from 'react';
 import logo from './images/WorldSkills-Logo.png';
 import * as apiService from './Components/apiService.js';
 import * as authUtils from './Components/authUtils.js'
 import { jwtDecode } from 'jwt-decode';
 
 function LoginPage() {
+
+    useEffect(() => {
+        const cssFile = '/css/Login.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
+    }, []);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

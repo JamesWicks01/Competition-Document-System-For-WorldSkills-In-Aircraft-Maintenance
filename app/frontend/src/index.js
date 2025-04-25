@@ -17,9 +17,12 @@ import PartsConsumableRequestPage from './pages/PartsConsumableRequest';
 import StructuralDamageReportPage from './pages/StructuralDamageReport';
 import TaskCardPage from './pages/TaskCard';
 import TechnicalDispatchReportPage from './pages/TechnicalDispatchReport';
+import TechnicalDispatchReportPage2 from './pages/TechnicalDispatchReportPart2';
 import ToolCalibrationRecordPage from './pages/ToolCalibrationRecord';
+import ViewAllPartsConsumableRequestsPage from './pages/ViewAllPartsConsumableRequests';
 import ViewAllDocumentBindersPage from './pages/ViewAllDocumentBinders';
 import WorkOrderSummaryPage from './pages/WorkOrderSummary';
+import WorkOrderSummaryPage2 from './pages/WorkOrderSummaryPart2';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -42,9 +45,12 @@ export default function App() {
         <Route path="/structural-damage-report" element={<StructuralDamageReportPage />} />
         <Route path="/task-card" element={<TaskCardPage />} />
         <Route path="/technical-dispatch-report" element={<TechnicalDispatchReportPage />} />
+        <Route path="/technical-dispatch-report-2" element={<TechnicalDispatchReportPage2 />} />
         <Route path="/tool-calibration-record" element={<ToolCalibrationRecordPage />} />
+        <Route path="/view-all-parts-consumable-requests" element={<ViewAllPartsConsumableRequestsPage />} />
         <Route path="/view-all-document-binders" element={<ViewAllDocumentBindersPage />} />
         <Route path="/work-order-summary" element={<WorkOrderSummaryPage />} />
+        <Route path="/work-order-summary-2" element={<WorkOrderSummaryPage2 />} />
       </Routes>
     </BrowserRouter>
   )

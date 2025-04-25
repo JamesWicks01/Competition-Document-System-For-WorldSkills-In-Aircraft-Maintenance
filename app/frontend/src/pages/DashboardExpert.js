@@ -1,4 +1,4 @@
-import './css/DashboardExpert.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import * as authUtils from './Components/authUtils.js';
 import { useEffect } from 'react';
 
@@ -8,10 +8,16 @@ function DashboardExpertPage() {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
         authUtils.CheckSession();
+        const cssFile = '/css/DashboardExpert.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
     }, []);
 
     function PartsAndConsumableRequest_Button() {
-        window.location.href = "/parts-consumable-request";
+        window.location.href = "/view-all-parts-consumable-requests";
     };
 
     function ToolsCalibrationRecords_Button() {

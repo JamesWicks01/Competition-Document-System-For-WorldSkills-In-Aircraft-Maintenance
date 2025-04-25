@@ -3,12 +3,12 @@ import * as authUtils from './Components/authUtils.js';
 import * as apiService from './Components/apiService.js';
 import React, { useEffect, useState } from "react";
 
-function ViewAllDocumentBindersPage() {
+function ViewAllPartsConsumableRequestsPage() {
 
     useEffect(() => {
         async function fetchData() {
             try{
-                const response = await apiService.apiRequest('get-all-document-binders');
+                const response = await apiService.apiRequest('get-parts-consumable-requests');
                 setData(response);
             } catch (error) {
                 alert("Error fetching data: " + error.message);
@@ -30,16 +30,16 @@ function ViewAllDocumentBindersPage() {
     const [data, setData] = useState([]);
 
 
-    function openBinder(binder_id) {
-        sessionStorage.setItem('binderID', binder_id);
-        window.location.href = '/document-binder';
+    function openRequest(request_id) {
+        sessionStorage.setItem('request_id', request_id);
+        window.location.href = '/parts-consumable-request';
     };
 
     async function Search(){
         const searchType = document.getElementById('u67_input').value;
         const searchInput = document.getElementById('u68_input').value.trim();
         try {
-            const data = await apiService.apiRequest(`search-document-binders?searchType=${searchType}&searchInput=${searchInput}`);
+            const data = await apiService.apiRequest(`search-parts-consumable-requests?searchType=${searchType}&searchInput=${searchInput}`);
             setData(data);
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -54,20 +54,20 @@ function ViewAllDocumentBindersPage() {
         <table className="table-binder w-full">
             <thead>
                 <tr className="table-header">
-                    <th className="table-header text-left">Binder ID</th>
-                    <th className="table-header text-left">Assigned Competitor</th>
-                    <th className="table-header text-left">Binder Status</th>
+                    <th className="table-header text-left">Request ID</th>
+                    <th className="table-header text-left">Competitor Name</th>
+                    <th className="table-header text-left">Request Date</th>
                     <th className="table-binder-header text-left">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {data.map((row, rowIndex) => (
                 <tr key={rowIndex} className="table-row">
-                    <td className="table-cell">{row.binder_id}</td>
+                    <td className="table-cell">{row.request_id}</td>
                     <td className="table-cell">{row.user_name}</td>
-                    <td className="table-cell">{row.binder_status}</td>
+                    <td className="table-cell">{row.request_date}</td>
                     <td className="table-cell">
-                        <button onClick={() => openBinder(row.binder_id)}>View Binder</button>
+                        <button onClick={() => openRequest(row.request_id)}>View Request</button>
                     </td>
                 </tr>
                 ))}
@@ -107,11 +107,11 @@ function ViewAllDocumentBindersPage() {
         >
             <div id="u67_div" className="" />
             <select id="u67_input" className="u67_input">
-            <option className="u67_input_option" value="binder_id">
-                Binger ID
+            <option className="u67_input_option" value="request_id">
+                Request ID
             </option>
             <option className="u67_input_option" value="user_name">
-                Assigned Competitor
+                Competitor Name
             </option>
             </select>
         </div>
@@ -143,7 +143,7 @@ function ViewAllDocumentBindersPage() {
             <div id="u70_div" className="" />
             <div id="u70_text" className="text ">
             <p>
-                <span>VIEW ALL DOCUMENT BINDERS</span>
+                <span>VIEW ALL PARTS AND CONSUMABLE REQUESTS</span>
             </p>
             </div>
         </div>
@@ -152,4 +152,4 @@ function ViewAllDocumentBindersPage() {
 
 };
 
-export default ViewAllDocumentBindersPage;
+export default ViewAllPartsConsumableRequestsPage;

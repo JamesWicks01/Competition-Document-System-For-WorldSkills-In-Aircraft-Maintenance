@@ -50,7 +50,10 @@ export function CheckAccess() {
             "/tool-calibration-record",
             "/view-all-document-binders",
             "/work-order-summary",
-            "/engine-report"
+            "/work-order-summary-2",
+            "/technical-dispatch-report-2",
+            "/engine-report",
+            "/view-all-parts-consumable-requests"
         ],
         Expert: [
             "/aircraft-technical-log",
@@ -66,7 +69,10 @@ export function CheckAccess() {
             "/tool-calibration-record",
             "/view-all-document-binders",
             "/work-order-summary",
-            "/engine-report"
+            "/work-order-summary-2",
+            "/technical-dispatch-report-2",
+            "/engine-report",
+            "/view-all-parts-consumable-requests"
         ],
         Competitor: [
             "/aircraft-technical-log",
@@ -80,6 +86,8 @@ export function CheckAccess() {
             "/technical-dispatch-report",
             "/tool-calibration-record",
             "/work-order-summary",
+            "/work-order-summary-2",
+            "/technical-dispatch-report-2",
             "/engine-report"
         ],
     };
@@ -126,6 +134,16 @@ export async function hashString(string) {
     const salt = await bcryptjs.genSalt(12);
     const hashedString = await bcryptjs.hash(string, salt);
     return hashedString;
+}
+
+export function readOnlyInputs() {
+    const role = GetRole();
+    const formElements = document.querySelectorAll('input, textarea, select');
+    formElements.forEach(el => {
+        if (role === 'Admin' || role === 'Expert') {
+            el.disable = true;
+        }
+    });
 }
   
 

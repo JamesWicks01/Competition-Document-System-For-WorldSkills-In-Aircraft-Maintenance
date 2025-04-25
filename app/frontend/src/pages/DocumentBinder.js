@@ -1,4 +1,4 @@
-import './css/DocumentBinder.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import * as authUtils from './Components/authUtils.js';
 import * as apiService from './Components/apiService.js';
 import React, { useEffect, useState } from "react";
@@ -60,6 +60,12 @@ function DocumentBinderPage() {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
         authUtils.CheckSession();
+        const cssFile = '/css/DocumentBinder.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
     }, []);
 
     const [data, setData] = useState([]);

@@ -1,4 +1,4 @@
-import './css/ToolCalibrationRecord.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import React, { useEffect, useState } from "react";
 import * as apiService from './Components/apiService.js';
 import * as authUtils from './Components/authUtils.js';
@@ -30,6 +30,12 @@ function ToolCalibrationRecordPage() {
         authUtils.CheckSession();
         fetchData();
         InsertNewRecordAccess();
+        const cssFile = '/css/ToolCalibrationRecord.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
     }, []);
 
     const [data, setData] = useState([]);

@@ -1,4 +1,4 @@
-import './css/ChangeUserPassword.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import { useEffect } from 'react';
 import * as authUtils from './Components/authUtils.js';
 import * as apiService from './Components/apiService.js';
@@ -8,6 +8,12 @@ function ChangeUserPasswordPage() {
     useEffect(() => {
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
+        const cssFile = '/css/ChangeUserPassword.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
      }, []);
 
      async function changeButton() {

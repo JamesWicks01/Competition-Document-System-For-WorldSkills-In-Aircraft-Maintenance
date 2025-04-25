@@ -45,7 +45,109 @@ app.post("/login", (req, res) => {
   });
 });
 
-//** Server Request Relating To ATL Creation and Assignment **/
+//** Server Requests Relating To Parts and Consumable Requests **
+// **Get All Parts and Consumable Requests**
+app.get("/get-parts-consumable-requests", (req, res) => {
+  const sql = `
+    SELECT 
+      pcr.request_id, 
+      pcr.user_id, 
+      CONCAT(u.user_fname, ' ', u.user_lname) AS user_name, 
+      pcr.aca_number, 
+      pcr.work_summary_order_id, 
+      pcr.task_card_id, 
+      pcr.items,
+      COALESCE(pcr.request_date, '1970-01-01 00:00:00') AS request_date
+    FROM parts_consumable_requests pcr
+    JOIN users u ON pcr.user_id = u.user_id
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching requests:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+});
+
+//** Submit Parts and Consumable Request **
+app.post("/submit-parts-consumable-request", (req, res) => {
+  const data = req.body;
+
+  const sql = `INSERT INTO parts_consumable_requests 
+      (user_id, name, aca_number, work_summary_order_id, task_card_id, items)
+      VALUES (?, ?, ?, ?, ?, ?)`;
+
+  const values = [
+    data.user_id,
+    data.name,
+    data.aca_number,
+    data.work_order_summary_id,
+    data.task_card_id,
+    JSON.stringify(data.items)
+  ];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Error submitting request:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    res.json({ message: "Request Submitted Successfully", request_id: result.insertId });
+  });
+});
+
+//** Load Parts and Consumable Request **
+app.get("/load-parts-consumable-request", (req, res) => {
+  const { request_id } = req.query;
+  const sql = `SELECT * FROM parts_consumable_requests WHERE request_id = ?`;
+  db.query(sql, [request_id], (err, result) => {
+    if (err) {
+      console.error("Error loading request:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(result[0]);
+  });
+});
+
+//** Search All Parts and Consumable Requests **
+app.get("/search-parts-consumable-requests", (req, res) => {
+  const { searchType, searchInput } = req.query;
+  let whereClause = "";
+  let values = [];
+  if (searchType === "user_name") {
+    whereClause = "CONCAT(u.user_fname, ' ', u.user_lname) LIKE ?";
+    values = [`%${searchInput}%`];
+  } else {
+    whereClause = `?? LIKE ?`;
+    values = [searchType, `%${searchInput}%`];
+  }
+  const sql = `
+    SELECT 
+      pcr.request_id, 
+      pcr.user_id, 
+      CONCAT(u.user_fname, ' ', u.user_lname) AS user_name, 
+      pcr.aca_number, 
+      pcr.work_summary_order_id, 
+      pcr.task_card_id, 
+      pcr.items,
+      COALESCE(pcr.request_date, '1970-01-01 00:00:00') AS request_date
+    FROM parts_consumable_requests pcr
+    JOIN users u ON pcr.user_id = u.user_id
+    WHERE ${whereClause} 
+  `;
+
+  db.query(sql, values ,(err, results) => {
+    if (err) {
+      console.error("Error fetching requests:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    res.json(results);
+  });
+});
+
+//** Server Request Relating To ATL Creation and Assignment **
 // **Get All Users That Are Competitors That Don't Have ATLs Assigned To Them**
 app.get("/get-competitors", (req, res) => {
   const sql = `SELECT u.user_id, CONCAT (u.user_fname, ' ', u.user_lname) AS name
@@ -946,12 +1048,9 @@ app.post("/update-document-data", (req, res) => {
         data.document_id
       ];
       break;
-    case "TDR":
+    case "TDR-P2":
       sql = `
         UPDATE technical_dispatch_reports SET
-        registration = ?,
-        total_air_time = ?,
-        date = ?,
         maintenance_description = ?,
         limitation_date = ?,
         limitation_total_air_time = ?,
@@ -962,9 +1061,6 @@ app.post("/update-document-data", (req, res) => {
         prepared_by = ?
         WHERE document_id = ?`;
       values = [
-        data.registration,
-        data.total_air_time,
-        data.date,
         data.maintenance_description,
         data.limitation_date,
         data.limitation_total_air_time,
@@ -973,6 +1069,22 @@ app.post("/update-document-data", (req, res) => {
         data.airworthiness_directive_description,
         data.other_tasks,
         data.prepared_by,
+        data.document_id
+      ];
+      break;
+    case "TDR":
+      sql = `
+        UPDATE technical_dispatch_reports SET
+        registration = ?,
+        total_air_time = ?,
+        date = ?,
+        defect_rows = ?
+        WHERE document_id = ?`;
+      values = [
+        data.registration,
+        data.total_air_time,
+        data.date,
+        JSON.stringify(data.defect_rows),
         data.document_id
       ];
       break;
@@ -991,17 +1103,7 @@ app.post("/update-document-data", (req, res) => {
         total_cycles = ?,
         opened_by = ?,
         date_opened = ?,
-        followon_maintenance_checks_yes = ?,
-        followon_maintenance_checks_na = ?,
-        testflight_required_yes = ?,
-        testflight_required_na = ?,
-        deferred_defects_yes = ?,
-        wos_affixed_yes = ?,
-        date = ?,
-        time = ?,
-        technical_log_page_sequence_number = ?,
-        closed_by = ?,
-        subject_to_test_flight = ?
+        task_cards_included_rows = ?,
         WHERE document_id = ?`;
       values = [
         data.work_order_summary_number,
@@ -1016,10 +1118,30 @@ app.post("/update-document-data", (req, res) => {
         data.total_cycles,
         data.opened_by,
         data.date_opened,
+        JSON.stringify(data.task_cards_included_rows),
+        data.document_id
+      ];
+      break;
+      case "WOS-P2":
+      sql = `
+        UPDATE work_order_summaries SET
+        followon_maintenance_checks_yes = ?,
+        followon_maintenance_checks_na = ?,
+        testflight_requirements_yes = ?,
+        testflight_requirements_na = ?,
+        deferred_defects_yes = ?,
+        wos_affixed_yes = ?,
+        date = ?,
+        time = ?,
+        technical_log_page_sequence_number = ?,
+        closed_by = ?,
+        subject_to_test_flight = ?
+        WHERE document_id = ?`;
+      values = [
         data.followon_maintenance_checks_yes,
         data.followon_maintenance_checks_na,
-        data.testflight_required_yes,
-        data.testflight_required_na,
+        data.testflight_requirements_yes,
+        data.testflight_requirements_na,
         data.deferred_defects_yes,
         data.wos_affixed_yes,
         data.date,

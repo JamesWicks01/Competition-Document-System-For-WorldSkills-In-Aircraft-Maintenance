@@ -19,25 +19,6 @@ CREATE TABLE IF NOT EXISTS `parts_consumable_requests` (
     task_card_id VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS `part_requests` (
-    part_request_id INT AUTO_INCREMENT PRIMARY KEY,
-    request_id INT NOT NULL,
-    item_number VARCHAR(255),
-    part_number VARCHAR(255),
-    description TEXT,
-    quantity VARCHAR(255),
-    FOREIGN KEY (request_id) REFERENCES parts_consumable_requests(request_id)
-);
-
-CREATE TABLE IF NOT EXISTS `consumable_requests` (
-    consumable_request_id INT AUTO_INCREMENT PRIMARY KEY,
-    request_id INT NOT NULL,
-    item_number VARCHAR(255),
-    identification_number VARCHAR(255),
-    description TEXT,
-    quantity VARCHAR(255),
-    FOREIGN KEY (request_id) REFERENCES parts_consumable_requests(request_id)
-);
 
 CREATE TABLE IF NOT EXISTS `users` (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,6 +36,18 @@ VALUES
     ('User', 'Competitor', 'user_competitor', 'password123', 'Competitor', FALSE),
     ('User', 'Expert', 'user_expert', 'password123', 'Expert', FALSE),
     ('User', 'Admin', 'user_admin', 'password123', 'Admin', FALSE);
+
+CREATE TABLE IF NOT EXISTS `parts_consumable_requests` (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL, -- New
+    request_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- New
+    name VARCHAR(255),
+    aca_number VARCHAR(255),
+    work_summary_order_id VARCHAR(255),
+    task_card_id VARCHAR(255),
+    items TEXT, -- New
+    FOREIGN KEY (user_id) REFERENCES users(user_id) -- New
+);
 
 
 CREATE TABLE IF NOT EXISTS `document_binders` (
@@ -252,6 +245,7 @@ CREATE TABLE IF NOT EXISTS `technical_dispatch_reports` (
     registration VARCHAR(255),
     total_air_time VARCHAR(255),
     date DATE,
+    defect_rows TEXT, -- New
     maintenance_description TEXT,
     limitation_date DATE,
     limitation_total_air_time VARCHAR(255),
@@ -261,19 +255,6 @@ CREATE TABLE IF NOT EXISTS `technical_dispatch_reports` (
     other_tasks VARCHAR(255),
     prepared_by VARCHAR(255),
     FOREIGN KEY (document_id) REFERENCES documents(document_id)
-);
-
-CREATE TABLE IF NOT EXISTS `deferred_defects` (
-    dd_id INT AUTO_INCREMENT PRIMARY KEY,
-    tdr_id INT NOT NULL,
-    description VARCHAR(255),
-    type_mel BOOLEAN DEFAULT FALSE,
-    type_nonmel BOOLEAN DEFAULT FALSE,
-    mel_id Varchar(255),
-    mel_category ENUM('N/A','A','B','C','D') DEFAULT 'N/A',
-    due_date DATE,
-    due_time TIME,
-    FOREIGN KEY (tdr_id) REFERENCES technical_dispatch_reports(tdr_id)
 );
 
 CREATE TABLE IF NOT EXISTS `work_order_summaries` (
@@ -292,6 +273,7 @@ CREATE TABLE IF NOT EXISTS `work_order_summaries` (
     total_cycles VARCHAR(255),
     opened_by VARCHAR(255),
     date_opened DATE,
+    task_cards_included_rows TEXT, -- New
     followon_maintenance_checks_yes BOOLEAN DEFAULT FALSE,
     followon_maintenance_checks_na BOOLEAN DEFAULT FALSE,
     testflight_requirements_yes BOOLEAN DEFAULT FALSE,
@@ -304,22 +286,4 @@ CREATE TABLE IF NOT EXISTS `work_order_summaries` (
     closed_by VARCHAR(255),
     subject_to_test_flight BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (document_id) REFERENCES documents(document_id)
-);
-
-CREATE TABLE IF NOT EXISTS `included_task_cards` (
-    itc_id INT AUTO_INCREMENT PRIMARY KEY,
-    wos_id INT NOT NULL,
-    id_number INT,
-    title VARCHAR(255),
-    deferred_defect BOOLEAN DEFAULT FALSE,
-    function_check BOOLEAN DEFAULT FALSE,
-    leak_check BOOLEAN DEFAULT FALSE,
-    other_check BOOLEAN DEFAULT FALSE,
-    na_check BOOLEAN DEFAULT FALSE,
-    ic_complete_yes BOOLEAN DEFAULT FALSE,
-    ic_complete_na BOOLEAN DEFAULT FALSE,
-    test_flight_yes BOOLEAN DEFAULT FALSE,
-    test_flight_na BOOLEAN DEFAULT FALSE,
-    reviewed_by VARCHAR(255),
-    FOREIGN KEY (wos_id) REFERENCES work_order_summaries(wos_id)
 );

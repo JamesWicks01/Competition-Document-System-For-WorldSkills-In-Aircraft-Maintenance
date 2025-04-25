@@ -1,9 +1,10 @@
-import './css/StructuralDamageReport.css';
 import { useEffect , useState , useRef } from 'react';
 import * as authUtils from './Components/authUtils.js';
 import * as apiService from './Components/apiService.js';
 import CustomCheckbox from "./Components/CheckboxComponent.js";
 import DrawingCanvas from "./Components/DrawingCanvas.js";
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
+import dayjs from 'dayjs';
 
 function StructuralDamageReportPage() {
 
@@ -23,7 +24,7 @@ function StructuralDamageReportPage() {
                     document.getElementById("u787_input").value = form.aircraft_type || "";
                     document.getElementById("u788_input").value = form.registration || "";
                     document.getElementById("u789_input").value = form.serial_number || "";
-                    document.getElementById("u790_input").value = form.date_submitted ? form.date_submitted.split("T")[0] : "";
+                    document.getElementById("u790_input").value = dayjs(form.date_submitted).format('YYYY-MM-DD');
                     document.getElementById("u791_input").value = form.total_airframe_time || "";
                     document.getElementById("u792_input").value = form.airframe_cycles || "";
                     document.getElementById("u793_input").value = form.work_order_number || "";
@@ -63,6 +64,12 @@ function StructuralDamageReportPage() {
         authUtils.CheckAccess();
         authUtils.CheckSession();
         FetchData();
+        const cssFile = '/css/StructuralDamageReport.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
      }, []);
 
     const [checkboxes, setCheckboxes] = useState({
@@ -77,7 +84,8 @@ function StructuralDamageReportPage() {
     const canvasRef = useRef();
 
     function Back_Button(){
-        authUtils.Back()
+        sessionStorage.removeItem("document_id");
+        authUtils.Back();
     }
 
      async function SaveDocument() {

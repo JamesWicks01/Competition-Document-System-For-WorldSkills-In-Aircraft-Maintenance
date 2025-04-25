@@ -1,8 +1,9 @@
-import './css/EngineReport.css';
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import { useEffect , useRef } from 'react';
 import * as authUtils from './Components/authUtils.js';
 import * as apiService from './Components/apiService.js';
 import DrawingCanvas from "./Components/DrawingCanvas.js";
+import dayjs from 'dayjs';
 
 function EngineReportPage() {
 
@@ -25,7 +26,7 @@ function EngineReportPage() {
                     document.getElementById("u735_input").value = form.engine_running_hours || "";
                     document.getElementById("u736_input").value = form.work_order_number || "";
                     document.getElementById("u737_input").value = form.task_card_id || "";
-                    document.getElementById("u738_input").value = form.date_submitted ? form.date_submitted.split("T")[0] : "";
+                    document.getElementById("u738_input").value = dayjs(form.date_submitted).format('YYYY-MM-DD');
                     document.getElementById("u739_input").value = form.damage_type || "";
                     document.getElementById("u740_input").value = form.damage_dimension_length || "";
                     document.getElementById("u741_input").value = form.damage_dimension_width || "";
@@ -55,11 +56,18 @@ function EngineReportPage() {
         authUtils.CheckAccess();
         authUtils.CheckSession();
         LoadData();
+        const cssFile = '/css/EngineReport.css';
+        loadStyle(cssFile);
+
+        return () => {
+        unloadStyle(cssFile); // clean up when navigating away
+        };
      }, []);
 
      const canvasRef = useRef();
 
      function Back_Button() {
+        sessionStorage.removeItem("document_id");
         authUtils.Back();
      }
 

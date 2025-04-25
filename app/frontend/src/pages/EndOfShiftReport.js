@@ -1,8 +1,9 @@
-import "./css/EndOfShiftReport.css";
+import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import { useState, useEffect } from "react";
 import * as authUtils from "./Components/authUtils.js";
 import * as apiService from "./Components/apiService.js";
 import CustomCheckbox from "./Components/CheckboxComponent.js";
+import dayjs from "dayjs";
 
 function EndOfShiftReportPage() {
 
@@ -20,7 +21,7 @@ function EndOfShiftReportPage() {
               const report = response; // Extract first object from the array
   
               document.getElementById("u882_input").value = report.aircraft || "";
-              document.getElementById("u888_input").value = report.date ? report.date.split("T")[0] : "";
+              document.getElementById("u888_input").value = dayjs(report.date).format('YYYY-MM-DD');;
               document.getElementById("u889_input").value = report.prepared_by || "";
               document.getElementById("u883_input").value = report.steps_accomplished || "";
               document.getElementById("u890_input").value = report.work_order_numbers || "";
@@ -44,6 +45,12 @@ function EndOfShiftReportPage() {
     authUtils.CheckLoggedIn();
     authUtils.CheckAccess();
     authUtils.CheckSession();
+    const cssFile = '/css/EndOfShiftReport.css';
+    loadStyle(cssFile);
+
+    return () => {
+    unloadStyle(cssFile); // clean up when navigating away
+    };
   }, []);
 
   const handleCheckboxChange = (id, value) => {
@@ -51,7 +58,8 @@ function EndOfShiftReportPage() {
 };
 
   function Back_Button() {
-    authUtils.Back();
+        sessionStorage.removeItem("document_id");
+        authUtils.Back();
   }
 
   async function SaveReport() {

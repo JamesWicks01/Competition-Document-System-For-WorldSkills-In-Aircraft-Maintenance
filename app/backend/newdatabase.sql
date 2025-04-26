@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `task_cards` (
     oc_systems_affected VARCHAR(255),
     oc_detailed_on_tc VARCHAR(255),
     ic_required_yes BOOLEAN DEFAULT FALSE, -- New
-    ic_required_no BOOLEAN DEFAULT FALSE, --New
+    ic_required_no BOOLEAN DEFAULT FALSE, -- New
     post_maintenance_inspection VARCHAR(255),
     independent_check_by VARCHAR(255),
     tc_certified_by VARCHAR(255),

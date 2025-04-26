@@ -1,6 +1,8 @@
 import { loadStyle, unloadStyle } from './Components/styleUtils.js';
 import { useEffect, useState } from 'react';
 import * as authUtils from './Components/authUtils.js';
+import * as apiService from './Components/apiService.js';
+import dayjs from 'dayjs';
 
 function WorkOrderSummaryPage() {
     const [taskCards, setTaskCards] = useState([
@@ -8,14 +10,45 @@ function WorkOrderSummaryPage() {
     ]);
 
     useEffect(() => {
+      const fetchData = async () => {
+        const data = {
+          document_id: sessionStorage.getItem("document_id"),
+          table: "work_order_summaries"
+        };
+        try {
+          const response = await apiService.apiRequest(`get-document-data?table=${data.table}&document_id=${data.document_id}`);
+          if (response && typeof response === 'object') {
+            const report = response;
+            document.getElementById("u488_input").value = report.work_order_summary_number || "";
+            document.getElementById("u489_input").value = report.subject || "";
+            document.getElementById("u490_input").value = report.summary_page_part1 || "";
+            document.getElementById("u492_input").value = report.summary_page_part2 || "";
+            document.getElementById("u484_input").value = report.aircraft_type || "";
+            document.getElementById("u485_input").value = report.registration || "";
+            document.getElementById("u486_input").value = report.serial_number || "";
+            document.getElementById("u487_input").value = report.total_task_cards || "";
+            document.getElementById("u493_input").value = report.total_airframe_time || "";
+            document.getElementById("u494_input").value = report.total_cycles || "";
+            document.getElementById("u495_input").value = report.opened_by || "";
+            document.getElementById("u496_input").value = dayjs(report.date_opened).format('YYYY-MM-DD');
+    
+            if (report.task_cards_included_rows) {
+              setTaskCards(JSON.parse(report.task_cards_included_rows));
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+        };
         authUtils.CheckLoggedIn();
         authUtils.CheckAccess();
         authUtils.CheckSession();
+        fetchData();
         const cssFile = '/css/WorkOrderSummary.css';
         loadStyle(cssFile);
 
         return () => {
-            unloadStyle(cssFile); // clean up when navigating away
+            unloadStyle(cssFile);
         };
     }, []);
 
@@ -63,6 +96,47 @@ function WorkOrderSummaryPage() {
         updated[index][section][key] = checked;
         setTaskCards(updated);
     };
+
+    async function handleSave() {
+        const work_order_summary_number = document.getElementById("u488_input").value.trim();
+        const subject = document.getElementById("u489_input").value.trim();
+        const summary_page_part1 = document.getElementById("u490_input").value.trim();
+        const summary_page_part2 = document.getElementById("u492_input").value.trim();
+        const aircraft_type = document.getElementById("u484_input").value.trim();
+        const registration = document.getElementById("u485_input").value.trim();
+        const serial_number = document.getElementById("u486_input").value.trim();
+        const total_task_cards = document.getElementById("u487_input").value.trim();
+        const total_airframe_time = document.getElementById("u493_input").value.trim();
+        const total_cycles = document.getElementById("u494_input").value.trim();
+        const opened_by = document.getElementById("u495_input").value.trim();
+        const date_opened = document.getElementById("u496_input").value.trim();
+        const task_cards_included_rows = taskCards;
+
+        const data = {
+            work_order_summary_number: work_order_summary_number,
+            subject: subject,
+            summary_page_part1: summary_page_part1,
+            summary_page_part2: summary_page_part2,
+            aircraft_type: aircraft_type,
+            registration: registration,
+            serial_number: serial_number,
+            total_task_cards: total_task_cards,
+            total_airframe_time: total_airframe_time,
+            total_cycles: total_cycles,
+            opened_by: opened_by,
+            date_opened: date_opened,
+            task_cards_included_rows: task_cards_included_rows,
+            document_id: sessionStorage.getItem("document_id")
+        };
+        try {
+        const response = await apiService.apiRequest("update-document-data", "POST", { document_type: "WOS", data: data });
+        if (response) {
+            alert("Work Order Summary Page Saved Successfully");
+        }
+        } catch (error) {
+        alert(error.message);
+        }
+    }
 
     function NextPage() {
         window.location.href = "/work-order-summary-2";
@@ -262,7 +336,7 @@ function WorkOrderSummaryPage() {
             data-label="Summary_Page_Part1"
         >
             <div id="u490_div" className="" />
-            <input id="u490_input" type="text" defaultValue="" className="u490_input" />
+            <input id="u490_input" type="text" defaultValue="" className="u490_input" placeholder='#'/>
         </div>
         {/* Summary_Page_Part2 (Text field) */}
         <div
@@ -271,7 +345,7 @@ function WorkOrderSummaryPage() {
             data-label="Summary_Page_Part2"
         >
             <div id="u492_div" className="" />
-            <input id="u492_input" type="text" defaultValue="" className="u492_input" />
+            <input id="u492_input" type="text" defaultValue="" className="u492_input" placeholder='#'/>
         </div>
         {/* Total_Airframe_Time (Text field) */}
         <div
@@ -428,7 +502,7 @@ function WorkOrderSummaryPage() {
                 <div id="next" className="button" onClick={NextPage}>
                     <p><span>Next Page</span></p>
                 </div>
-                <div id="save" className="button">
+                <div id="save" className="button" onClick={handleSave}>
                     <p><span>Save</span></p>
                 </div>
                 </div>

@@ -50,12 +50,6 @@ useEffect(() => {
     };
     }, []);
 
-  useEffect(() => {
-    if (defectRows.length > 0) {
-      localStorage.setItem('defectRows', JSON.stringify(defectRows));
-    }
-  }, [defectRows]);
-
   function NextPage() {
     window.location.href = "/technical-dispatch-report-2";
   }

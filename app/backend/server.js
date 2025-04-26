@@ -1103,7 +1103,7 @@ app.post("/update-document-data", (req, res) => {
         total_cycles = ?,
         opened_by = ?,
         date_opened = ?,
-        task_cards_included_rows = ?,
+        task_cards_included_rows = ?
         WHERE document_id = ?`;
       values = [
         data.work_order_summary_number,

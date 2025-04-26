@@ -150,11 +150,17 @@ app.get("/search-parts-consumable-requests", (req, res) => {
 //** Server Request Relating To ATL Creation and Assignment **
 // **Get All Users That Are Competitors That Don't Have ATLs Assigned To Them**
 app.get("/get-competitors", (req, res) => {
-  const sql = `SELECT u.user_id, CONCAT (u.user_fname, ' ', u.user_lname) AS name
-                FROM users u
-                LEFT JOIN document_binders db ON u.user_id = db.user_id
-                WHERE u.user_role = 'Competitor'
-                AND (db.binder_id IS NULL OR db.binder_status != 'In Progress')`;
+  const sql = `
+    SELECT u.user_id, CONCAT(u.user_fname, ' ', u.user_lname) AS name
+    FROM users u
+    WHERE u.user_role = 'Competitor'
+    AND NOT EXISTS (
+      SELECT 1
+      FROM document_binders db
+      WHERE db.user_id = u.user_id
+      AND db.binder_status = 'In Progress'
+    )
+  `;
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching competitors:", err);

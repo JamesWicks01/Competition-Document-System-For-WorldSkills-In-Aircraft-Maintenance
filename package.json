@@ -1,0 +1,18 @@
+{
+    "name": "competition-document-system-for-worldskills-in-aircraft-maintenance",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "cd app/backend && node server.js",
+        "client": "cd app/frontend && npm start",
+        "install-all": "concurrently \"npm run install-server\" \"npm run install-client\"",
+        "install-server": "cd app/backend && npm install",
+        "install-client": "cd app/frontend && npm install"
+    },
+    "devDependencies": {
+        "concurrently": "^7.0.0"
+    },
+    "dependencies": {
+        "install-all": "^1.1.0"
+    }
+}

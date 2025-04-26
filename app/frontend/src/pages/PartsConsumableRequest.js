@@ -119,16 +119,40 @@ function PartsConsumableRequestPage() {
             </div>
 
             {/* Input Labels */}
-                  <div id="u106" class="ax_default box_1 transition notrs">
-        <div id="u106_div" class=""></div>
-        <div id="u106_text" class="text ">
-          <p><span>Name</span></p>
-        </div>
-      </div>
-            <div id="u107" className=""><div id="u107_div" /><div id="u107_text"><p>ACA#</p></div></div>
-            <div id="u108" className=""><div id="u108_div" /><div id="u108_text"><p>Work Order #</p></div></div>
-            <div id="u109" className=""><div id="u109_div" /><div id="u109_text"><p>Task Card ID#</p></div></div>
-            <div id="u110" className=""><div id="u110_div" /><div id="u110_text"><p>Item</p></div></div>
+            <div id="u106" class="ax_default box_1 transition notrs">
+                <div id="u106_div" class=""></div>
+                <div id="u106_text" class="text ">
+                <p><span>Name</span></p>
+                </div>
+            </div>
+
+            <div id="u107" class="ax_default box_1 transition notrs">
+                <div id="u107_div" class=""></div>
+                <div id="u107_text" class="text ">
+                <p><span>ACA#</span></p>
+                </div>
+            </div>
+
+            <div id="u108" class="ax_default box_1 transition notrs">
+                <div id="u108_div" class=""></div>
+                <div id="u108_text" class="text ">
+                <p><span>Work Order #</span></p>
+                </div>
+            </div>
+
+            <div id="u109" class="ax_default box_1 transition notrs">
+                <div id="u109_div" class=""></div>
+                <div id="u109_text" class="text ">
+                <p><span>Task Card ID#</span></p>
+                </div>
+            </div>
+
+            <div id="u110" class="ax_default box_1 transition notrs">
+                <div id="u110_div" class=""></div>
+                <div id="u110_text" class="text ">
+                <p><span></span></p>
+                </div>
+            </div>
             {/* Input Fields */}
             <div id="u115" className="ax_default text_field transition notrs">
                 <div id="u115_div" />

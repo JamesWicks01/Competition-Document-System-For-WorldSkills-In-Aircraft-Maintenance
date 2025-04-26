@@ -47,6 +47,12 @@ function WorkOrderSummaryPage() {
         const cssFile = '/css/WorkOrderSummary.css';
         loadStyle(cssFile);
 
+        const userRole = authUtils.GetRole();
+        if (userRole === 'Expert' || userRole === 'Admin') {
+            const addRow = document.getElementById('add-row-btn');
+            if (addRow) addRow.style.display = 'none';
+        }
+
         return () => {
             unloadStyle(cssFile);
         };
@@ -472,7 +478,9 @@ function WorkOrderSummaryPage() {
                                     />
                                 </td>
                                 <td>
-                                    <button onClick={() => deleteTaskCardRow(index)}>Delete</button>
+                                    {(authUtils.GetRole() !== 'Expert' && authUtils.GetRole() !== 'Admin') && (
+                                    <button className="delete-button" onClick={() => deleteTaskCardRow(index)}>Delete</button>
+                                    )}     
                                 </td>
                             </tr>
                         ))}

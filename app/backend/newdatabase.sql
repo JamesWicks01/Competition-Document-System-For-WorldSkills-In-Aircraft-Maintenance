@@ -11,15 +11,6 @@ CREATE TABLE IF NOT EXISTS `tool_calibration_records` (
     calibration_due_date DATE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `parts_consumable_requests` (
-    request_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255),
-    aca_number VARCHAR(255),
-    work_summary_order_id VARCHAR(255),
-    task_card_id VARCHAR(255)
-);
-
-
 CREATE TABLE IF NOT EXISTS `users` (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_fname VARCHAR(255) NOT NULL,
